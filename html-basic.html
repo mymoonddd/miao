@@ -3,57 +3,63 @@
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="Document" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
-  <font></font>
 </head>
 
-
-
 <body>
+
+   <!-- 标题和段落的使用 -->
   <h1>Lorem</h1>
-  <h2>Lorem,ipsum.</h2>
-  <h3>Lorem,ipsum dolor.</h3>
-  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo, sint aut. Blanditiis eveniet labore quis tempore rem facilis, veritatis laboriosam aliquid quasi corporis quam nobis pariatur ab fugiat. Harum, architecto.</p>
-  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Deserunt fuga maxime vel quam itaque facilis dolor molestiae tempora culpa, omnis reiciendis ut aliquid eius sunt excepturi quod delectus laudantium. Voluptates.</p>
+  <h2>Lorem, ipsum.</h2>
+  <h3>Lorem, ipsum dolor.</h3>
 
-  <a href="www.jd.com">在新窗口打开京东</a>
-  <a href="mailto:222@qq.com">点我发邮件</a>
-  <a href="#page-bottom">跳到页面底部</a>
-  <a href="./Foo.js" download>点我下载文件</a>
+  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore, ad facere? Voluptatibus, vero. Exercitationem odit id, quo, possimus provident eum dolore quas deserunt, doloremque sapiente ab distinctio eaque natus quibusdam?</p>
 
+  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione qui ullam aperiam dolor expedita deserunt nesciunt sunt, hic quia exercitationem eaque iusto laboriosam? Cupiditate error harum cumque, libero reprehenderit vitae!</p>
+
+   <!-- 锚的使用 -->
+  <a href="www.jd.com" target="_blank">在新窗口打开京东</a>
+  <a href="mailto:xiaochunyan0218@126.com">点我发邮件</a>
+  <a href=#page_end>跳到页面底部</a>
+  <a href="1.txt" download="1.txt">点我下载文件</a>
   <br>
-  <img src="https://drscdn.500px.org/photo/229389427/m%3D1170/v2?user_id=7012987&webp=true&sig=196fa0c161aa562478d08571764872f7d69a346c3c0b2e12aa00e2c6414eb28b" width="200" height="200" alt="图片出错了">
+  <img src="https://drscdn.500px.org/photo/229389427/m%3D1170/v2?user_id=7012987&webp=true&sig=196fa0c161aa562478d08571764872f7d69a346c3c0b2e12aa00e2c6414eb28b" width="200" height="200" alt="图片
+  还没有加载出来">
+
   <hr>
+  <hr>
+  <marquee>飘~~~</marquee>
 
-  <marquee direction="left"> 飘~~~ </marquee>
+   <!-- 强调符号的使用 -->
+  <p>
+    <em>这几种强调</em>
+    <b>有什么 </b>
+    <strong>区别呢？</strong>
+    <u>这个呢？</u>
+    <i>这个呢？</i>
+    <br>
+    &lt;!-- 这段注释需要出现在页面里面 --！&gt;
+  </p>
 
-  <em> 这几种强调 </em>
-  <strong> 有什么 </strong>
-  <b> 区别呢？</b>
-  <u> 这个呢？</u>
-  <i> 这个呢？</i>
+  <p>html的注释怎么写？</p>
+  <p>下面是一段javascript代码，最合适用何种标签表示呢？</p>
 
-  <br>
-  &lt;!-- 这段注释需要出现在页面里面 --&gt;
-  <p>  html的注释怎么写？ </p>
-  <!-- 这是注释 -->
-
-  下面是一段javascript代码，最合适用何种标签表示呢？
-
-  <pre class="language-js">
+  <pre>
     <code>
-    function a(){
-      return 8
-    }
+      function a(){
+        return 8
+      }
     </code>
   </pre>
+
   <hr>
 
+   <!-- 表单ul ol dl的使用 -->
   <ul>
-    <li> 小学
+    <li>小学
       <ol>
-        <li>一年级
+        <li> 一年级
           <ol>
             <li>上学期</li>
             <li>下学期</li>
@@ -61,10 +67,12 @@
         </li>
         <li>二年级</li>
         <li>三年级</li>
-      </ol> </li>
-      <li>中学</li>
-      <li>大学</li>
+      </ol>
+    </li>
+    <li>中学</li>
+    <li>大学</li>
   </ul>
+
   <hr>
 
   <dl>
@@ -80,70 +88,79 @@
     <dd>小明</dd>
     <dd>豆豆</dd>
   </dl>
+
   <hr>
 
+   <!-- form的使用 -->
   <h3>Google搜索</h3>
-  <form target="_blank" action="https://www.google.com/search?">
-  <input type="text" name=q><button> 在新窗口打开搜索结果</button>
+  <form action="https://www.google.com/search?">
+    <input type="text" target="_blank">
+    <button type="submit">在新窗口打开搜索结果</button>
   </form>
 
   <hr>
 
-  <div>
-    <form action="html-basic.html?">
-      个人信息调查表
-      <dl>
-        <dt>性别</dt>
-        <dd>
-          <label><input type="radio" name="gender"> 男 </label>
-          <label><input type="radio" name="gender"> 女 </label>
-        </dd>
 
-        <dt>年龄</dt>
-        <dd>
-          <select>
-            <option hidden>请选择</option>
-            <optgroup label="少年">少年</optgroup>
-            <option value="1~6"> 1~6岁 </option>
-            <option value="1~6"> 6~12岁 </option>
+   <!-- 制作能够提交的表单 -->
+  <p> 个人信息调查表 </p>
+  <form action="?">
+    <dl>
+      <dt>性别</dt>
+      <dd> <input type="radio" name="gender"> 男
+          <input type="radio" name="gender"> 女
+      </dd>
 
-            <optgroup label="青年">青年</optgroup>
-            <option value="13~15"> 13~15岁 </option>
-            <option value="13~15"> 16~18岁 </option>
+      <dt>年龄</dt>
+      <dd>
+        <select name="age">年龄
+          <option hidden>请选择</option>
 
-            <optgroup label="壮年">壮年</optgroup>
-            <option value="13~15"> 18~20岁 </option>
-            <option value="13~15"> 20~22岁 </option>
-          </select>
-        </dd>
+          <optgroup label="少年">少年</optgroup>
+          <option>1~6岁</option>
+          <option>6~12岁</option>
 
-        <dt>生日</dt>
-        <dd><input type="date"></dd>
+          <optgroup label="青年">青年</optgroup>
+          <option>13~15岁</option>
+          <option>16~18岁</option>
 
-        <dt>生辰</dt>
-        <dd><input type="time"></dd>
+          <optgroup label="壮年">壮年</optgroup>
+          <option>1~6岁</option>
+          <option>6~12岁</option>
+        </select>
+      </dd>
 
-        <dt>照片</dt>
-        <dd><label><input hidden type="file" accept="image/*">点我上传照片，我比文件上传按钮好看</label></dd>
+      <dt>生日</dt>
+      <dd><input type="date" name="birthday"></dd>
 
-        <dt>肤色</dt>
-        <dd> <input type="color"> </dd>
+      <dt>生辰</dt>
+      <dd><input type="time" name="birthday_time"></dd>
 
-        <dt>自我介绍</dt>
-        <dd> <textarea name="自我介绍" cols="30" rows="10">&lt;/textarea&gt;</textarea> </dd>
-      </dl>
+      <dt>照片</dt>
+      <dd><label>点我上传照片，我比文件上传按钮好看
+        <input hidden type="file" name="picture" accept="image/*">
+      </label></dd>
 
 
-    <fieldset disabled>
-      <legend>这里面的全都禁用了</legend>
-      <input type="text"> <input type="text"> <input type="text"> <input type="text">
-    </fieldset>
+      <dt>肤色</dt>
+      <dd><input type="color" name="skin_color"></dd>
 
-    <button>提交</button>
-    <button type="reset">重置</button>
-    </form>
-  </div>
+      <dt>自我介绍</dt>
+      <dd><textarea name="self_introduction" id="" cols="30" rows="10">&lt;/textarea&gt;
+      </textarea></dd>
+
+      <fieldset disabled="disabled">
+        <legend>这里面的全都禁用了</legend>
+        <input type="text">
+        <input type="text">
+        <input type="text">
+        <input type="text">
+      </fieldset>
+
+      <button type="submit">提交</button>
+      <button type="reset">重置</button>
+    </dl>
+  </form>
+
+<p id="page_end"></p>
 </body>
 </html>
-
-
