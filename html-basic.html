@@ -106,8 +106,8 @@
   <form action="?">
     <dl>
       <dt>性别</dt>
-      <dd> <input type="radio" name="gender"> 男
-          <input type="radio" name="gender"> 女
+      <dd> <label> <input type="radio" name="gender"> 男 </label>
+           <label> <input type="radio" name="gender"> 女 </label>
       </dd>
 
       <dt>年龄</dt>
@@ -133,19 +133,18 @@
       <dd><input type="date" name="birthday"></dd>
 
       <dt>生辰</dt>
-      <dd><input type="time" name="birthday_time"></dd>
+      <dd><input type="time" name="birtime"></dd>
 
       <dt>照片</dt>
       <dd><label>点我上传照片，我比文件上传按钮好看
-        <input hidden type="file" name="picture" accept="image/*">
+        <input hidden type="file" name="avatar" accept="image/*">
       </label></dd>
-
 
       <dt>肤色</dt>
       <dd><input type="color" name="skin_color"></dd>
 
       <dt>自我介绍</dt>
-      <dd><textarea name="self_introduction" id="" cols="30" rows="10">&lt;/textarea&gt;
+      <dd><textarea name="intro" cols="30" rows="10">&lt;/textarea&gt;
       </textarea></dd>
 
       <fieldset disabled="disabled">
