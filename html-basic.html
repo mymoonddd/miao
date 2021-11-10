@@ -18,7 +18,7 @@
 
   <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione qui ullam aperiam dolor expedita deserunt nesciunt sunt, hic quia exercitationem eaque iusto laboriosam? Cupiditate error harum cumque, libero reprehenderit vitae!</p>
 
-   <!-- 锚的使用 -->
+   <!-- 锚(a)的使用 -->
   <a href="www.jd.com" target="_blank">在新窗口打开京东</a>
   <a href="mailto:xiaochunyan0218@126.com">点我发邮件</a>
   <a href=#page_end>跳到页面底部</a>
@@ -56,7 +56,7 @@
   <hr>
 
    <!-- 列表ul ol dl的使用 -->
-  <ul>
+  <ul name="ul ol列表">
     <li>小学
       <ol>
         <li> 一年级
@@ -75,7 +75,7 @@
 
   <hr>
 
-  <dl>
+  <dl name="dl列表">
     <dt>班级</dt>
     <dd>三年二班</dd>
 
@@ -92,7 +92,7 @@
   <hr>
 
    <!-- form的使用 -->
-  <h3>Google搜索</h3>
+  <h3 name="Google搜索">Google搜索</h3>
   <form action="https://www.google.com/search?">
     <input type="text" target="_blank" name=q>
     <button type="submit">在新窗口打开搜索结果</button>
@@ -104,7 +104,7 @@
    <!-- 制作能够提交的表单 -->
   <p> 个人信息调查表 </p>
   <form action="?">
-    <dl>
+    <dl name="个人信息调查表">
       <dt>性别</dt>
       <dd> <label> <input type="radio" name="gender"> 男 </label>
            <label> <input type="radio" name="gender"> 女 </label>
@@ -133,7 +133,7 @@
       <dd><input type="date" name="birthday"></dd>
 
       <dt>生辰</dt>
-      <dd><input type="time" name="birtime"></dd>
+      <dd><input type="time" name="birthtime"></dd>
 
       <dt>照片</dt>
       <dd><label>点我上传照片，我比文件上传按钮好看
@@ -147,6 +147,7 @@
       <dd><textarea name="intro" cols="30" rows="10">&lt;/textarea&gt;
       </textarea></dd>
 
+      <!-- fieldset的用法 -->
       <fieldset disabled="disabled">
         <legend>这里面的全都禁用了</legend>
         <input type="text">
@@ -160,6 +161,74 @@
     </dl>
   </form>
 
-<p id="page_end"></p>
+  <!-- 制作表格 -->
+  <table border="1" name="table">
+    <tr>
+      <th>编号</th>
+      <th>品名</th>
+      <th>进价</th>
+      <th>出价</th>
+    </tr>
+
+    <tr>
+      <th>aaa</th>
+      <td>aaa</td>
+      <td rowspan="2">5</td>
+      <td>aaa</td>
+    </tr>
+
+    <tr>
+      <th>aaa</th>
+      <td>aaa</td>
+      <td>8</td>
+    </tr>
+
+    <tr>
+      <th>aaa</th>
+      <td>aaa</td>
+      <td>aaa</td>
+      <td>aaa</td>
+    </tr>
+
+    <tr>
+      <th>aaa</th>
+      <td>aaa</td>
+      <td>aaa</td>
+      <td>aaa</td>
+    </tr>
+
+    <colgroup>
+      <col>
+      <col bgcolor="red">
+    </colgroup>
+  </table>
+
+  <hr>
+
+  <!-- map与area的使用方法 -->
+  <img src="https://drscdn.500px.org/photo/174778125/m%3D1170_k%3D1/2841ccf2a3720e8e794a6a6930f6ff2c" width="300" usemap="#map01">
+  <map name="map01">
+    <area shape="rect" coords="55 110 210 200" href="#">
+    <area shape="circle" coords="130 260 90" href="#">
+  </map>
+
+  <hr>
+
+  <!-- iframe的使用方法 -->
+  <a href="https://www.mi.com">小米</a>
+  <br>
+  <iframe src="https://nodejs.org/en" frameborder="1" name="iframe"></iframe>
+
+  <br>
+  <br>
+
+  <!-- 转义符的使用 -->
+  aaa&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bbbbb
+
+  <pre>aaa&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bbbb</pre>
+
+  >>>>>>>>>>>>>>>>><<<<<<<<<< &lt;span>&lt;/span>
+
+  <div id="page_end"></div>
 </body>
 </html>
