@@ -10,18 +10,18 @@
       body > p:first-of-type {
         color:red
       }
+      body > p:nth-of-type(2):focus{
+        color:blue
+      }
       body > p:nth-of-type(2):hover {
         color:red
       }
       body > p:nth-of-type(2):active {
         color:green
       }
-      body > p:nth-of-type(2):focus{
-        color:blue
-      }
     </style>
     <style>
-      p > span {
+      p.a.c > span {
         color:red
       }
       span > span:first-child {
@@ -37,16 +37,16 @@
       a:visited {
         color:orange
       }
-      a:nth-child(-n+5):link {
+      a:link {
         color:pink
       }
-      [ href*="@" ] {
-        color:blue
+      a[ href*="@" ] {
+        color:blue;
       }
-      [ href^="tel" ] {
-        color:yellow
+      a[ href^="tel" ] {
+        color:yellow;
       }
-      [ href*="pdf"i ] {
+      a[ href*="pdf"i ] {
         font-size: 30px;
       }
 
@@ -77,11 +77,12 @@
 
     <!-- 让所有的质/素数(prime)（2，3，5，7，11，13……）跟合数（4，6，8，9，10……）为不同的颜色 -->
     <style>
-      .prime li:nth-child(2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97){
+      .prime li:first-child,
+      .prime li:nth-child(2n+4),
+      .prime li:nth-child(3n+6),
+      .prime li:nth-child(5n+10),
+      .prime li:nth-child(7n+14) {
         color: crimson;
-      }
-      .prime li:nth-child(:not(prim)){
-        color: rgb(158, 173, 156);
       }
     </style>
 
