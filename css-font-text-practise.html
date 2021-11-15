@@ -9,7 +9,7 @@
 
     h1 {
       color:black;
-      text-shadow: 2px 2px #808080;
+      text-shadow: 2.5px 2.5px 2.5px #808080;
     }
     h1 span {
       color:blue
@@ -48,11 +48,11 @@
 
     h2 {
       text-transform: capitalize;
-      font: small-caps bold 30px 'Comic Sans MS','宋体',fantasy;
+      font: small-caps bold 1.5em'Comic Sans MS','宋体',fantasy;
     }
     p.a {
       text-align: right;
-      font: oblique 30px sans-serif;
+      font: oblique 1.6em sans-serif;
     }
     p.a b span::before {
       content:"aaa "
@@ -70,16 +70,15 @@
     p.d {
       font: 1em '微软雅黑',monospace;
       text-align: justify;
+      text-align-last: justify;
       text-indent: 2em;
       word-spacing: 0.3em;
-      letter-spacing:0.3em;
-      line-height: 1.8em;
+      letter-spacing:0.25em;
+      line-height: 2em;
     }
-    p.c {zoom: 2; font-size: 1em}
-    p.c > span {font-size:100%;}
-    p.c > span > span {font-size:120%;}
-    p.c > span > span > span {font-size:140%;}
-    p.c > span > span > span > span {font-size:160%;}
+    .c span{
+      font-size: 1.5em;
+    }
 
   </style>
 </head>
