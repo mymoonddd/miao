@@ -76,13 +76,18 @@
     </style>
 
     <!-- 让所有的质/素数(prime)（2，3，5，7，11，13……）跟合数（4，6，8，9，10……）为不同的颜色 -->
-    <style>
+    <!-- <style>
       .prime li:first-child,
       .prime li:nth-child(2n+4),
-      .prime li:nth-child(3n+6),
-      .prime li:nth-child(5n+10),
-      .prime li:nth-child(7n+14) {
+      .prime li:nth-child(3n+9),
+      .prime li:nth-child(5n+25),
+      .prime li:nth-child(7n+49) {
         color: crimson;
+      }
+    </style> -->
+    <style>
+      .prime li:not(:first-child):not(:nth-child(2n+4)):not(:nth-child(3n+9)):not(:nth-child(5n+25)):not(:nth-child(7n+49)) {
+        color: blue;
       }
     </style>
 
