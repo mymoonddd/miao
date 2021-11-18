@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Oald 7</title>
+  <style>
+
+    /* 通用格式 */
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+    }
+    p.header {
+      font: bold 20px "Microsoft YaHei", serif;
+      color: gray;
+      text-align: right;
+      padding: 20px 5% 20px 50px;
+      margin: 0;
+    }
+    input {
+        width: 90%;
+        margin-left: 5%;
+      }
+
+    /* 左侧边栏(搜索栏)布局 */
+    div.search {
+      height: 100vh;
+      width: 200px;
+      margin: 0;
+      background-color: rgb(234,238,243);
+    }
+    div.search input::placeholder {
+      content:search
+    }
+    div.search ul {
+      list-style: none;
+      margin-left: -30px;
+      overflow-y: auto;
+      height: calc(100vh - 120px);
+    }
+    div.search ul button {
+      margin: 0;
+      line-height：1em;
+      border: transparent;
+      background-color: transparent;
+      width: 200px;
+      text-align: left;
+      color: rgb(88,123,205)
+    }
+    div.search ul button:hover {
+      background-color: rgb(187,206,233);
+    }
+
+    /* 左二栏标题部分布局 */
+    div.title {
+      margin: -100vh 400px 0 200px;
+      width: auto;
+      height: 72px;
+    }
+    div.title p {
+      text-align: left;
+    }
+
+    /* 左二栏内容部分布局 */
+    div.content {
+      margin: 0 402px 0 202px;
+      border: 1px solid rbga(rgba(255, 255, 255, 0.486));
+      box-shadow: 1px 1px 10px;
+      width: auto;
+      height: calc(100vh - 72px);
+      overflow: auto;
+      font-size: 25px;
+      line-height: 36px;
+    }
+
+    /* 右二生词表布局 */
+      div.vocabulary {
+        width: 200px;
+        height: 100vh;
+        margin: -100vh 200px 0 auto;
+        background-color:  rgb(234,238,243);
+        box-shadow: 1px 1px 10px;
+      }
+
+    /* 右侧边栏历史记录布局 */
+      div.history {
+        width: 200px;
+        height: 100vh;
+        margin: -100vh 0 0 auto;
+        background-color:  rgb(234,238,243);
+        box-shadow: 1px 1px 10px;
+      }
+
+  </style>
+</head>
+<body>
+  <div class="search">
+    <p class="header">OALD Se7en</p>
+    <input type="text" placeholder="搜索单词">
+    <ul>
+      <li><button>lorem </button></li>
+      <li><button>lorem </button></li>
+      <li><button>lorem </button></li>
+      <li><button>lorem </button></li>
+      <li><button>lorem </button></li>
+      <li><button>lorem </button></li>
+      <li><button>lorem </button></li>
+      <li><button>lorem </button></li>
+      <li><button>lorem </button></li>
+      <li><button>lorem </button></li>
+      <li><button>lorem </button></li>
+      <li><button>lorem </button></li>
+      <li><button>lorem </button></li>
+      <li><button>lorem </button></li>
+      <li><button>lorem </button></li>
+      <li><button>lorem </button></li>
+      <li><button>lorem </button></li>
+      <li><button>lorem </button></li>
+      <li><button>lorem </button></li>
+      <li><button>lorem </button></li>
+      <li><button>lorem </button></li>
+      <li><button>lorem </button></li>
+      <li><button>lorem </button></li>
+      <li><button>lorem </button></li>
+      <li><button>lorem </button></li>
+      <li><button>lorem </button></li>
+      <li><button>lorem </button></li>
+      <li><button>lorem </button></li>
+      <li><button>lorem </button></li>
+      <li><button>lorem </button></li>
+      <li><button>lorem </button></li>
+      <li><button>lorem </button></li>
+      <li><button>lorem </button></li>
+      <li><button>lorem </button></li>
+      <li><button>lorem </button></li>
+      <li><button>lorem </button></li>
+      <li><button>lorem </button></li>
+      <li><button>lorem </button></li>
+      <li><button>lorem </button></li>
+      <li><button>lorem </button></li>
+      <li><button>lorem </button></li>
+      <li><button>lorem </button></li>
+      <li><button>lorem </button></li>
+      <li><button>lorem </button></li>
+      <li><button>lorem </button></li>
+      <li><button>lorem </button></li>
+      <li><button>lorem </button></li>
+      <li><button>lorem </button></li>
+
+    </ul>
+  </div>
+
+  <div class="title">
+    <p class="header">lorem</p>
+  </div>
+
+  <div class="content">
+    <ol>
+      <li>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium id neque, et repellendus quo blanditiis!</li>
+      <br>
+      <li>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium id neque, et repellendus quo blanditiis!</li>
+      <br>
+      <li>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium id neque, et repellendus quo blanditiis!</li>
+      <br>
+      <li>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium id neque, et repellendus quo blanditiis!</li>
+      <br>
+      <li>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium id neque, et repellendus quo blanditiis!</li>
+      <br>
+      <li>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium id neque, et repellendus quo blanditiis!</li>
+      <br>
+    </ol>
+  </div>
+
+  <div class="vocabulary">
+    <p class="header">Vocabulary</p>
+    <input type="text" placeholder="Search Vocabulary">
+  </div>
+
+  <div class="history">
+    <p class="header">History</p>
+    <input type="text" placeholder="Search History">
+  </div>
+</body>
+</html>
