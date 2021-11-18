@@ -5,53 +5,102 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta http-equiv="refresh" content="1.5">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>QQ邮箱</title>
   <style>
+
     body {
       margin: 0px;
+
     }
+
+    /* 标题框格式 */
     div#header {
       margin: 0;
       width: auto;
-      height: 1000em;
+      height: 70px;
       background-color: rgb(206, 245, 174);
     }
 
-    div#border {
-      background-color: rgb(137,181,233);
-      margin: -997em 0px 0px 8px;
-      width: auto;
-      height: 1000em;
+    /* 侧边框格式 */
+    div#aside {
+      width: 170px;
+      box-sizing: border-box;
+      border: rgb(117, 201, 230) 10px solid;
+      margin: 0;
+      height: calc(100vh - 70px);
+      background-color: rgb(243, 145, 145);
+      overflow: auto;
     }
 
-    div#side1 {
-      width: 170px;
-      margin: -999.5em auto 0px 15px;
-      height: 5em;
-      background-color: rgb(243, 145, 145);
-    }
-    div#side2 {
-      width: 170px;
-      margin: 0.5em auto 0px 15px;
-      height: 995em;
-      background-color: rgb(243, 145, 145);
-    }
-
+    /* 主体内容框格式 */
     div#main {
-      height: 1000em;
-      margin: -1000.5em auto 0px 192px;
+      height: calc(100vh - 70px);
+      margin: calc(70px - 100vh) auto 0px 170px;
       background-color: rgb(244, 246, 136);
+      overflow: auto;
     }
+
+    /* 内容框文本格式 */
+    p {
+      font: italic 30px/33px arial, sans-serif;
+      margin: 1em;
+    }
+
   </style>
 
 </head>
 <body>
 
     <div id="header"></div>
-    <div id="border"></div>
-    <div id="side1"></div>
-    <div id="side2"></div>
-    <div id="main">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Fugiat deleniti doloribus ullam maiores quod dignissimos eaque magni dolorem vitae mollitia, veniam sunt voluptatibus, blanditiis veritatis deserunt ex rem expedita Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero velit molestias sed reprehenderit sunt officiis maxime doloribus fugiat, repudiandae ex excepturi impedit laboriosam quibusdam nulla illo, commodi suscipit exercitationem repellat labore pariatur deleniti tempora. Autem ex hic obcaecati. Vel asperiores consectetur veritatis sequi, labore, neque animi pariatur obcaecati minima quia eius temporibus dolor facere explicabo adipisci. Quasi ut similique esse facilis veritatis natus molestiae. Sed natus dolore nostrum est dignissimos deserunt odit! Adipisci cupiditate debitis nemo iusto reiciendis maiores error quia a corporis, corrupti ipsum dicta modi distinctio consectetur provident? Officia asperiores repudiandae obcaecati laborum similique esse nisi dolorum voluptatum enim earum repellendus debitis nam non sit eum voluptas optio inventore maiores, assumenda animi. Porro itaque quisquam sit rerum, sed asperiores? Aliquid tempora modi necessitatibus sint? Ex eos vel aliquam ipsam odit velit temporibus sequi quis sunt inventore similique officia repellendus explicabo culpa molestias, non nobis repellat? Vero est asperiores unde earum voluptas nemo amet non quis omnis praesentium laboriosam optio architecto dolore, delectus, repellat qui harum necessitatibus iste debitis accusamus itaque quas! Sint mollitia esse nam ut nemo ea facilis alias, id a! Praesentium eos pariatur deserunt necessitatibus delectus expedita animi. Aspernatur ipsam placeat quo provident corporis neque eveniet.</div>
+
+    <div id="aside">
+      <ul><li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li></ul>
+    </div>
+    
+    <div id="main">
+       <p> Lorem ipsum dolor sit, amet consectetur adipisicing elit. Fugiat deleniti doloribus ullam maiores quod dignissimos eaque magni dolorem vitae mollitia, veniam sunt voluptatibus, blanditiis veritatis deserunt ex rem expedita Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero velit molestias sed reprehenderit sunt officiis maxime doloribus fugiat, repudiandae ex excepturi impedit </p>
+
+       <p>   laboriosam quibusdam nulla illo, commodi suscipit exercitationem repellat labore pariatur deleniti tempora. Autem ex hic obcaecati. Vel asperiores consectetur veritatis sequi, labore, neque animi pariatur obcaecati minima quia eius temporibus dolor facere explicabo adipisci. Quasi ut similique esse facilis veritatis natus molestiae. Sed natus dolore nostrum est dignissimos deserunt odit! Adipisci cupiditate debitis nemo iusto reiciendis maiores error quia a corporis, corrupti ipsum dicta modi distinctio consectetur provident? Officia asperiores repudiandae obcaecati laborum similique esse nisi dolorum voluptatum enim earum repellendus debitis nam non sit eum voluptas optio inventore maiores, assumenda animi. Porro itaque quisquam sit rerum, sed asperiores? Aliquid tempora modi necessitatibus sint? Ex eos vel aliquam ipsam odit velit temporibus sequi quis sunt invent</p>
+
+       <p> ore similique officia repellendus explicabo culpa molestias, non nobis repellat? Vero est asperiores unde earum voluptas nemo amet non quis omnis praesentium laboriosam optio architecto dolore, delectus, repellat qui harum necessitatibus iste debitis accusamus itaque quas! Sint mollitia esse nam ut nemo ea facilis alias, id a! Praesentium eos pariatur deserunt necessitatibus delectus expedita animi.</p>
+
+       <p>Aspernatur ipsam placeat quo provident corporis neque eveniet.</p>
+    </div>
 
 </body>
 </html>
