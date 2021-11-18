@@ -4,6 +4,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <xmeta http-equiv="refresh" content="1.5">
   <title>Document</title>
 <style>
   body {
@@ -20,7 +21,8 @@
     color: white;
   }
 
-  div div {
+  /* 块元素的垂直水平布局 */
+  div#d1 div {
     width: 180px;
     height: 40px;
     border: 3px solid;
@@ -29,21 +31,41 @@
     background-color: rgb(255,192,203);
     margin-right: 30px;
   }
-  div div:hover {
+  div#d1 div:hover {
     background-color: red;
   }
 
   /* blocks的调整与对齐 */
-  div div:nth-child(3n+1)  {
+  div#d1 div:nth-child(3n+1)  {
     margin-bottom: -40px;
   }
-  div div:nth-child(3n+2)  {
+  div#d1 div:nth-child(3n+2)  {
     margin-bottom: -40px;
     margin-left: 210px;
   }
-  div div:nth-child(3n)  {
+  div#d1 div:nth-child(3n)  {
     margin-bottom: 15px;
     margin-left: 420px;
+  }
+
+  /* 行内块的垂直水平布局 */
+  div#d2 {
+    width: 600px;
+    margin: 50px auto;
+  }
+  div#d2 div {
+    display: inline-block;
+    width: 180px;
+    height: 40px;
+    box-sizing: border-box;
+    margin: 0px auto 15px 24px;
+    border: 3px solid;
+    background-color: rgb(255,192,203);
+    text-align: center;
+    overflow: auto;
+  }
+  div#d2 div:nth-child(3n+1) {
+    margin-left: 0px;
   }
 
   p.p3 {
@@ -80,6 +102,22 @@
     <div>产品</div>
     <div>产品</div>
   </div>
+
+  <div id="d2">
+    <div>宽180高40(包含边框)</div>
+    <div>产品</div>
+    <div>产品</div>
+    <div>水平间隙30px</div>
+    <div>产品</div>
+    <div>产品</div>
+    <div>垂直间隙15px</div>
+    <div>产品</div>
+    <div>产品</div>
+    <div>边框宽度3px</div>
+    <div>产品</div>
+    <div>产品</div>
+  </div>
+
     <p class="p3">link</p>
     <p class="p3">link</p>
     <p class="p3">link</p>
