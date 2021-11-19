@@ -16,11 +16,9 @@
       box-sizing: border-box;
     }
     p.header {
-      font: bold 1vw "Microsoft YaHei", serif;
-      color: gray;
       text-align: right;
-      padding: 20px 5% 20px 50px;
-      margin: 0;
+      margin: 0 1em 1em auto;
+      padding-top: 0.5em;
     }
     input {
         width: 90%;
@@ -30,16 +28,17 @@
     /* 左侧边栏(搜索栏)布局 */
     div.search {
       height: 100vh;
-      width: 10vw;
+      width: 200px;
       margin: 0;
       background-color: rgb(234,238,243);
+      box-sizing: border-box;
     }
-    div.search input::placeholder {
-      content:search
+    div,search input {
+      font: inherit;
     }
     div.search ul {
       list-style: none;
-      margin-left: -30px;
+      padding: 0;
       overflow-y: auto;
       height: calc(100vh - 120px);
     }
@@ -48,7 +47,7 @@
       line-height：1em;
       border: transparent;
       background-color: transparent;
-      width: 200px;
+      width: auto;
       text-align: left;
       color: rgb(88,123,205)
     }
@@ -58,17 +57,14 @@
 
     /* 左二栏标题部分布局 */
     div.title {
-      margin: -100vh 20vw 0 10vw;
+      margin: -100vh 400px 0 200px;
       height: 72px;
       background-color: white;
-    }
-    div.title p {
-      text-align: left;
     }
 
     /* 左二栏内容部分布局 */
     div.content {
-      margin: 0 20vw 0 10vw;
+      margin: 0 400px 0 200px;
       border: 1px solid rbga(rgba(255, 255, 255, 0.486));
       box-shadow: 1px 1px 10px;
       height: calc(100vh - 72px);
@@ -79,16 +75,16 @@
 
     /* 右二生词表布局 */
     div.vocabulary {
-      width: 10vw;
+      width: 200px;
       height: 100vh;
-      margin: -100vh 10vw 0 auto;
+      margin: -100vh 200px 0 auto;
       background-color:  rgb(234,238,243);
       box-shadow: 1px 1px 10px;
     }
 
     /* 右侧边栏历史记录布局 */
     div.history {
-      width: 10vw;
+      width: 200px;
       height: 100vh;
       margin: -100vh 0 0 auto;
       background-color:  rgb(234,238,243);
