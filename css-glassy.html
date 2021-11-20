@@ -65,11 +65,11 @@
     code {
       white-space: pre;
       display: inline-block;
-      margin-left: -90px;
+      margin: -30px -60px;
+
     }
     span.mono {
-      font-family: monospace;
-      font-weight: bold;
+      font: bold 1.2em monospace;
       color: grey;
     }
 
@@ -93,20 +93,18 @@
 
     <div class="d3">
       <h2> I missed the original complexspiral demo-- how does this work?!?</h2>
-      <p class="p3">Glad you asked. The effect demonstrated here is achieved by using fixed background images, nothing more. For example, the main-content area (the blue part here) uses the following styles for the default spiral-shell background:
-        <code>
-          div#content {background: white url(glassy-ripple.jpg) 0 0 no-repeat fixed;} </code></p>
-      <p class="p3">The above is equivalent to these styles:
-        <code>
-
-          div#content {
-            background-color: white;
-            background-image: url(glassy-ripple.jpg);
-            background-position: 0 0;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
+      <p class="p3">Glad you asked. The effect demonstrated here is achieved by using fixed background images, nothing more. For example, the main-content area (the blue part here) uses the following styles for the default spiral-shell background:</p>
+      <code>
+        div#content {background: white url(glassy-ripple.jpg) 0 0 no-repeat fixed;}</code>
+      <p class="p3">The above is equivalent to these styles:    </p>
+      <code>
+        div#content {
+          background-color: white;
+          background-image: url(glassy-ripple.jpg);
+          background-position: 0 0;
+          background-repeat: no-repeat;
+          background-attachment: fixed;
           }</code>
-      </p>
       <p class="p3">The effect of these longer rules is exactly the same; they're just split out into individual background properties for more detailed consideration by you, gentle reader.</p>
       <p class="p3"> First, check out the rippled-shell image found here: <a href="https://meyerweb.com/eric/css/edge/complexspiral/glassy-ripple.jpg">url(glassy-ripple.jpg)</a> . Then come back to this page and I'll continue with the explanation. All done? Great.</p>
       <p class="p3"> According to CSS, any background image that is "fixed" using<span class="mono">background-attachment: fixed</span>; is fixed with respect to the viewport-- not the element with which the image is associated. So I set the rippled-shell background image to be aligned with the top left corner of the browser window (the viewport) with the values given for <span class="mono">background-position</span>. However, the image will only be visible wherever is intersects with the element to which it's been assigned. Therefore, even though the top left corner of the rippled-shell image is aligned with the top left corner of the viewport, we can only see it wherever it intersects with a div that has an id with a value of <span class="mono">content</span> (which, again, happens to be the one containing this text).</p>
