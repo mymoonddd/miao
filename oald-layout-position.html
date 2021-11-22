@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>oald-layout-position</title>
+    <style>
+      html {
+        width: 100%;
+        height: 100%;
+      }
+
+      body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+      }
+
+      div {
+        border: 1px solid;
+        box-sizing: border-box;
+        overflow: auto;
+      }
+
+      div.NavBar {
+        background-color: rgb(234,238,243);
+        width: 18%;
+        height: 100%;
+      }
+
+      div.content-title {
+        width: 46%;
+        height: 160px;
+        position: relative;
+        top: -100%;
+        right: -18%;
+        background-color: #fff;
+      }
+
+      div.content-main {
+        width: 46%;
+        height: calc(100% - 160px);
+        position: relative;
+        top: -100%;
+        right: -18%;
+        background-color: #fff;
+      }
+
+      div.Vocabulary {
+        width: 18%;
+        height: 100%;
+        position: relative;
+        top: -200%;
+        right: -64%;
+        background-color: rgb(234,238,243);
+      }
+
+      div.History {
+        width: 18%;
+        height: 100%;
+        position: relative;
+        top: -300%;
+        right: -82%;
+        background-color: rgb(234,238,243);
+      }
+
+      p {
+        margin: 10px 30px;
+        text-indent: 2em;
+        color: black;
+        font-size: 2em;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="NavBar"></div>
+    <div class="content-title"></div>
+    <div class="content-main">
+      <p> Additional Notes </p>
+      <p> If you want to change the alignment of one or more flex items, but not all, you can
+      include the align-self property on the flex items you would like to align differently.
+      The align-self takes the same values as align-items, and is discussed in “Flex
+      Items” on page 609. </p>
+      <p> You cannot override the alignment for anonymous flex items (non-empty text node
+      children of flex containers). Their align-self always matches the value of alignitems
+      of their parent flex container. </p>
+      <p> In the align-items examples, the flex container’s cross-size was as tall as it needed to
+      be. No height was declared on the container, so it defaulted to height: auto.
+      Because of this, the flex container grew to fit the content. You may have noticed the
+      example flex containers were all the same height, and the flex line heights were the
+      same across all examples. </p>
+      <p> Had the cross-size—in this case the height—been set to a specific size, there may have
+      been extra space at cross-end, or not enough space to fit the content. Flexbox allows
+      us to control the alignment of flex lines with the align-content property. The
+      align-content property is the last property we need to focus on that applies to the
+      flex container (versus the flex items). The align-content property only impacts flex
+      line alignment in multiline flex containers. </p>
+    </div>
+    <div class="Vocabulary"></div>
+    <div class="History"></div>
+  </body>
+</html>
