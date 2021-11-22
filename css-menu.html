@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>JS Bin</title>
+  <style>
+    html {
+      width: 100%;
+    }
+
+    body {
+      margin: 9px;
+      width: 100%;
+    }
+
+    p.title {
+      margin: 0;
+    }
+
+    ul {
+      width: 100%;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    ul li {
+      display: inline-block;
+      height: auto;
+      padding: 0px 10px 10px 10px;
+      font: 16px san-serif;
+      text-align: center;
+      line-height: 30px;
+      min-width: 2em;
+      vertical-align: top;
+      color: white;
+      background-color: rgb(109, 109, 255);
+    }
+
+    ul.main > li {
+      background-color: #fff;
+      color: black;
+    }
+
+
+    /* 粮食 */
+    #crop:not(:hover) {
+      clip-path: polygon(0% 0%, 100% 0%, 100% 17%, 0% 17%);
+    }
+
+
+    /* 谷物与其子元素 */
+    ul.grain-child {
+      position: absolute;
+      left: 73px;
+      top: 39px;
+      width: 2em;
+    }
+    ul.grain:not(:hover) {
+      clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+    }
+
+    /* 薯类与其子元素 */
+    ul.potato-child {
+      position: absolute;
+      left: 73px;
+      top: 79px;
+      width: 2em;
+    }
+    ul.potato:not(:hover) {
+      clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+    }
+
+    /* 面粉与其子元素 */
+    ul.flour-child {
+      position: absolute;
+      left: 73px;
+      top: 119px;
+      width: 2em;
+    }
+    ul.flour:not(:hover) {
+      clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+    }
+
+    /* 肉类 */
+    #meat:not(:hover) {
+      clip-path: polygon(0% 0%, 100% 0%, 100% 17%, 0% 17%);
+    }
+
+    /* 猪肉与其子元素 */
+    ul.pork-child {
+      position: absolute;
+      left: 152px;
+      top: 39px;
+      width: 2em;
+    }
+    ul.pork:not(:hover) {
+      clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+    }
+
+    /* 牛肉与其子元素 */
+    ul.beef-child {
+      position: absolute;
+      left: 152px;
+      top: 79px;
+      width: 2em;
+    }
+    ul.beef:not(:hover) {
+      clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+    }
+
+    /* 鱼肉与其子元素 */
+    ul.fish-child {
+      position: absolute;
+      left: 152px;
+      top: 119px;
+      width: 2em;
+    }
+    ul.fish:not(:hover) {
+      clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+    }
+
+    /* 水果 */
+    #fruit:not(:hover) {
+      clip-path: polygon(0% 0%, 100% 0%, 100% 17%, 0% 17%);
+    }
+
+    /* 饮品 */
+    #drink:not(:hover) {
+      clip-path: polygon(0% 0%, 100% 0%, 100% 17%, 0% 17%);
+    }
+
+    /* 零食 */
+    #junkfood:not(:hover) {
+      clip-path: polygon(0% 0%, 100% 0%, 100% 17%, 0% 17%);
+    }
+
+    /* 其他 */
+    #other:not(:hover) {
+      clip-path: polygon(0% 0%, 100% 0%, 100% 23%, 0% 23%);
+    }
+
+  </style>
+</head>
+<body>
+    <ul class="main">
+
+      <!-- 粮食 -->
+      <li id="crop">粮食
+        <!-- 谷物与其子元素 -->
+        <ul class="grain">
+          <li>谷物
+            <ul class="grain-child">
+              <li>大米</li>
+              <li>黑米</li>
+            </ul>
+          </li>
+        </ul>
+
+        <!--  薯类与其子元素 -->
+        <ul class="potato">
+          <li>薯类
+            <ul class="potato-child">
+              <li>红薯</li>
+              <li>土豆</li>
+            </ul>
+          </li>
+        </ul>
+
+        <!--  面粉与其子元素 -->
+        <ul class="flour">
+          <li>面粉
+            <ul class="flour-child">
+              <li>面包</li>
+              <li>面条</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+
+      <!-- 肉类 -->
+      <li id="meat">肉类
+        <!-- 猪肉与其子元素 -->
+        <ul class="pork">
+          <li>猪肉
+            <ul class="pork-child">
+              <li>五花</li>
+              <li>里脊</li>
+            </ul>
+          </li>
+        </ul>
+
+        <!--  牛肉与其子元素 -->
+        <ul class="beef">
+          <li>牛肉
+            <ul class="beef-child">
+              <li>后腿</li>
+              <li>里脊</li>
+            </ul>
+          </li>
+        </ul>
+
+        <!--  鱼肉与其子元素 -->
+        <ul class="fish">
+          <li>鱼肉
+            <ul class="fish-child">
+              <li>草鱼</li>
+              <li>鲫鱼</li>                 <li>鲫鱼</li>
+              <li>鳝鱼</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+
+      <!-- 水果 -->
+      <li id="fruit">水果
+        <ul><li>苹果</li></ul>
+        <ul><li>橘子</li></ul>
+        <ul><li>西瓜</li></ul>
+      </li>
+
+      <!-- 饮品 -->
+      <li id="drink">饮品
+        <ul><li>牛奶</li></ul>
+        <ul><li>豆浆</li></ul>
+        <ul><li>咖啡</li></ul>
+      </li>
+
+      <!-- 零食 -->
+      <li id="junkfood">零食
+        <ul><li>薯片</li></ul>
+        <ul><li>辣条</li></ul>
+        <ul><li>饼干</li></ul>
+      </li>
+
+      <!-- 其他 -->
+      <li id="other">其他
+        <ul><li>维生素</li></ul>
+        <ul><li>蛋白粉</li></ul>
+      </li>
+
+</body>
+</html>
