@@ -5,59 +5,40 @@
   <meta name="viewport" content="width=device-width">
   <title>qq-mail-position</title>
   <style>
-    html {
-      height: 100%;
-      width: 100%;
-    }
-
     body {
       margin: 0;
-      height: 100%;
-      width: 100%;
     }
 
-    div.title {
-      background-color: rgb(51,72,98);
-      height: 70px;
+    div.header {
+      height: 100px;
+      background-color: rgb(48,69,93)
     }
 
-    div.NavBar {
-      background-color: rgb(232,235,239);
-      width: 190px;
-      height: calc(100% - 70px);
-      overflow: auto;
+    div.aside {
+      width: 200px;
+      position: absolute;
+      bottom: 0;
+      top: 100px;
+      background-color: rgb(232,235,239)
     }
 
-    div.content {
-      background-color: white;
-      width: calc(100% - 190px);
-      height: calc(100% - 70px);
-      position: relative;
-      left: 190px;
-      top: calc(70px - 100%);
-      overflow: auto;
-    }
-    p {
+    div.main {
+      position: absolute;
+      top: 100px;
+      bottom:0;
+      left: 200px;
+      border: 1px;
+      padding: 1em;
       text-indent: 2em;
-      color: black;
-      padding: 10px;
-      font-size: 2em;
+      font: 1.5em sans-serif;
+      overflow: auto;
+      background-color: white;
     }
   </style>
 </head>
 <body>
-  <div class="title"></div>
-  <div class="NavBar"></div>
-  <div class="content">
-    <p> Absolute positioning </p>
-    <p> While float will not actually float a flex item, setting position: absolute is a diffrent story. The absolutely positioned children of flex containers, just like any ather absolutely positioned element, are taken out of the flow of the document. </p>
-    <p> More to the point, they do not participate in flex layout, and are not part of the document flow. However, they can be impacted by the styles set on the flex container, just as a child can be impacted by a partent element that isn't a flex container. In addition to inheriting any inheritable properties, the flex container's properties can affect the origin of the positioning. </p>
-    <p> The absolutely positoined child of a flex container is affected by both the justif-content value of the flex container, and its own align-self value, if there is one. For example, if you set align-self: center on the absolutely positioned child, it will start out centered with respect to the flex container parent's cross axis. From there, it can moved by properties like top, bottom, margins, and so on. </p>
-    <hr>
-    <p> Absolute positioning </p>
-    <p> While float will not actually float a flex item, setting position: absolute is a diffrent story. The absolutely positioned children of flex containers, just like any ather absolutely positioned element, are taken out of the flow of the document. </p>
-    <p> More to the point, they do not participate in flex layout, and are not part of the document flow. However, they can be impacted by the styles set on the flex container, just as a child can be impacted by a partent element that isn't a flex container. In addition to inheriting any inheritable properties, the flex container's properties can affect the origin of the positioning. </p>
-    <p> The absolutely positoined child of a flex container is affected by both the justif-content value of the flex container, and its own align-self value, if there is one. For example, if you set align-self: center on the absolutely positioned child, it will start out centered with respect to the flex container parent's cross axis. From there, it can moved by properties like top, bottom, margins, and so on. </p>
-  </div>
+  <div class="header"></div>
+  <div class="aside"></div>
+  <div class="main">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia vitae ratione explicabo autem soluta, consectetur natus molestiae earum repellendus rem cumque tempore iusto in quaerat assumenda ipsa quam dignissimos blanditiis expedita, porro exercitationem? Dicta, quo, unde, ut tempore expedita voluptates voluptatum iste provident nam deleniti placeat! Voluptatibus odio perferendis provident ea rem, sit dicta nobis neque voluptate quia nisi numquam temporibus error consequuntur eum quidem dolores ipsam ducimus! Autem recusandae commodi ea, necessitatibus molestiae fugiat enim facere quasi aliquam, sequi quidem accusantium iure ex hic optio quisquam deserunt reprehenderit dignissimos doloremque? Error rem aliquid ipsa, debitis minima a porro nisi, eum excepturi dolores veritatis. Pariatur explicabo repudiandae et quae, ipsum facere placeat quidem, illo ipsa excepturi voluptatum, a cum perferendis incidunt doloribus deleniti hic consequuntur rerum. Voluptatum saepe a sint. Possimus cupiditate voluptas sequi autem iure nemo sed magnam enim? Eos exercitationem soluta recusandae illo magni odit esse magnam delectus, veniam adipisci nulla excepturi. Laboriosam veritatis quidem quisquam repellat qui in ex amet sunt sed illo officia tempore, ab obcaecati nam incidunt, optio, eaque quae doloribus doloremque corrupti? Quia rerum ipsum corporis facere excepturi quod voluptatibus tempore tempora, dignissimos id porro exercitationem iste, voluptas eveniet alias culpa nam sit neque magnam mollitia commodi vero. Temporibus velit deleniti autem qui beatae porro laborum earum illum ducimus itaque! Delectus cumque dolorum, aspernatur earum illo doloribus totam repudiandae inventore corrupti nostrum, explicabo incidunt nobis molestias quas cum aut iusto nulla quidem pariatur nemo rem harum in. Mollitia, vel itaque! Assumenda autem nulla accusantium ipsam at nisi, error deserunt obcaecati optio necessitatibus sapiente, similique corporis dolorem aut doloremque. Culpa aspernatur molestiae libero, fuga modi enim, quos consectetur, quaerat perferendis possimus odit aliquam qui adipisci laborum quasi? Expedita quibusdam alias optio debitis tempore praesentium sapiente facere laboriosam omnis voluptas, quo neque adipisci enim, velit minus. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis quis fuga quaerat architecto dolore inventore quia ipsam eos, perspiciatis, magnam facere quo culpa iste, aliquam eligendi fugiat dolor aliquid nam!Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis quis fuga quaerat architecto dolore inventore quia ipsam eos, perspiciatis, magnam facere quo culpa iste, aliquam eligendi fugiat dolor aliquid nam!>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis quis fuga quaerat architecto dolore inventore quia ipsam eos, perspiciatis, magnam facere quo culpa iste, aliquam eligendi fugiat dolor aliquid nam!Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis quis fuga quaerat architecto dolore inventore quia ipsam eos, perspiciatis, magnam facere quo culpa iste, aliquam eligendi fugiat dolor aliquid nam!</div>
 </body>
 </html>
