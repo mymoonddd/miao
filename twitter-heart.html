@@ -6,7 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>twitter-heart</title>
   <style>
-    div {
+    input {
+      xvisibility: hidden;
+      xbackground: visible;
       background-image: url(pictures/web_heart_animation.png);
       width: 100px;
       height: 100px;
@@ -15,12 +17,12 @@
       transition: background-position 1s steps(29, jump-none);
     }
 
-    div:active  {
+    input:checked  {
       background-position: top right;
     }
   </style>
 </head>
 <body>
-  <div></div>
+  <input type="checkbox">
 </body>
 </html>
