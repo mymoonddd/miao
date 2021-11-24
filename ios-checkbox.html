@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>ios-checkbox</title>
+  <style>
+
+    input {
+      display: none;
+      position: absolute;
+    }
+
+    label {
+      display: block;
+    }
+
+    label.tuoyuan {
+      height: 160px;
+      width: 320px;
+      position: absolute;
+      top: 0px;
+      border: 1px solid;
+      border-radius: 200px;
+      background-color: rgb(255,255,255);
+      transition: 1s ease;
+    }
+
+    input:checked + label.tuoyuan {
+      background-color: rgb(48,243,75);
+    }
+
+    label.yuan {
+      height: 150px;
+      width: 150px;
+      position: absolute;
+      top: 5px;
+      left: 15px;
+      box-shadow: 1px 1px 10px grey;
+      border-radius: 200px;
+      background-color: #fff;
+      transition: 1s ease;
+    }
+
+    input:checked + label.tuoyuan + label.yuan {
+      left: 170px;
+    }
+
+  </style>
+</head>
+<body>
+  <input id="button" type="checkbox">
+  <label for="button" class="tuoyuan"></label>
+  <label for="button" class="yuan"></label>
+</body>
+</html>
