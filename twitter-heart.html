@@ -6,6 +6,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>twitter-heart</title>
   <style>
+    body {
+      font-size: 0;
+    }
+
+    /* 情况一 取消点赞后立刻变灰 */
+    input {
+      opacity: 0;
+      width: 25px;
+      height: 25px;
+      margin: 0;
+      position: absolute;
+      left: 59px;
+      top: 38px;
+      border: solid;
+      z-index: 2;
+    }
+
     div {
       background-image: url(pictures/web_heart_animation.png);
       width: 100px;
@@ -13,30 +30,46 @@
       background-position: top left;
       position: absolute;
       top: 0;
-      transition: background-position 1s steps(29, jump-none);
       z-index: 1;
       border: 1px solid grey;
     }
 
     input:checked + div  {
       background-position: top right;
+      transition: background-position 1s steps(29, jump-none);
     }
 
-    input {
-      opacity: 0;
-      width: 25px;
-      height: 25px;
-      position: relative;
-      left: 34px;
-      top: 34px;
-      border: solid;
-      z-index: 2;
+    /* 情况二 取消点赞后倒放动画变灰 */
+    .anothor {
+      margin-left: 150px;
+      background-color:rgb(17, 89, 161);
+    }
+
+    div.anothor {
+      background-image: url(pictures/web_heart_animation.png);
+      width: 100px;
+      height: 100px;
+      background-position: top left;
+      position: absolute;
+      top: 0;
+      z-index: 1;
+      xborder: 1px solid rgb(59, 60, 65);
+      transition: background-position 1s steps(29, jump-none);
+    }
+
+    input.anothor:checked + div.anothor  {
+      background-position: top right;
     }
 
   </style>
 </head>
 <body>
-  <input type="checkbox">
-  <div class="twitter-heart"></div>
+  <!-- 情况一 取消点赞后立刻变灰 -->
+  <input type="checkbox" title="取消点赞后立刻变灰">
+  <div class="twitter-heart" title="请点击爱心"></div>
+
+  <!-- 情况二 取消点赞后倒放动画变灰 -->
+  <input type="checkbox" class="anothor" title="取消点赞后倒放动画变灰">
+  <div class="twitter-heart anothor" title="请点击爱心"></div>
 </body>
 </html>
