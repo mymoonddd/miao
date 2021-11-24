@@ -3,54 +3,87 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
-  <title>ios-checkbox</title>
+  <title>JS Bin</title>
   <style>
 
-    input {
-      display: none;
-      position: absolute;
-    }
+* {
+  position: absolute;
+  top: 0;
+  background-color: #fff;
+  box-sizing: border-box;
+}
 
-    label {
-      display: block;
-    }
+input {
+  display: none;
+}
 
-    label.tuoyuan {
-      height: 160px;
-      width: 320px;
-      position: absolute;
-      top: 0px;
-      border: 1px solid;
-      border-radius: 200px;
-      background-color: rgb(255,255,255);
-      transition: 1s ease;
-    }
+label {
+  display: block;
+}
 
-    input:checked + label.tuoyuan {
-      background-color: rgb(48,243,75);
-    }
+label.a {
+  width: 300px;
+  height: 160px;
+  border-radius: 200px;
+  background-color: lightgreen;
+  border: solid #7774;
+  box-shadow: 1px 1px 10px #7774;
+}
 
-    label.yuan {
-      height: 150px;
-      width: 150px;
-      position: absolute;
-      top: 5px;
-      left: 15px;
-      box-shadow: 1px 1px 10px grey;
-      border-radius: 200px;
-      background-color: #fff;
-      transition: 1s ease;
-    }
+label.b {
+    width: 300px;
+  height: 160px;
+  border-radius: 200px;
+  background-color: #fff;
+  transform: scale(1);
+  opacity: 10;
+  transition: transform 0.5s linear, opacity 0.5s cubic-bezier(0, 0.5, 0.9, 1);
+}
 
-    input:checked + label.tuoyuan + label.yuan {
-      left: 170px;
-    }
+input:checked + label.a + label.b {
+  transform: scale(0);
+  opacity: 0;
+}
+
+label.c {
+  width: 135px;
+  height: 135px;
+  border-radius: 200px;
+  margin: 5px 10px;
+  background-color: #fff;
+  left:0;
+  top:8px;
+  transition: left 0.5s cubic-bezier(0, 0.70, 0.1, 1);
+  box-shadow: 1px 0 20px #7774;
+}
+
+input:checked + label.a + label.b + label.c {
+  left: 140px;
+}
+
+label.d {
+  width: 135px;
+  height: 135px;
+  border-radius: 200px;
+  margin: 5px 10px;
+  background-color: #fff;
+  left:0;
+  top:8px;
+  transition: left 0.3s cubic-bezier(0, 0.35, 0.75, 1);
+}
+
+input:checked + label.a + label.b + label.c + label.d {
+  left: 140px;
+}
 
   </style>
 </head>
 <body>
-  <input id="button" type="checkbox">
-  <label for="button" class="tuoyuan"></label>
-  <label for="button" class="yuan"></label>
+  <input type="checkbox" id="button">
+<label class="a" for="button"></label>
+<label class="b" for="button"></label>
+<label class="c" for="button"></label>
+<label class="d" for="button"></label>
+
 </body>
 </html>
