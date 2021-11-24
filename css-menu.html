@@ -8,23 +8,40 @@
   <style type="text/less">
 
     /* less版 */
+
     ul {
       list-style: none;
       padding: 0 ;
     }
+    li {
+      border: solid 1px;
+      padding: 0 15px;
+    }
 
     body > ul > li {
       display: inline-block;
+      position: relative;
       list-style: none;
-      padding: 0;
-      ul {
+      > ul {
         position: absolute;
-        display: none;
+        left: 0;
         white-space: nowrap;
-        ul {
-          display: none;
-          top: 0;
-          left: 100%;
+          > li {
+            display: none;
+          }
+            ul{
+              position: absolute;
+              top: 0;
+              left: 100%;
+              > li {
+                display: none;
+              }
+            }
+        ul::before {
+          content: ">";
+          position: absolute;
+          left: -15px;
+          display: block;
         }
       }
     }
@@ -33,7 +50,7 @@
       background-color: gold;
     }
 
-    li:hover > ul {
+    li:hover > ul > li {
       display: block;
     }
   </style>
@@ -62,10 +79,9 @@
     <li>一级菜单</li>
     <li>一级菜单</li>
     <li>一级菜单</li>
-    <li>一级菜单</li>
-    <li>一级菜单</li>
+
   </ul>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/3.11.1/less.min.js" ></script>
+  <script src="less+sass/less.min.js" ></script>
 </body>
 
 </html>
