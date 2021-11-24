@@ -7,10 +7,12 @@
   <title>div-image-contain</title>
   <style>
 
+
     section {
       background-color: rgb(236, 236, 236);
-      width: 690px;
+      width: 750px;
     }
+
     div {
       border: solid;
       margin: 10px;
@@ -19,18 +21,19 @@
       display: inline-block;
     }
 
+    /* inlne */
     div.inline {
       line-height: 200px;
       text-align: center;
       font-size: 0;
     }
-
     img.inline {
       vertical-align: middle;
       max-width: 200px;
       max-height: 200px;
     }
 
+    /* block */
     div.block {
       position: relative;
     }
@@ -44,12 +47,44 @@
       max-width: 200px;
       max-height: 200px;
     }
+
+    /* object-fit */
+    img.object-fit {
+    width: 200px;
+    height: 200px;
+    object-fit: contain;
+    border: solid;
+    margin: 10px;
+    max-height: 100%;
+    max-width: 100%;
+    }
+
+    /* table */
+    section.table {
+      display: table;
+      border-collapse: collapse;
+      width:600px;
+      height:200px;
+      margin: auto;
+    }
+    div.table {
+      display: table-cell;
+      text-align: center;
+
+    }
+    img.table {
+      max-height: 100%;
+      max-width: 100%;
+      vertical-align: middle;
+    }
+
   </style>
 </head>
 <body>
 
   <section title="inline方法">
-    <div class="inline">
+   <p>inline元素</p>
+   <div class="inline">
       <img src="pictures/blueVtc.png" alt="error" class="inline">
     </div>
     <div class="inline">
@@ -59,8 +94,10 @@
       <img src="pictures/graySml.png" alt="error" class="inline">
     </div>
   </section>
-   <br>
-  <section title="block方法">
+
+
+  <section title="block">
+    <p>block元素</p>
     <div class="block">
       <img src="pictures/blueVtc.png" alt="error" class="block">
     </div>
@@ -71,5 +108,31 @@
       <img src="pictures/graySml.png" alt="error" class="block">
     </div>
   </section>
+
+  <section title="object-fit">
+    <p>object-fit</p>
+      <img src="pictures/blueVtc.png" alt="error" class="object-fit">
+    </div>
+      <img src="pictures/GreenHrz.png" alt="error" class="object-fit">
+    </div>
+      <img src="pictures/graySml.png" alt="error" class="object-fit">
+    </div>
+  </section>
+
+  <section title="table">
+    <p>table元素</p>
+    <section class="table">
+      <div class="table">
+        <img src="pictures/blueVtc.png" alt="error" class="table">
+      </div>
+      <div class="table">
+        <img src="pictures/GreenHrz.png" alt="error" class="table">
+      </div>
+      <div class="table">
+        <img src="pictures/graySml.png" alt="error" class="table">
+      </div>
+    </section>
+  </section>
+
 </body>
 </html>
