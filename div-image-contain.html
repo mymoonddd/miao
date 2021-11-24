@@ -6,31 +6,70 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>div-image-contain</title>
   <style>
-  div {
-    height: 500px;
-    width: 500px;
-    margin-bottom: 50px;
-    border: solid;
-  }
 
+    section {
+      background-color: rgb(236, 236, 236);
+      width: 690px;
+    }
+    div {
+      border: solid;
+      margin: 10px;
+      width: 200px;
+      height: 200px;
+      display: inline-block;
+    }
 
-  img.Blue {
-    transform: scale(0.62) translate(-31%, 0);
-  }
+    div.inline {
+      line-height: 200px;
+      text-align: center;
+      font-size: 0;
+    }
 
-  img.Green {
-    transform: scale(0.61) translate(10%, -32%)
-  }
+    img.inline {
+      vertical-align: middle;
+      max-width: 200px;
+      max-height: 200px;
+    }
 
-  img.Grey{
-    transform: scale(3) translate(70%, 65%)
-  }
+    div.block {
+      position: relative;
+    }
+    img.block {
+      position: absolute;
+      margin: auto;
+      right: 0;
+      left: 0;
+      bottom: 0;
+      top: 0;
+      max-width: 200px;
+      max-height: 200px;
+    }
   </style>
 </head>
 <body>
-  <div> <img class="Blue" src="pictures/blueVtc.png" alt="error"> </div>
-<div> <img class="Green" src="pictures/greenHrz.png" alt="error"></div>
-<div> <img  class="Grey" src="pictures/graySml.png" alt="error"></div>
 
+  <section title="inline方法">
+    <div class="inline">
+      <img src="pictures/blueVtc.png" alt="error" class="inline">
+    </div>
+    <div class="inline">
+      <img src="pictures/GreenHrz.png" alt="error" class="inline">
+    </div>
+    <div class="inline">
+      <img src="pictures/graySml.png" alt="error" class="inline">
+    </div>
+  </section>
+   <br>
+  <section title="block方法">
+    <div class="block">
+      <img src="pictures/blueVtc.png" alt="error" class="block">
+    </div>
+    <div class="block">
+      <img src="pictures/GreenHrz.png" alt="error" class="block">
+    </div>
+    <div class="block">
+      <img src="pictures/graySml.png" alt="error" class="block">
+    </div>
+  </section>
 </body>
 </html>

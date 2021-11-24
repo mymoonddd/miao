@@ -3,51 +3,40 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
-  <title>css-menu</title>
-  <style>
+  <xlink rel="stylesheet/less" type="text/css" href="styles.less" />
+  <title>less-menu</title>
+  <style type="text/less">
 
-    /* 修改版 */
+    /* less版 */
     ul {
       list-style: none;
-      padding: 0px;
-      background-color: white;
+      padding: 0 ;
     }
 
-    li {
-      border: 1px solid;
-      box-sizing: border-box;
+    body > ul > li {
+      display: inline-block;
+      list-style: none;
+      padding: 0;
+      ul {
+        position: absolute;
+        display: none;
+        white-space: nowrap;
+        ul {
+          display: none;
+          top: 0;
+          left: 100%;
+        }
+      }
     }
 
     li:hover {
       background-color: gold;
     }
-
-    body>ul>li {
-      display: inline-block;
-      background-color: white;
-    }
-
-    ul ul {
-      position: absolute;
-      display: none;
-    }
-
-    li:hover>ul {
+    li:hover > ul {
       display: block;
-    }
-
-    ul ul ul {
-      position: absolute;
-      top: 0;
-      left: 100%;
-      white-space: nowrap;
-    }
-
-    body ul li ul>li:not(:empty):after {
-      content: ">";
-    }
   </style>
 </head>
+
 <body>
   <ul>
     <li>一级菜单
@@ -74,6 +63,6 @@
     <li>一级菜单</li>
     <li>一级菜单</li>
   </ul>
-
 </body>
+<script src="https://cdn.jsdelivr.net/npm/less@4.1.1"></script>
 </html>
