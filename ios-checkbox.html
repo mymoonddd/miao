@@ -3,14 +3,24 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
-  <title>JS Bin</title>
+  <title>ios-checkbox</title>
   <style>
 
 * {
   position: absolute;
-  top: 0;
+  top: 10px;
+  left: 10px;
   background-color: #fff;
   box-sizing: border-box;
+}
+
+div {
+  position: relative;
+  top: 100%;
+  background-color: rgba(108, 207, 89, 0.384);
+  box-shadow:2px 2px 20px rgba(128, 128, 128, 0.219);
+  width: 264px;
+  height: 160px;
 }
 
 input {
@@ -22,8 +32,8 @@ label {
 }
 
 label.a {
-  width: 300px;
-  height: 160px;
+  width: 240px;
+  height: 140px;
   border-radius: 200px;
   background-color: lightgreen;
   border: solid #7774;
@@ -31,59 +41,63 @@ label.a {
 }
 
 label.b {
-    width: 300px;
-  height: 160px;
+  width: 240px;
+  height: 140px;
   border-radius: 200px;
   background-color: #fff;
   transform: scale(1);
   opacity: 10;
-  transition: transform 0.5s linear, opacity 0.5s cubic-bezier(0, 0.5, 0.9, 1);
+  border: solid rgba(119, 119, 119, 0.144);
+  transition: transform 0.5s cubic-bezier(0, 0.5, 0.9, 1), opacity 0.5s cubic-bezier(0, 0.5, 0.9, 1), border 0.5s cubic-bezier(0, 0.5, 0.9, 1);
 }
 
 input:checked + label.a + label.b {
   transform: scale(0);
   opacity: 0;
+  border: solid rgba(119, 119, 119, 0);
 }
 
 label.c {
-  width: 135px;
-  height: 135px;
+  width: 120px;
+  height: 120px;
   border-radius: 200px;
-  margin: 5px 10px;
+  margin: 10px;
   background-color: #fff;
-  left:0;
-  top:8px;
-  transition: left 0.5s cubic-bezier(0, 0.70, 0.1, 1);
+  transition: left 0.5s cubic-bezier(0, 0.9, 0.9, 1);
+  box-shadow: 1px 0 20px #7774;
+  box-shadow: 1px 0 20px #7774;
+  box-shadow: 1px 0 20px #7774;
+  box-shadow: 1px 0 20px #7774;
   box-shadow: 1px 0 20px #7774;
 }
 
+
 input:checked + label.a + label.b + label.c {
-  left: 140px;
+  left: 110px;
 }
 
 label.d {
-  width: 135px;
-  height: 135px;
+  width: 120px;
+  height: 120px;
   border-radius: 200px;
-  margin: 5px 10px;
+  margin: 10px;
   background-color: #fff;
-  left:0;
-  top:8px;
-  transition: left 0.3s cubic-bezier(0, 0.35, 0.75, 1);
+  transition: left 0.3s cubic-bezier(0, 0.7, 0.7, 1);
 }
 
 input:checked + label.a + label.b + label.c + label.d {
-  left: 140px;
+  left: 110px;
 }
 
   </style>
 </head>
 <body>
-  <input type="checkbox" id="button">
-<label class="a" for="button"></label>
-<label class="b" for="button"></label>
-<label class="c" for="button"></label>
-<label class="d" for="button"></label>
-
+  <div class="ios-button">
+    <input type="checkbox" id="button">
+    <label class="a" for="button"></label>
+    <label class="b" for="button"></label>
+    <label class="c" for="button"></label>
+    <label class="d" for="button"></label>
+  </div>
 </body>
 </html>
