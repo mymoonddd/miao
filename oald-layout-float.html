@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>oald-layout--float</title>
+  <style>
+
+    html {
+      width: 100%;
+      height: 100%;
+    }
+
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+    }
+    section {
+      min-width: 990px;
+      height: 100%;
+    }
+
+    div {
+      border-right: 1px solid;
+    }
+
+    .asideLeft {
+      float: left;
+      width: 200px;
+      height: 100%;
+      background-color: rgb(234,238,243);
+      box-sizing: border-box;
+    }
+
+    .asideRight1, .asideRight2 {
+      float: right;
+      width: 200px;
+      height: 100%;
+      background-color: rgb(234,238,243);
+      margin-top: -130px;
+      box-sizing: border-box;
+    }
+
+    div.mainTitle {
+      margin-right: 400px;
+      border-bottom: 1px solid #000;
+      height: 130px;
+      background-color: #fff;
+      box-sizing: border-box;
+    }
+
+    div.mainContent {
+      background-color: #fff;
+      position: absolute;
+      left: 200px;
+      top: 130px;
+      right: 400px;
+      bottom: 0;
+      overflow: auto;
+      font-size: 2em;
+    }
+  </style>
+</head>
+<body>
+   <section>
+    <div class="asideLeft"></div>
+    <div class="mainTitle"></div>
+    <div class="mainContent">
+      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae ab non recusandae alias, nulla ipsam pariatur, consequatur cum, beatae animi vel facilis rerum exercitationem quam repellat earum labore optio blanditiis.      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae ab non recusandae alias, nulla ipsam pariatur, consequatur cum, beatae animi vel facilis rerum exercitationem quam repellat earum labore optio blanditiis.
+    </div>
+    <div class="asideRight1"></div>
+    <div class="asideRight2"></div>
+  </section>
+</body>
+</html>
