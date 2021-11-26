@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>abs-center</title>
+  <style>
+
+    table {
+      border-collapse: collapse;
+      font-size: 0.5em;
+      position: absolute;
+      left:40px;
+      top: 40px;
+    }
+
+    tr:nth-child(2) {
+      background-color: rgba(0, 0, 0, 0.075);
+    }
+
+    th {
+      width: 10em;
+      background-color: rgba(238, 158, 202, 0.479);
+      border: double;
+      text-align: center;
+      font-size: 2em;
+    }
+
+    td {
+      width: 300px;
+      border: double;
+    }
+
+    h2 {
+      margin-left: 0.5em;
+    }
+
+    p {
+      margin: -1em 0;
+      padding: 0 0.8em;
+      height: 17em;
+      white-space: pre-wrap;
+    }
+
+    .parent {
+      width: 300px;
+      height: 300px;
+      background-color: #fff;
+      margin: auto;
+    }
+
+    /* img元素的常规方法  */
+
+    .parent.normal {
+      text-align: center;
+      line-height: 300px;
+    }
+
+    img,normal {
+      max-width: 100%;
+      max-height: 100%;
+      vertical-align: middle;
+      overflow: auto;
+    }
+
+    /* img元素的定位方法  */
+    .parent.position {
+      position: relative;
+    }
+
+    img.position {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      margin: auto;
+      max-width: 100%;
+      max-height: 100%;
+    }
+
+    /* img元素的background-size方法(背景图片小于前景框)  */
+    .child.backgroundSmall {
+      width: 300px;
+      height: 300px;
+      background-image: url(http://mymoonddd.github.io/miao/pictures/graySml.png);
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+
+    /* img元素的background-size方法（背景图片尺寸大于前景框）  */
+    .child.backgroundBig {
+      width: 300px;
+      height: 300px;
+      background-image: url(http://mymoonddd.github.io/miao/pictures/GreenHrz.png);
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+
+    /* 非替换元素的表格方法 */
+    .parent.table {
+      display: table;
+      border-collapse: collapse;
+    }
+
+    .child.table {
+      display: table-cell;
+      text-align: center;
+    }
+
+    img.table {
+      max-height: 300px;
+      max-width: 300px;
+      vertical-align: middle;
+    }
+
+  </style>
+</head>
+<body>
+    <table>
+      <tbody>
+        <tr>
+          <th>示意图</th>
+          <td>
+            <div class="parent normal">
+              <img src="http://mymoonddd.github.io/miao/pictures/blueVtc.png" alt="这里是一张蓝图" class="normal">
+            </div>
+          </td>
+          <td>
+            <div class="parent position">
+              <img src="http://mymoonddd.github.io/miao/pictures/blueVtc.png" alt="error" class="position">
+            </img>
+          </div>
+          </td>
+          <td>
+            <div class="parent backgroundSmall">
+              <div class="child backgroundSmall">
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="parent backgroundBig">
+              <div class="child backgroundBig">
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="parent table">
+              <span class="child table">
+                <img src="http://mymoonddd.github.io/miao/pictures/GreenHrz.png" alt="error" class="table">
+              </span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <th>实现方法</th>
+          <td>
+            <h2>替换元素的常规居中</h2>
+            <p>
+父元素：块元素
+子元素：替换元素
+居中元素：替换元素
+实现：在父元素设置内容水平居中，在子元素设置自身相对于父元素垂直居中。
+          ①大小：max-width, max-height
+          ②位置：line-height text-align vertical-align
+            </p>
+          </td>
+          <td>
+            <h2>img元素的定位居中</h2>
+              <p>
+父元素：块元素
+子元素：Img元素
+居中元素：Img元素
+实现：父元素相对定位；子元素绝对定位。
+          ①大小：max-width, max-height
+          ②位置：margin top/right/bottom/left
+                          </p>
+          </td>
+          <td colspan="2">
+            <h2>块元素的背景图片居中</h2>
+            <p>
+父元素：块元素
+子元素：块元素(显示为块元素的非替换元素)
+居中元素：子块元素的背景图片
+实现-将图片设置为子元素的背景图
+        ①大小：background-repeat/background-size
+        ②位置：background-position
+            </p>
+          </td>
+          <td>
+            <h2>img元素的表格居中</h2>
+            <p>
+父元素：块元素
+子元素：块元素/非替换元素
+居中元素：子元素的内容图
+实现：将父元素设置为表格，子元素设置为表单元格。在子元素下插入图片。
+          ①大小：max-height，max-width
+          ②位置：text-align，vertical-align
+           </p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+</body>
+</html>
