@@ -21,7 +21,7 @@
       display: inline-block;
     }
 
-    /* inlne */
+    /* inline */
     div.inline {
       line-height: 200px;
       text-align: center;
@@ -55,8 +55,9 @@
     object-fit: contain;
     border: solid;
     margin: 10px;
-    max-height: 100%;
-    max-width: 100%;
+    }
+    img.object-fit:last-child {
+      object-fit: scale-down;
     }
 
     /* table */
@@ -70,13 +71,13 @@
     div.table {
       display: table-cell;
       text-align: center;
-
     }
     img.table {
       max-height: 100%;
       max-width: 100%;
       vertical-align: middle;
     }
+
 
   </style>
 </head>
@@ -112,11 +113,8 @@
   <section title="object-fit">
     <p>object-fit</p>
       <img src="pictures/blueVtc.png" alt="error" class="object-fit">
-    </div>
       <img src="pictures/GreenHrz.png" alt="error" class="object-fit">
-    </div>
       <img src="pictures/graySml.png" alt="error" class="object-fit">
-    </div>
   </section>
 
   <section title="table">
