@@ -1,0 +1,104 @@
+* {
+  background-color: rgba(0,0,0,0.08);
+  box-shadow: inset 0 0 1px red;
+}
+
+html {
+  height: 100%;
+  zoom: 0.9;
+  font-size: 12px;
+}
+body {
+  height: 100%;
+  margin: 0;
+}
+
+// 标题部分
+// 标题部分
+// 标题部分
+// 标题部分
+// 标题部分
+
+header {
+  width: 100%;
+  height: 40px;
+  background-color: #333;
+  ul {
+    margin: 0 auto;
+    list-style: none;
+    padding: 0;
+    width: 1126px;
+    height: 40px;
+    white-space: nowrap;
+    color: #0002;
+    text-align: center;
+    li {
+      display: inline-block;
+      color: #888;
+      padding: 12px 0;
+      xmargin: -2px;
+    }
+    li:hover {
+      color: #fff;
+    }
+    li.logIn {
+      margin-left: 160px;
+    }
+    li.cart {
+      margin-left: 25px;
+      width: 120px;
+      position: relative;
+      background-color:#0002;
+      border-top: 1px solid #0006;
+      box-sizing: border-box;
+      &:hover {
+        color: rgb(255,106,0);
+        background-color: #fff;
+      }
+      div.cart {
+        width: 320px;
+        height: 100px;
+        background-color: #fff;
+        position: absolute;
+        top:40px;
+        right: 0;
+        clip-path: inset(0 0 100% 0);
+        transition: 0.2s linear;
+        box-shadow: 1px 1px 10px gray;
+      }
+
+      &:hover div.cart {
+        clip-path: inset(0 0 0 0);
+      }
+    }
+    li.appQRcode {
+      position: relative;
+      div.appQRcode {
+        width: 130px;
+        height: 150px;
+        background-color: #fff;
+        position: absolute;
+        top: 40px;
+        left: -35px;
+        box-shadow: 1px 1px 10px gray;
+        clip-path: inset(0 0 100% 0);
+        transition: 0.2s linear;
+        color: #000;
+      }
+      &:hover div.appQRcode {
+        clip-path: inset(0 0 0 0);
+      }
+    }
+  }
+}
+
+
+// 导航部分
+// 导航部分
+// 导航部分
+// 导航部分
+// 导航部分
+
+
+
+
