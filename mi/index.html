@@ -19,6 +19,7 @@ body {
   height: 100%;
   margin: 0;
   overflow: auto;
+  position: relative;
 }
 
 header {
@@ -134,40 +135,42 @@ nav {
       width: 600px;
       margin-left: 160px;
       display: inline-block;
-      &:hover div{
-        clip-path: inset(0 0 0 0);
-            }
+      position: relative;
       li {
         display: inline-block;
         padding-right: 19px;
         &:hover {
           color: orange;
+          div.hidden {
+            clip-path: inset(0 0 0 0);
+          }
         }
-        div {
-          width: 100%;
+        div.hidden {
+          width: 1226px;
           height: 150px;
-          box-shadow: 1px 5px 10px #3333;
-          background-color: #fff;
+          background-color: white;
           clip-path: inset(0 0 100% 0);
           transition: 0.2s linear;
           position: absolute;
-          top: 100px;
-          left: 0;
+          top: 60px;
+          left: -220px;
           z-index: 3;
-          table {
-            width: 1126px;
-            margin: auto;
-            border-top: 1px solid #888;
-            tr.image {
-              td {
-                width: 178px;
-                height: 125px;
-                img {
-                  width: 80px;
-                  height: 100px;
-                }
-              }
+          display: flex;
+          span {
+            text-align: center;
+            flex-grow: 1;
+            border-top: solid 1px #8888;
+            &:not(:first-child)::before {
+              content: "|";
+              font-size: 6em;
+              font-weight: 100;
+              color: #8882;
             }
+            img {
+              max-height: 100px;
+              max-width: 100px;
+            }
+
           }
         }
       }
@@ -464,11 +467,11 @@ nav {
 
 main {
   width: 1226px;
-  height: 2000px;
   margin: 0 auto;
   background-color:rgb(245,245,245);
   font-size: 1.1em;
   padding-top: 29px;
+  padding-bottom: 50px;
   div.longPic {
     height: 132px;
     width: 100%;
@@ -477,85 +480,173 @@ main {
     background-repeat: no-repeat;
   }
   div.product {
-    position: relative;
-    background-color: #f5f5f5;
-    p {
-      position: absolute;
-      top: -55px;
-      +p {
-        right: 0;
-      }
-    }
     div {
-      margin-top: 60px;
-      label {
-      position: absolute;
-      top: -40px;
-      &:hover {
-        color: rgb(255,106,0);
-        &::after {
-          content: "_____";
+      position: relative;
+      &:hover section {
+        visibility: hidden;
+        transition: none;
+      }
+      span {
+        font-size: .8em;
+        float: right;
+        margin-left: 15px;
+        margin-bottom: 700px;
+        &:last-child {
           position: absolute;
-          left: -3px;
-          bottom: -10px;
+          left: 0;
         }
-        +ul {
-          display: none;
-          transition: 1s 1000s linear;
-
-          &.R1 +label +ul.R2 {
-            display: block;
-            transition: .1s 1000s linear;
-          }
-          &.R2 +label +ul.R3 {
-            display: block;
-          }
-          &.R3 +label +ul.R4 {
-            display: block;
+        section {
+          width: 1230px;
+          height: 600px;
+          position: absolute;
+          top: 2em;
+          right: 0;
+          xvisibility: hidden;
+          transition: .1s 999999s;
+          ul {
+            list-style: none;
+            padding: 0;
+            li {
+              float: left;
+              margin: 7px;
+              width: 230px;
+              height: 300px;
+              background-color: #fff;
+              text-align: center;
+              &:first-child {
+                margin-left: 0;
+                margin-right: 20px;
+                height: 638px;
+                img.firstPic {
+                  height: 648px;
+                }
+              }
+              p {
+                margin: 0;
+                font-size: .8em;
+                color: black;
+                &:nth-child(2) {
+                  margin-top: 10px;
+                }
+                &:nth-child(3) {
+                  color: #888;
+                  font-size: .7em;
+                }
+                &:nth-child(4) {
+                  margin-top: 20px;
+                }
+              }
+              img {
+                display: block;
+                margin: auto;
+              }
+            }
           }
         }
-      }
-      &.R1 {
-        right: 0;
-      }
-      &.R2 {
-        right: 70px;
+        &:hover {
+          color: #ff6a00;
+          section {
+            visibility: visible;
+            transition: none;
+          }
+        }
       }
     }
+  }
+  div.Video {
+    display: flex;
+    width: 1226px;
+    margin-left: -9px;
+    div.radio {
+      input:checked +div {
+        display: block;
       }
-      ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-        width: 100%;
-        height: 630px;
-        transition: .1s display linear;
-        position: obsolute;
-        top: 0;
+      input#close:checked ~div {
         display: none;
-        &:nth-child(2) {
-          display: block;
+      }
+      div.hiddenbox {
+        display: none;
+        max-width: 880px;
+        max-height: 500px;
+        position: fixed;
+        top: 0;
+        right: 0;
+        left: 0;
+        bottom: 0;
+        margin: auto;
+        border: none;
+        box-shadow: 0 0 10px 100000px #444a;
+        z-index: 100;
+        label.close {
+          display: inline-block;
         }
-        li {
-          float: left;
-          width: 234px;
-          height: 300px;
-          margin-left: 14px;
-          margin-top: 14px;
+        p {
+          height: 60px;
+          width: 100%;
           background-color: #fff;
-          box-shadow: 0 0 0 #0000;
-          transition: 0.3s linear;
-          text-align: center;
-          &:first-child {
-            height: 614px;
-            margin-left: 0;
+          position: relative;
+          line-height: 60px;
+          text-indent: 1em;
+          margin: 0;
+        }
+        video {
+          max-width: 100%;
+          max-height: 100%;
+        }
+        label {
+          font-size: 2em;
+          display: inline-block;
+          position: absolute;
+          top: -5px;
+          right: 10px;
+        }
+      }
+    }
+    label.openvideo {
+      display: block;
+      width: 300px;
+      height: 290px;
+      margin-left: 9px;
+      margin-top: 0;
+      text-align: center;
+      background-color: #fff;
+      box-shadow: 0 0 0 0;
+      transition: .3s linear;
+      position: relative;
+      &:hover {
+        box-shadow: 0 0 10px #bbb;
+        margin-top: -2px;
+      }
+      div {
+        color: black;
+        img {
+          width: 300px;
+          height: 185px;
+          &:hover ~p.play {
+            background-color: #ff6a00;
           }
-          &:hover {
-            box-shadow: 1px 1px 20px #2222;
+        }
+        p {
+          margin: 0;
+          margin-top: 20px;
+          font-size: 0.7em;
+          &.sub {
+            font-size: 0.5em;
+            color: #888;
+            margin-top: 10px;
           }
-          img {
-            margin-top: 30px;
+          &.play {
+            position: absolute;
+            bottom: 115px;
+            left: 15px;
+            width: 40px;
+            height: 25px;
+            box-sizing: border-box;
+            color: white;
+            border: 2px solid;
+            border-radius: 11px;
           }
+        }
       }
     }
   }
@@ -567,10 +658,12 @@ aside{
     right: 0;
     bottom: 70px;
     width: 84px;
-    height: 453px;
     border-collapse: collapse;
     box-shadow: 1px 1px 10px #2222;
     z-index: 100;
+    @media (max-width:1300px) {
+          width: 25px;
+        }
     tr {
       height: 90px;
       width: 82px;
@@ -578,10 +671,24 @@ aside{
       color: #999;
       text-align: center;
       background-color: #fff;
+      @media (max-width:1300px) {
+          height: 40px;
+          width: 25px;
+        }
       img {
         display: block;
         height: 30px;
         margin: 12px auto;
+        @media (max-width:1300px) {
+          height: 15px;
+          margin: 1px auto;
+        }
+      }
+      p {
+        margin: 0;
+        @media (max-width:1300px) {
+          display: none;
+        }
       }
       img.hover {
         display: none;
@@ -604,6 +711,145 @@ aside{
     }
   }
 }
+
+footer {
+  height: 500px;
+  margin: auto;
+  width: 1226px;
+  div.row1 {
+    ul {
+      display: flex;
+      list-style: none;
+      padding: 0;
+      text-align: center;
+
+      li {
+        width: 244px;
+        height: 25px;
+        position: relative;
+        &:not(:first-child)::before {
+          content: "|";
+          position: absolute;
+          left: 0;
+          top: -10px;
+          font-size: 2em;
+          font-weight: 100;
+          color: #3333;
+        }
+        p {
+          margin: 0;
+          color: #666;
+          &.tool::before {
+            content:"☏";
+            margin-right: 8px;
+            font-size: 1.5em;
+            margin-top: 1px;
+          }
+          &.seven::before {
+            content:"⑦";
+            margin-right: 8px;
+            font-size: 1.5em;
+            margin-top: 1px;
+          }
+          &.five::before {
+            content:"⑮";
+            margin-right: 8px;
+            font-size: 1.5em;
+            margin-top: 1px;
+          }
+          &.gift::before {
+            content:"❀";
+            margin-right: 8px;
+            font-size: 1.5em;
+            margin-top: 1px;
+          }
+          &.location::before {
+            content:"❣";
+            margin-right: 8px;
+            font-size: 1.5em;
+            margin-top: 1px;
+          }
+        }
+      }
+    }
+  }
+  hr {
+    border: 1px 1px solid #888;
+  }
+  div.footer.row2 {
+    display: flex;
+    div.footer2.left {
+      table {
+        text-align: left;
+        color: #888;
+        th, td {
+          width: 160px;
+        }
+        th {
+          padding-bottom: 20px;
+        }
+        td {
+          padding-top: 10px;
+          font-size: .8em;
+        }
+      }
+    }
+    div.footer2.right {
+      width: 300px;
+      height: 200px;
+      text-align: center;
+      p {
+        margin: 5px 0;
+        &:nth-child(2n-1){
+          color: #ff6a00;
+          font-size: 1.2em;
+        }
+        &:nth-child(2n) {
+          color: black;
+          font-size: .8em;
+        }
+        &:nth-child(3) {
+          border: 1px solid;
+          width: 4em;
+          margin: auto;
+          font-size: 0.8em;
+          padding: 5px 22px;
+          &:hover {
+            background-color: #ff6a00;
+            color: white;
+          }
+        }
+        &:nth-child(4) {
+          position: relative;
+          a {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            &.weibo {
+              background: url(https://cdn.cnbj1.fds.api.mi-img.com/staticsfile/global/wb.png) no-repeat;
+              background-size: contain;
+            }
+            &.weixin {
+              background: url(https://cdn.cnbj1.fds.api.mi-img.com/staticsfile/global/wx.png) no-repeat;
+              background-size: contain;
+              &:hover +img{
+                display: block;
+              }
+            }
+          }
+          img {
+               display: none;
+               width: 120px;
+               position: absolute;
+               top: 20px;
+               right: 20px;
+              }
+        }
+      }
+    }
+  }
+}
+
 </style>
 </head>
 
@@ -642,231 +888,78 @@ aside{
       <img class="nav row1" src="https://www.mi.com/favicon.ico" alt="">
       <ul class="nav row1">
         <li> Xiaomi手机
-           <div class="hidden">
-            <table>
-              <tbody>
-                <tr class="image">
-                  <td><img src="" alt=""></td>
-                  <td><img src="" alt=""></td>
-                  <td><img src="" alt=""></td>
-                  <td><img src="" alt=""></td>
-                  <td><img src="" alt=""></td>
-                  <td><img src="" alt=""></td>
-                </tr>
-                <tr class="name">
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                </tr>
-                <tr class="price">
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                </tr>
-              </tbody>
-            </table>
+          <div class="hidden">
+            <span><img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/8cad77bda138fd94eadbc2ddfced7c56.png?thumb=1&w=120&h=83&f=webp&q=90" alt=""> </span>
+            <span><img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/087c52d253d9301dff7743d6bf2d0330.png?thumb=1&w=120&h=83&f=webp&q=90" alt=""> </span>
+            <span><img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/85e44ea2405ff8414148bbde7446b137.png?thumb=1&w=120&h=83&f=webp&q=90" alt=""> </span>
+            <span><img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/1a359e9346e3c6ee8c9d8389e3fd9458.png?thumb=1&w=120&h=83&f=webp&q=90" alt=""> </span>
+            <span><img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/a1c45eadcedeb27b1cafca0359422da9.png?thumb=1&w=120&h=83&f=webp&q=90" alt=""> </span>
+            <span><img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/56e3379b5422cb06e5c8a0c546445606.png?thumb=1&w=120&h=83&f=webp&q=90" alt=""> </span>
           </div>
         </li>
         <li> Redmi 红米
-                     <div class="hidden">
-            <table>
-              <tbody>
-                <tr class="image">
-                  <td><img src="" alt=""></td>
-                  <td><img src="" alt=""></td>
-                  <td><img src="" alt=""></td>
-                  <td><img src="" alt=""></td>
-                  <td><img src="" alt=""></td>
-                  <td><img src="" alt=""></td>
-                </tr>
-                <tr class="name">
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                </tr>
-                <tr class="price">
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                </tr>
-              </tbody>
-            </table>
+          <div class="hidden">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
           </div>
         </li>
         <li> 电视
-                     <div class="hidden">
-            <table>
-              <tbody>
-                <tr class="image">
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                </tr>
-                <tr class="name">
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                </tr>
-                <tr class="price">
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                </tr>
-              </tbody>
-            </table>
+          <div class="hidden">
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
           </div>
         </li>
         <li> 笔记本
-                     <div class="hidden">
-            <table>
-              <tbody>
-                <tr class="image">
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                </tr>
-                <tr class="name">
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                </tr>
-                <tr class="price">
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                </tr>
-              </tbody>
-            </table>
+          <div class="hidden">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
           </div>
         </li>
         <li> 平板
-                     <div class="hidden">
-            <table>
-              <tbody>
-                <tr class="image">
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                </tr>
-                <tr class="name">
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                </tr>
-                <tr class="price">
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                </tr>
-              </tbody>
-            </table>
+          <div class="hidden">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
           </div>
         </li>
         <li> 家电
-                     <div class="hidden">
-            <table>
-              <tbody>
-                <tr class="image">
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                </tr>
-                <tr class="name">
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                </tr>
-                <tr class="price">
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                </tr>
-              </tbody>
-            </table>
+          <div class="hidden">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
           </div>
         </li>
         <li> 路由器
-                     <div class="hidden">
-            <table>
-              <tbody>
-                <tr class="image">
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                </tr>
-                <tr class="name">
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                </tr>
-                <tr class="price">
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                </tr>
-              </tbody>
-            </table>
+          <div class="hidden">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
           </div>
         </li>
         <li> 服务 </li>
         <li> 社区 </li>
+        <div class="longwhite"></div>
       </ul>
       <form class="nav row1" action="https://www.mi.com/search?">
         <input class="nav row1 search" type="text" id="input" placeholder="手机">
@@ -1135,7 +1228,7 @@ aside{
               <div class="darkLeft"></div>
           </label>
           </div>
-       </div>
+      </div>
         <div class="washingMachine">
           <input type="radio" name="imgChange" id="washingMachine">
           <div class="img">
@@ -1153,7 +1246,7 @@ aside{
               <div class="darkLeft"></div>
           </label>
           </div>
-       </div>
+      </div>
         <div class="Windows11">
           <input type="radio" name="imgChange" id="Windows11">
           <div class="img">
@@ -1171,7 +1264,7 @@ aside{
               <div class="darkLeft"></div>
           </label>
           </div>
-       </div>
+      </div>
     </div>
     <div class="nav row3">
       <div class="left">
@@ -1197,38 +1290,139 @@ aside{
   </nav>
   <main>
     <div class="longPic"> </div>
-    <div class="product One">
+    <div class="product">
+      <div class="product2">
+        <span> 穿戴
+          <section>
+            <ul class="R1">
+              <li>
+                <img class="firstPic" src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/9895c56a7b792fb9053e3085fc261072.jpg?thumb=1&w=176&h=461&f=webp&q=90" alt="error">
+              </li>
+              <li>
+                <img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/b28153b80cb2c67564608e56d5c2f3f3.jpg?thumb=1&w=150&h=150&f=webp&q=90" alt="error">
+                <p>小米手环6</p>
+                <p>全屏实力</p>
+                <p>229元</p>
+              </li>
+              <li>
+                <img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/c84e1bc129dda0c9c0169e1fab1fe521.jpg?thumb=1&w=150&h=150&f=webp&q=90" alt="error">
+                <p>小米手环5 NFC版</p>
+                <p>多功能NFC 11种运动模式</p>
+                <p>199元 <s>229元</s></p>
+              </li>
+              <li>
+                <img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/ec0ec7692ba005710d1887262559609c.jpg?thumb=1&w=150&h=150&f=webp&q=90" alt="error">
+                <p>小米手环 5</p>
+                <p>磁吸式充电</p>
+                <p>169元 <s>189元</s></p>
+              </li>
+              <li>
+                <img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/66c7a6e46c5f1a7214eab8182d78171e.jpg?thumb=1&w=150&h=150&f=webp&q=90" alt="error">
+                <p>Redmi AirDots 3真无线蓝牙耳机</p>
+                <p>圈铁音质，超长续航</p>
+                <p>199元</p>
+              </li>
+              <li>
+                <img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/8fd19df34c6b2723f337cb3fb11984a6.png?thumb=1&w=150&h=150&f=webp&q=90" alt="error">
+                <p>小米真无线蓝牙耳机Air 2 Pro</p>
+                <p>主动降噪/持久续航/无线充</p>
+                <p>449元 <s>699</s>元</p>
+              </li>
+              <li>
+                <img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/8a8de2281327e612f3f83fd1a4db6aea.jpg?thumb=1&w=150&h=150&f=webp&q=90" alt="error">
+                <p>小米真无线蓝牙耳机Air2 SE</p>
+                <p>放肆用，畅快听</p>
+                <p>129元 <s>169元</s></p>
+              </li>
+              <li>
+                <img src="" alt="">
+                <p>浏览更多穿戴</p>
+              </li>
+            </ul>
+          </section>
+        </span>
+        <span>
+          热门
+          <section>
+            <ul class="R2">
+              <li>
+                <img class="firstPic"  src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/9895c56a7b792fb9053e3085fc261072.jpg?thumb=1&w=176&h=461&f=webp&q=90">
+              </li>
+              <li>
+                <img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/f84503dbf5adbdf17111c61d4a7cf893.jpg?thumb=1&w=150&h=150&f=webp&q=90">
+                <p>Redmi 手表 2</p>
+                <p>AMOLED高清大屏</p>
+                <p>399元</p>
+              </li>
+              <li>
+                <img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/b28153b80cb2c67564608e56d5c2f3f3.jpg?thumb=1&w=150&h=150&f=webp&q=90">
+                <p>小米手环6 NFC版</p>
+                <p>全屏实力</p>
+                <p>249元279元</p>
+              </li>
+              <li>
+                <img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/0cc4e8e58d7288cd8dff13b98bdc3ea8.jpg?thumb=1&w=150&h=150&f=webp&q=90">
+                <p>Redmi 手表</p>
+                <p>35g超轻/1.4"大屏/多功能NFC/7天长续航</p>
+                <p>269元299元</p>
+              </li>
+              <li>
+                <img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/11570d5371f16d2d9b19f504e09d01f0.jpg?thumb=1&w=150&h=150&f=webp&q=90">
+                <p>Xiaomi 真无线降噪耳机 3 Pro</p>
+                <p>动态降噪 静听曼妙</p>
+                <p>699元</p>
+              </li>
+              <li>
+                <img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/2fcf24e40ff09a254857ac8b4ace25b8.jpg?thumb=1&w=150&h=150&f=webp&q=90">
+                <p>Redmi Buds 3半入耳真无线蓝牙耳机</p>
+                <p>轻巧半入耳，舒适有天分</p>
+                <p>199元</p>
+              </li>
+              <li>
+                <img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/72c4b2540c851b542e505058f1603823.jpg?thumb=1&w=150&h=150&f=webp&q=90">
+                <p>Redmi Buds 3 青春版</p>
+                <p>轻巧无线 持久动听</p>
+                <p>99元</p>
+              </li>
+              <li>
+                <img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/72c4b2540c851b542e505058f1603823.jpg?thumb=1&w=150&h=150&f=webp&q=90">
+                <p>Redmi AirDots 3 Pro</p>
+                <p>智能降噪 超低延迟</p>
+                <p>299元349元</p>
+              </li>
+              <li>
+                <p> 浏览更多热门</p>
+              </li>
+            </ul>
+          </section>
+        </span>
+        <span>智能穿戴</span>
+      </div>
+    </div>
+    <br>
+    <!-- <div class="product One">
       <p>手机</p>
+      <p>查看更多</p>
       <div>
-        <p>查看更多</p>
-        <ul class="display">
-          <li><img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/c583f2edc613f1be20fa415910b13ce3.jpg?thumb=1&w=176&h=461&f=webp&q=90" alt="error"> </li>
-          <li><img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/6d0a3e7acc3e91e2cfd83dbbe1d1c029.jpg?thumb=1&w=150&h=150&f=webp&q=90" alt="error"> </li>
-          <li><img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/c001ebc4aee69bc9ff6fae9ecf9137d0.jpg?thumb=1&w=150&h=150&f=webp&q=90" alt=""></li>
-          <li><img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/50da95e9e4496dcac8704da2deb94f6e.jpg?thumb=1&w=150&h=150&f=webp&q=90" alt="error"> </li>
-          <li><img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/3490cfc52dc7c9abf9badfa1dc2d0eae.png?thumb=1&w=150&h=150&f=webp&q=90" alt="error"> </li>
-          <li><img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/7290b681343512c60e3a845379f3335f.jpg?thumb=1&w=150&h=150&f=webp&q=90" alt="error"> </li>
-          <li><img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/c5c752522100ecd364cc53752bb660bc.jpg?thumb=1&w=150&h=150&f=webp&q=90" alt="error"> </li>
-          <li><img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/ab07e0fcbec3beb8b0f409db8bee8da4.jpg?thumb=1&w=150&h=150&f=webp&q=90" alt="error"> </li>
-          <li><img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/61454401f855cf5ed64747a6ac04bae5.jpg?thumb=1&w=150&h=150&f=webp&q=90" alt="error"> </li>
-        </ul>
+        <label></label>
+            <ul class="display">
+              <li><img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/c583f2edc613f1be20fa415910b13ce3.jpg?thumb=1&w=176&h=461&f=webp&q=90" alt="error"> </li>
+              <li><img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/6d0a3e7acc3e91e2cfd83dbbe1d1c029.jpg?thumb=1&w=150&h=150&f=webp&q=90" alt="error"> </li>
+              <li><img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/c001ebc4aee69bc9ff6fae9ecf9137d0.jpg?thumb=1&w=150&h=150&f=webp&q=90" alt=""></li>
+              <li><img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/50da95e9e4496dcac8704da2deb94f6e.jpg?thumb=1&w=150&h=150&f=webp&q=90" alt="error"> </li>
+              <li><img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/3490cfc52dc7c9abf9badfa1dc2d0eae.png?thumb=1&w=150&h=150&f=webp&q=90" alt="error"> </li>
+              <li><img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/7290b681343512c60e3a845379f3335f.jpg?thumb=1&w=150&h=150&f=webp&q=90" alt="error"> </li>
+              <li><img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/c5c752522100ecd364cc53752bb660bc.jpg?thumb=1&w=150&h=150&f=webp&q=90" alt="error"> </li>
+              <li><img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/ab07e0fcbec3beb8b0f409db8bee8da4.jpg?thumb=1&w=150&h=150&f=webp&q=90" alt="error"> </li>
+              <li><img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/61454401f855cf5ed64747a6ac04bae5.jpg?thumb=1&w=150&h=150&f=webp&q=90" alt="error"> </li>
+            </ul>
       </div>
     </div>
     <div class="product Two">
       <p>智能穿戴</p>
       <div>
         <label for="R1" class="R1">穿戴</label>
-        <ul class="R1">
-          <li><img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/9895c56a7b792fb9053e3085fc261072.jpg?thumb=1&w=176&h=461&f=webp&q=90" alt="error"> </li>
-          <li><img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/b28153b80cb2c67564608e56d5c2f3f3.jpg?thumb=1&w=150&h=150&f=webp&q=90" alt="error"> </li>
-          <li><img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/c84e1bc129dda0c9c0169e1fab1fe521.jpg?thumb=1&w=150&h=150&f=webp&q=90" alt="error"> </li>
-          <li><img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/ec0ec7692ba005710d1887262559609c.jpg?thumb=1&w=150&h=150&f=webp&q=90" alt="error"> </li>
-          <li><img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/66c7a6e46c5f1a7214eab8182d78171e.jpg?thumb=1&w=150&h=150&f=webp&q=90" alt="error"> </li>
-          <li><img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/8fd19df34c6b2723f337cb3fb11984a6.png?thumb=1&w=150&h=150&f=webp&q=90" alt="error"> </li>
-          <li><img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/8a8de2281327e612f3f83fd1a4db6aea.jpg?thumb=1&w=150&h=150&f=webp&q=90" alt="error"> </li>
 
-          <li><img src="" alt=""> 浏览更多穿戴</li>
-        </ul>
         <label for="R2" class="R2">热门</label>
         <ul class="R2">
           <li><img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/9895c56a7b792fb9053e3085fc261072.jpg?thumb=1&w=176&h=461&f=webp&q=90"> </li>
@@ -1258,17 +1452,67 @@ aside{
           <li><img src="" alt=""> 浏览更多穿戴</li>
         </ul>
         <label for="R2" class="R2">热门</label>
-        <ul class="R2">
-          <li><img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/9895c56a7b792fb9053e3085fc261072.jpg?thumb=1&w=176&h=461&f=webp&q=90"> </li>
-          <li><img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/f84503dbf5adbdf17111c61d4a7cf893.jpg?thumb=1&w=150&h=150&f=webp&q=90"> </li>
-          <li><img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/b28153b80cb2c67564608e56d5c2f3f3.jpg?thumb=1&w=150&h=150&f=webp&q=90"> </li>
-          <li><img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/0cc4e8e58d7288cd8dff13b98bdc3ea8.jpg?thumb=1&w=150&h=150&f=webp&q=90"> </li>
-          <li><img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/11570d5371f16d2d9b19f504e09d01f0.jpg?thumb=1&w=150&h=150&f=webp&q=90"> </li>
-          <li><img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/2fcf24e40ff09a254857ac8b4ace25b8.jpg?thumb=1&w=150&h=150&f=webp&q=90"> </li>
-          <li><img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/72c4b2540c851b542e505058f1603823.jpg?thumb=1&w=150&h=150&f=webp&q=90"> </li>
-          <li><img src=""> 浏览更多热门 </li>
-        </ul>
+
       </div>
+    </div> -->
+    <div class="Video">
+      <div class="radio">
+        <input type="radio" name="Video" id="close" hidden>
+        <input type="radio" name="Video" id="l1" hidden>
+        <div class="hiddenbox">
+          <p>2021年春季新品发布会第一场</p>
+          <video controls="controls" src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/812358b69886e576c66a01f1f00affe9.mp4"></video>
+          <label class="close" for="close">×</label>
+        </div>
+        <input type="radio" name="Video" id="l2" hidden>
+        <div class="hiddenbox">
+          <p>Redmi 10X系列发布会</p>
+          <video controls="controls" src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/11c70c96529b6e6938567ec1aa0910e0.mp4"></video>
+          <label for="close">×</label>
+        </div>
+        <input type="radio" name="Video" id="l3" hidden>
+        <div class="hiddenbox">
+          <p> 小米10 青春版 发布会</p>
+          <video controls="controls" src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/7cdabcaa763392c86b944eaf4e68d6a3.mp4"></video>
+          <label for="close">×</label>
+        </div>
+        <input type="radio" name="Video" id="l4" hidden>
+        <div class="hiddenbox">
+          <p>小米10 8K手机拍大片</p>
+          <video controls="controls" src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/e25d81c4922fca5ebe51877717ef9b76.mp4"></video>
+          <label for="close">×</label>
+        </div>
+      </div>
+      <div class="close"></div>
+      <label class="openvideo" for="l1">
+        <div>
+          <img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/e74c4ff741bcdfc5b28a48a43e4edc6d.jpg?thumb=1&w=518&h=315&f=webp&q=90"></img>
+          <p class="title">2021年春季新品发布会第一场</p>
+          <p class="play">▶</p>
+        </div>
+      </label>
+      <label class="openvideo" for="l2">
+      <div>
+          <img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/101b19aca4bb489bcef0f503e44ec866.jpg?thumb=1&w=518&h=315&f=webp&q=90"></img>
+          <p class="title">Redmi 10X系列发布会</p>
+          <p class="title sub" >Redmi 10X系列发布会</p>
+          <p class="play">▶</p>
+      </div>
+      </label>
+      <label class="openvideo" for="l3">
+      <div>
+          <img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/96563e75833ba4563bd469dd28203b09.jpg?thumb=1&w=518&h=315&f=webp&q=90"></img>
+          <p class="title">小米10 青春版 发布会</p>
+          <p class="play">▶</p>
+      </div>
+      </label>
+      <label class="openvideo" for="l4">
+      <div>
+          <img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/2fd26bb99b723337a2f8eaba84f7d5bb.jpg?thumb=1&w=518&h=315&f=webp&q=90"></img>
+          <p class="title">小米10 8K手机拍大片</p>
+          <p class="play">▶</p>
+      </div>
+      </label>
     </div>
   </main>
   <aside>
@@ -1276,28 +1520,28 @@ aside{
       <tbody>
         <tr><td>
           <img class="hover" src="https://i8.mifile.cn/b2c-mimall-media/74c4fcb4475af8308e9a670db9c01fdf.png" alt="">
-          <img class="static" src="https://i8.mifile.cn/b2c-mimall-media/98a23aae70f25798192693f21c4d4039.png" alt="">  手机APP
+          <img class="static" src="https://i8.mifile.cn/b2c-mimall-media/98a23aae70f25798192693f21c4d4039.png" alt=""> <p>手机APP</p>
         </td></tr>
         <tr><td>
           <img class="hover" src="https://i8.mifile.cn/b2c-mimall-media/41f858550f42eb1770b97faf219ae215.png" alt="">
-          <img class="static" src="https://i8.mifile.cn/b2c-mimall-media/55cad219421bee03a801775e7309b920.png" alt="">  个人中心
+          <img class="static" src="https://i8.mifile.cn/b2c-mimall-media/55cad219421bee03a801775e7309b920.png" alt=""> <p>个人中心</p>
         </td></tr>
         <tr><td>
           <img class="hover" src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/95fbf0081a06eec7be4d35e277faeca0.png" alt="">
-          <img class="static" src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/12eb0965ab33dc8e05870911b90f3f13.png" alt="">  售后服务
+          <img class="static" src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/12eb0965ab33dc8e05870911b90f3f13.png" alt="">  <p>售后服务</p>
         </td></tr>
         <tr><td>
           <img class="hover" src="https://i8.mifile.cn/b2c-mimall-media/5e9f2b1b0da09ac3b3961378284ef2d4.png" alt="">
           <img class="static" src="https://i8.mifile.cn/b2c-mimall-media/4f036ae4d45002b2a6fb6756cedebf02.png" alt="">
-        人工客服
+      <p>人工客服</p>
       </td></tr>
         <tr><td>
           <img class="hover" src="https://i8.mifile.cn/b2c-mimall-media/692a6c3b0a93a24f74a29c0f9d68ec71.png" alt="">
-          <img class="static" src="https://i8.mifile.cn/b2c-mimall-media/d7db56d1d850113f016c95e289e36efa.png" alt="">  购物车
+          <img class="static" src="https://i8.mifile.cn/b2c-mimall-media/d7db56d1d850113f016c95e289e36efa.png" alt=""> <p>购物车</p>
         </td></tr>
         <tr><td>
           <img class="hover" src="https://i1.mifile.cn/f/i/2018/home/totop_hover.png" alt="">
-          <img class="static" src="//i1.mifile.cn/f/i/2018/home/totop.png" alt="" >  回顶部
+          <img class="static" src="//i1.mifile.cn/f/i/2018/home/totop.png" alt="" >  <p>回顶部</p>
         </td></tr>
       </tbody>
     </table>
@@ -1305,69 +1549,81 @@ aside{
   <footer>
     <div class="footer row1">
       <ul class="footer row1">
-        <li class="footer row1"> 预约维修服务 </li>
-        <li class="footer row1"> 7天无理由退货 </li>
-        <li class="footer row1"> 15天免费换货 </li>
-        <li class="footer row1"> 满69包邮 </li>
-        <li class="footer row1"> 520余家售后网点 </li>
+        <li class="footer row1">
+          <p class="tool">预约维修服务 </p>
+        </li>
+        <li class="footer row1">
+          <p class="seven">7天无理由退货 </p>
+        </li>
+        <li class="footer row1">
+          <p class="five">15天免费换货 </p>
+        </li>
+        <li class="footer row1">
+          <p class="gift">满69包邮 </p>
+        </li>
+        <li class="footer row1">
+          <p class="location">520余家售后网点 </p>
+        </li>
       </ul>
     </div>
+    <br>
+    <hr>
+    <br>
     <div class="footer row2">
-      <div class="footer row2 left">
+      <div class="footer footer2 left">
         <table class="footer row2 left">
-          <thead class="footer row2 left">
-            <th class="footer row2 left">2</th>
-            <th class="footer row2 left">2</th>
-            <th class="footer row2 left">2</th>
-            <th class="footer row2 left">2</th>
-            <th class="footer row2 left">2</th>
-            <th class="footer row2 left">2</th>
-          </thead>
-          <tbody class="footer row2 left">
-            <tr class="footer row2 left">
-              <td class="footer row2 left">1</td>
-              <td class="footer row2 left"></td>
-              <td class="footer row2 left"></td>
-              <td class="footer row2 left"></td>
-              <td class="footer row2 left"></td>
-              <td class="footer row2 left"></td>
-            </tr>
-            <tr class="footer row2 left">
-              <td class="footer row2 left">1</td>
-              <td class="footer row2 left"></td>
-              <td class="footer row2 left"></td>
-              <td class="footer row2 left"></td>
-              <td class="footer row2 left"></td>
-              <td class="footer row2 left"></td>
-            </tr>
-            <tr class="footer row2 left">
-              <td class="footer row2 left">1</td>
-              <td class="footer row2 left"></td>
-              <td class="footer row2 left"></td>
-              <td class="footer row2 left"></td>
-              <td class="footer row2 left"></td>
-              <td class="footer row2 left"></td>
-            </tr>
-            <tr class="footer row2 left">
-              <td class="footer row2 left">1</td>
-              <td class="footer row2 left"></td>
-              <td class="footer row2 left"></td>
-              <td class="footer row2 left"></td>
-              <td class="footer row2 left"></td>
-              <td class="footer row2 left"></td>
-            </tr>
-            <tr>
-              <td class="footer row2 left">1</td>
-              <td class="footer row2 left"></td>
-              <td class="footer row2 left"></td>
-              <td class="footer row2 left"></td>
-              <td class="footer row2 left"></td>
-              <td class="footer row2 left"></td>
-            </tr>
-          </tbody>
-        </table>
+            <thead class="footer row2 left">
+              <th class="footer row2 left">帮助中心</th>
+              <th class="footer row2 left">服务支持</th>
+              <th class="footer row2 left">线下门店</th>
+              <th class="footer row2 left">关于小米</th>
+              <th class="footer row2 left">关注我们</th>
+              <th class="footer row2 left">特色服务</th>
+            </thead>
+            <tbody>
+              <tr>
+                <td>账户管理</td>
+                <td>售后政策</td>
+                <td>小米之家</td>
+                <td>了解小米</td>
+                <td>新浪微博</td>
+                <td>F 码通道</td>
+              </tr>
+              <tr>
+                <td>购物指南</td>
+                <td>自助服务</td>
+                <td>服务网点</td>
+                <td>加入小米</td>
+                <td>官方微信</td>
+                <td>礼物码</td>
+              </tr>
+              <tr>
+                <td>订单操作</td>
+                <td>相关下载</td>
+                <td>授权体验店/专区</td>
+                <td>投资者关系</td>
+                <td>联系我们</td>
+                <td>防伪查询</td>
+              </tr>
+              <tr>
+                <td>企业社会责任</td>
+                <td>公益基金会</td>
+              </tr>
+              <tr>
+                <td>廉洁举报</td>
+              </tr>
+            </tbody>
+          </table>
       </div>
-      <div class="footer row2 right">
+      <div class="footer footer2 right">
+        <p>400-100-5678</p>
+        <p>8:00-18:00（仅收市话费）</p>
+        <p>人工客服</p>
+        <p>关注小米：
+          <a class="weibo" href=""></a>
+          <a class="weixin" href=""></a>
+          <img src="//cdn.cnbj1.fds.api.mi-img.com/staticsfile/global/wx-img.png" alt="">
+        </p>
       </div>
     </div>
     <div class="footer row3">
@@ -1375,6 +1631,10 @@ aside{
       <div class="footer row3 right"></div>
     </div>
   </footer>
+
+
+
+
 </body>
 <script src="less.min.js"></script>
 </html>
