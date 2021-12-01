@@ -6,158 +6,76 @@
   <title>dl-layout</title>
   <style>
 
-    p {
-      width: 400px;
-      margin: auto;
-      background-color: #2222;
-    }
+  body {
+    word-break: keep-all;
+  }
 
-    dl {
-      height: 100px;
-      width: 400px;
-      margin: auto;
-    }
-    dt {
-      font: bold 1em sans-serif;
-    }
+  p {
+    background-color: #8884;
+  }
 
-    /* float */
-    dt.float {
-      float: left;
-      width: 2em;
-      height: 100%;
-      margin-right: 1.2em;
-    }
-    dd.float {
-      display: inline-block;
-      margin: 0 ;
-    }
+  dt {
+    font-weight: bold;
+    display: inline-block;
 
-    /* position */
-    dt.position {
-      position: absolute;
-    }
+  }
+  dd {
+    margin-left: 90px;
+    margin-top: -1.3em;
+  }
 
-    dd.position {
-      margin: 0 ;
-      display: inline-block;
-      position: relative;
-      right: -3em;
-    }
+  th {
+    width: 4em;
+    text-align: left;
+    vertical-align: top;
+  }
 
-    /* display: inline-block */
-    dt.display {
-      display: inline-block;
-    }
-
-    dd.display {
-      margin: 0;
-      display: inline-block;
-    }
-
+  span:first-child {
+    position: relative;
+    font-weight: bold;
+  }
+  span:not(:first-child) {
+    display: inline-block;
+    margin-left: 4.2em;
+    margin-top: -1.2em;
+  }
 
   </style>
 </head>
 <body>
-  <p class="float">float</p>
-  <dl class="float">
-    <dt class="float">主演</dt>
-    <dd class="float">1</dd>
-    <dd class="float">2</dd>
-    <dd class="float">3</dd>
-    <dd class="float">4</dd>
-    <dd class="float">5</dd>
-    <dd class="float">6</dd>
-    <dd class="float">7</dd>
-    <dd class="float">8</dd>
-    <dd class="float">9</dd>
-    <dd class="float">0</dd>
-    <dd class="float">2</dd>
-    <dd class="float">3</dd>
-    <dd class="float">4</dd>
-    <dd class="float">5</dd>
-    <dd class="float">6</dd>
-    <dd class="float">7</dd>
-    <dd class="float">8</dd>
-    <dd class="float">9</dd>
-    <dd class="float">0</dd>
-    <dd class="float">2</dd>
-    <dd class="float">3</dd>
-    <dd class="float">4</dd>
-    <dd class="float">5</dd>
-    <dd class="float">6</dd>
-    <dd class="float">7</dd>
-    <dd class="float">8</dd>
-    <dd class="float">9</dd>
-    <dd class="float">0</dd>
+
+  <p>dl dt dd</p>
+  <dl>
+    <dt>导演</dt>
+    <dd>冯小刚， 张艺谋， 张艺谋， 张艺谋， 张艺谋， 张艺谋，  张艺谋， 冯小刚， 刘欢 </dd>
+    <dt>出演人员</dt>
+    <dd>张艺谋， 刘欢， 张艺谋， 张艺谋，张艺谋， 张艺谋， 张艺谋， 冯小刚， 刘欢， 张艺谋， 张艺谋， 刘欢 </dd>
   </dl>
 
-  <p class="position"> position</p>
-  <dl class="position">
-    <dt class="position">主演</dt>
-    <dd class="position">1</dd>
-    <dd class="position">2</dd>
-    <dd class="position">3</dd>
-    <dd class="position">4</dd>
-    <dd class="position">5</dd>
-    <dd class="position">6</dd>
-    <dd class="position">7</dd>
-    <dd class="position">8</dd>
-    <dd class="position">9</dd>
-    <dd class="position">0</dd>
-    <dd class="position">2</dd>
-    <dd class="position">3</dd>
-    <dd class="position">4</dd>
-    <dd class="position">5</dd>
-    <dd class="position">6</dd>
-    <dd class="position">7</dd>
-    <dd class="position">8</dd>
-    <dd class="position">9</dd>
-    <dd class="position">0</dd>
-    <dd class="position">2</dd>
-    <dd class="position">3</dd>
-    <dd class="position">4</dd>
-    <dd class="position">5</dd>
-    <dd class="position">6</dd>
-    <dd class="position">7</dd>
-    <dd class="position">8</dd>
-    <dd class="position">9</dd>
-    <dd class="position">0</dd>
-  </dl>
-
-  <p class="display">display</p>
-  <dl class="display">
-    <dt class="display">主演</dt>
-    <dd class="display">1</dd>
-    <dd class="display">2</dd>
-    <dd class="display">3</dd>
-    <dd class="display">4</dd>
-    <dd class="display">5</dd>
-    <dd class="display">6</dd>
-    <dd class="display">7</dd>
-    <dd class="display">8</dd>
-    <dd class="display">9</dd>
-    <dd class="display">0</dd>
-    <dd class="display">2</dd>
-    <dd class="display">3</dd>
-    <dd class="display">4</dd>
-    <dd class="display">5</dd>
-    <dd class="display">6</dd>
-    <dd class="display">7</dd>
-    <dd class="display">8</dd>
-    <dd class="display">9</dd>
-    <dd class="display">0</dd>
-    <dd class="display">2</dd>
-    <dd class="display">3</dd>
-    <dd class="display">4</dd>
-    <dd class="display">5</dd>
-    <dd class="display">6</dd>
-    <dd class="display">7</dd>
-    <dd class="display">8</dd>
-    <dd class="display">9</dd>
-    <dd class="display">0</dd>
+  <p>表格</p>
+  <table>
+    <tbody>
+      <tr>
+        <th>导演</th>
+        <td> 赵本山， 赵本山， 赵本山， 赵本山， 赵本山， 冯巩， 赵本山，  冯巩， 赵本山， 赵本山， 赵本山， 赵本山， 赵本山， 冯巩， 赵本山</td>
+      </tr>
+      <tr>
+        <th>出演人员</th>
+        <td>Lorem, ipsum, dolor, sit, amet, consectetur, adipisicing, lorem</td>
+      </tr>
+    </tbody>
+  </table>
 
 
+  <p>行内块</p>
+  <div>
+    <span>导演</span>
+    <span>Lorem, ipsum, dolor, sit, amet, esse, doloribus, harum, dicta, sapiente, in, voluptatum, numquam, recusandae, dolorum, recusandae</span>
+  </div>
+    <div>
+    <span>出演人员</span>
+    <span>Lorem, ipsum, dolor, sit, amet, consectetur, adipis, Tempora, Lorem, ipsum, dolor, sit, amet, consectetur, adirecusandae</span>
+  </div>
 
 </body>
 </html>
