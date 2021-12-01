@@ -30,15 +30,20 @@
     vertical-align: top;
   }
 
-  span:first-child {
-    position: relative;
+  div {
+    display: flex;
+}
+span:first-child {
+    width: 4em;
     font-weight: bold;
-  }
-  span:not(:first-child) {
-    display: inline-block;
-    margin-left: 4.2em;
-    margin-top: -1.2em;
-  }
+    margin-right: 10px;
+}
+
+span.Two::after {
+  content:"       ";
+  white-space: pre;
+  font-size: 1em;
+}
 
   </style>
 </head>
@@ -67,9 +72,9 @@
   </table>
 
 
-  <p>行内块</p>
+  <p>flex</p>
   <div>
-    <span>导演</span>
+    <span class="Two">导演</span>
     <span>Lorem, ipsum, dolor, sit, amet, esse, doloribus, harum, dicta, sapiente, in, voluptatum, numquam, recusandae, dolorum, recusandae</span>
   </div>
     <div>
