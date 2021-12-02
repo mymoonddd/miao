@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
   <link type="text/less" href="index.less">
+
   <title>mi-index</title>
 </head>
   <style type="text/less">
@@ -12,15 +13,55 @@ x* {
   box-shadow: inset 0 0 1px red;
 }
 
+/* iconfont设定 */
+@font-face {
+  font-family: MIfont;
+  src: url(https://mymoonddd.github.io/miao/mi/mi.woff);
+}
+
+[font="search"]::before {
+  content: "\E616";
+  font-family: MIfont;
+  font-style: initial;
+}
+[font="tool"]::before {
+  content: "\E634";
+  font-family: MIfont;
+  font-style: initial;
+}
+[font="seven"]::before {
+  content: "\E635";
+  font-family: MIfont;
+  font-style: initial;
+}
+[font="fifteen"]::before {
+  content: "\E636";
+  font-family: MIfont;
+  font-style: initial;
+}
+[font="gift"]::before {
+  content: "\E638";
+  font-family: MIfont;
+  font-style: initial;
+}
+[font="locate"]::before {
+  content: "\E637";
+  font-family: MIfont;
+  font-style: initial;
+}
+
+/* 主体样式 */
+/* header, main, footer, nav, aside {
+  display: none;
+} */
+
 html {
-  width: 100%;
   height: 100%;
 }
 body {
-  width: 100%;
   height: 100%;
   margin: 0;
-  overflow: auto;
+  overflow-y: auto;
   position: relative;
 }
 
@@ -141,27 +182,8 @@ nav {
       display: inline-block;
       position: relative;
       &:hover {
-        div.longwhite {
-          clip-path: inset(0 0 0 0);
-        }
         div.hidden {
           clip-path: inset(0 0 0 0);
-        }
-      }
-      div.longwhite {
-        position: absolute;
-        height: 230px;
-        width: 10000px;
-        right: 0;
-        top: 90px;
-        background-color: white;
-        border-bottom: 1px solid #3333;
-        border-top: 1px solid #3333;
-        clip-path: inset(0 0 100% 0);
-        transition: 0.2s linear;
-        z-index: 11;
-        &.right {
-          left: 0;
         }
       }
       li {
@@ -180,11 +202,13 @@ nav {
         div.hidden {
           width: 1226px;
           height: 150px;
-          padding-top: 80px;
+          padding-top: 50px;
+          box-shadow: 1px 1px 11px 0px #8888;
           visibility: hidden;
+          background-color: #fff;
           clip-path: inset(0 0 100% 0);
           position: absolute;
-          top: 50px;
+          top: 80px;
           left: -220px;
           z-index: 12;
           &:hover {
@@ -506,7 +530,7 @@ main {
   background-color:rgb(245,245,245);
   font-size: 1.1em;
   padding-top: 29px;
-  padding-bottom: 50px;
+  padding-bottom: 20px;
   div.longPic {
     height: 132px;
     width: 100%;
@@ -515,6 +539,12 @@ main {
     background-repeat: no-repeat;
   }
   div.product {
+
+    span.left {
+      display: block;
+      margin-top: 20px;
+      margin-bottom: -25px;
+    }
     div {
       position: relative;
       &:hover section {
@@ -526,17 +556,12 @@ main {
         float: right;
         margin-left: 15px;
         margin-bottom: 700px;
-        &:last-child {
-          position: absolute;
-          left: 0;
-        }
         section {
           width: 1230px;
           height: 600px;
           position: absolute;
           top: 2em;
           right: 0;
-          xvisibility: hidden;
           transition: .1s 999999s;
           ul {
             list-style: none;
@@ -578,7 +603,7 @@ main {
             }
           }
         }
-        &:hover {
+        &.right:hover {
           color: #ff6a00;
           section {
             visibility: visible;
@@ -803,36 +828,15 @@ footer {
         }
         p {
           margin: 0;
+          margin-top: 10px;;
           color: #666;
-          &.tool::before {
-            content:"☏";
-            margin-right: 8px;
-            font-size: 1.5em;
-            margin-top: 1px;
+          &:hover {
+            color: #ff3a00;
           }
-          &.seven::before {
-            content:"⑦";
-            margin-right: 8px;
-            font-size: 1.5em;
-            margin-top: 1px;
-          }
-          &.five::before {
-            content:"⑮";
-            margin-right: 8px;
-            font-size: 1.5em;
-            margin-top: 1px;
-          }
-          &.gift::before {
-            content:"❀";
-            margin-right: 8px;
-            font-size: 1.5em;
-            margin-top: 1px;
-          }
-          &.location::before {
-            content:"❣";
-            margin-right: 8px;
-            font-size: 1.5em;
-            margin-top: 1px;
+          i {
+            font-size: 1.7em;
+            line-height: .6em;
+            vertical-align: -35%;
           }
         }
       }
@@ -920,6 +924,8 @@ footer {
 
 <body>
 
+
+
     <header #top>
     <ul class="header">
       <li> 小米商城 </li> |
@@ -955,8 +961,6 @@ footer {
     <div class="nav row1">
       <img class="nav row1 favicon" src="https://www.mi.com/favicon.ico" alt="">
       <ul class="nav row1">
-        <div class="longwhite left"></div>
-        <div class="longwhite right"></div>
         <li> Xiaomi手机
           <div>
             <div class="hidden">
@@ -1120,7 +1124,7 @@ footer {
         <input class="nav row1 search" type="text" id="input" placeholder="手机">
         <label for="input"></label>
         <div class="search"></div>
-        <button>∅</button>
+        <button><i font="search"></i></button>
       </form>
     </div>
     <div class="nav row2">
@@ -1447,8 +1451,9 @@ footer {
     <main>
     <div class="longPic"> </div>
     <div class="product">
+      <span class="left">智能穿戴</span>
       <div class="product2">
-        <span> 穿戴
+        <span class="right"> 穿戴
           <section>
             <ul class="R1">
               <li>
@@ -1497,7 +1502,7 @@ footer {
             </ul>
           </section>
         </span>
-        <span>
+        <span class="right">
           热门
           <section>
             <ul class="R2">
@@ -1552,7 +1557,6 @@ footer {
             </ul>
           </section>
         </span>
-        <span>智能穿戴</span>
       </div>
     </div>
     <br>
@@ -1666,19 +1670,19 @@ footer {
     <div class="footer row1">
       <ul class="footer row1">
         <li class="footer row1">
-          <p class="tool">预约维修服务 </p>
+          <p><i font="tool"></i> 预约维修服务 </p>
         </li>
         <li class="footer row1">
-          <p class="seven">7天无理由退货 </p>
+          <p><i font="seven"></i> 7天无理由退货 </p>
         </li>
         <li class="footer row1">
-          <p class="five">15天免费换货 </p>
+          <p><i font="fifteen"></i> 15天免费换货 </p>
         </li>
         <li class="footer row1">
-          <p class="gift">满69包邮 </p>
+          <p><i font="gift"></i> 满69包邮 </p>
         </li>
         <li class="footer row1">
-          <p class="location">520余家售后网点 </p>
+          <p> <i font="locate"></i> 520余家售后网点 </p>
         </li>
       </ul>
     </div>
