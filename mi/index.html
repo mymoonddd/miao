@@ -51,9 +51,9 @@ x* {
 }
 
 /* 主体样式 */
-/* header, main, footer, nav, aside {
+header, footer, nav, aside {
   display: none;
-} */
+}
 
 html {
   height: 100%;
@@ -576,10 +576,14 @@ main {
               &:first-child {
                 margin-left: 0;
                 margin-right: 20px;
-                height: 638px;
+                height: 614px;
                 img.firstPic {
-                  height: 648px;
+                  height: 100%;
                 }
+              }
+              &:hover {
+                box-shadow: 0 0 10px #bbb;
+                transition: .3s linear;
               }
               p {
                 margin: 0;
