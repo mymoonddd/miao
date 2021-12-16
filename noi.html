@@ -443,7 +443,7 @@
   var x = Number(prompt('x'))
   var y = Number(prompt('y'))
 
-  if ((x ** 2 <= 1) && (y ** 2 <= 1))
+  if (x ** 2 <= 1) && (y ** 2 <= 1))
     console.log('yes')
   else
     console.log('no')
@@ -1026,16 +1026,17 @@ console.log(result)
 
 </script>
 
-<script type=xxx id="ch0105/31">
+<script  id="ch0105/31">
 
   var N = Number(prompt('N'))
   var M = Number(prompt('M'))
   var status = 1
+  var result = ''
 
 // n是每个灯对应的编号
 // m是操作人员的编号
 
-  for (n = 1; n <= N; n++) {
+  for (n = 2; n <= N; n++) {
       status = 1
     for (m = 1; m <= M; m++) {
       if (n % m == 0) {
@@ -1046,9 +1047,10 @@ console.log(result)
     }
 
     if (status == -1) {
-      console.log(n + ',')
+      result = result + ',' + n
     }
   }
+  console.log(1 + result)
 
 </script>
 
