@@ -1115,60 +1115,142 @@ var n = Number(prompt('n'))
 
 </script>
 
-<script  id="ch0105/37">
+<script type=xxx  id="ch0105/37">
 
+  var M = Number(prompt('M'))
+  var N = Number(prompt('N'))
+  var X = Number(prompt('X'))
+  var result = N
 
+  while (X >= 0) {
+    N = N + Math.floor(M / N)
+    X = X - Math.ceil(M / N)
+    result = Math.max(result, N)
+  }
+
+  console.log(Math.round(result))
 
 </script>
 
 <script type=xxx id="ch0105/38">
 
+  var N = Number(prompt('N'))
+
+  for (i1 = 0, n = 0; i1 < N; i1 ++) {
+    n = Number(prompt('n'))
+    if (n == 0) {
+      console.log(0)
+    }
+    for (i2 = 0, cn = 0, x = 1, a = n + 1, gx = 0, s = 0; i2 < (n + 1); i2 ++) {
+      cn = Number(prompt('cn'))
+      if (i2 != n) {
+        a = a - 1
+        // fx = cn * x ** a
+        // gx = cn * a * x ** (a - 1)
+        console.log(cn * a)
+      }
+    }
+  }
+
+</script>
+
+<script type=xxx id="ch0105/39">
+  var n = Number(prompt('n'))
+
+  for (i = 0, x = n, a = 0, result = 0, s = 0; i < n; i ++) {
+    if ((i + 1) % 7 != 0) {
+        var I = String(i + 1).length
+        for (ii = 0; ii < I; ii ++) {
+          a = Math.trunc((i + 1) / 10 ** (ii)) % 10
+          if (a == 7) {
+            result = 1
+          }
+        }
+      if (result != 1) {
+        s = s + (i + 1) ** 2
+      }
+      result = 0
+    }
+  }
+  console.log(s)
+
+</script>
+
+<script type=xxx id="ch0105/40">
+  var n = Number(prompt('n'))
+
+  for (i = 0, x = n, a = 0, s = 0; i < n; i ++) {
+    var I = String(i + 1).length
+    for (ii = 0; ii < I; ii ++) {
+      a = Math.trunc((i + 1) / 10 ** (ii)) % 10
+      if (a == 1) {
+        s = s + 1
+      }
+    }
+  }
+  console.log(s)
+
+</script>
+
+<script type=xxx id="ch0105/41">
+
+var m = Number(prompt('m'))
+var n = Number(prompt('n'))
+
+  for (i = (m - 1), x = n, a = 0, s = 0; i < n; i ++) {
+    var I = String(i + 1).length
+    for (ii = 0; ii < I; ii ++) {
+      a = Math.trunc((i + 1) / 10 ** (ii)) % 10
+      if (a == 2) {
+        s = s + 1
+      }
+    }
+  }
+  console.log(s)
+
+</script>
+
+<!-- <script  id="ch0105/42">
+
+  var w = Number(prompt('w'))
+  var h = Number(prompt('h'))
+  var a = prompt('图形')
+  var b = prompt('实心')
+
+  for (i = 0, p = ''; i < ((w + 1) * h); i ++) {
+    if (i % (w + 1) == 0) {
+      p = p + '\n'
+    } else {
+      p = p + a
+    }
+    if (b == 0) {
+      for (x = 2; x < (w - 1); x ++) {
+        if ( x + (w + 1) < i && i < x + (h - 1) * (w + 1) ) {
+          p = p + '\t'
+        }
+        i = i + 1
+      }
+    }
+  }
+
+  console.log (p)
+
+</script> -->
+
+<script type=xxx id="ch0105/43">
+
 
 
 </script>
 
-<script  id="ch0105/39">
+<script type=xxx id="ch0105/44">
 
 
 
 </script>
 
-<script  id="ch0105/40">
+<script type=xxx id="ch0105/45">
 
 
 
-</script>
-
-<script  id="ch0105/41">
-
-
-
-</script>
-
-<script  id="ch0105/42">
-
-
-
-</script>
-
-<script  id="ch0105/43">
-
-
-
-</script>
-
-<script  id="ch0105/44">
-
-
-
-</script>
-
-<script  id="ch0105/45">
-
-
-
-</script>
-
-
-
-
+</script>
