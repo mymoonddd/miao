@@ -443,7 +443,7 @@
   var x = Number(prompt('x'))
   var y = Number(prompt('y'))
 
-  if ((Math.sqrt(x) <= 1) && (Math.sqrt(y) <= 1))
+  if (x ** 2 <= 1) && (y ** 2 <= 1))
     console.log('yes')
   else
     console.log('no')
@@ -464,7 +464,7 @@
   console.log(a * b)
   else if (c == '/')
    if (b != 0)
-    console.log(a + b)
+    console.log(a / b)
     else
     console.log('Divided by zero!')
   else
@@ -822,7 +822,7 @@ console.log(result)
   console.log(s.toFixed(4), h.toFixed(7))
 </script>
 
-<script  type=xxx id="ch0105/21">
+<script type=xxx id="ch0105/21">
 
   var n = Number(prompt('n'))
 
@@ -848,7 +848,6 @@ console.log(result)
 
 <script type=xxx id="ch0105/22">
   var s = 300
-  debugger
   for (var i = 0, m = 0, r = 0, d = 0, sum = 0; i < 12; i++) {
     m = Number(prompt('预算'))
     d = Math.trunc((s + r - m) / 100) * 100
@@ -970,9 +969,8 @@ console.log(result)
   var N = prompt('N')
   var n = N.length
 
-  for (var i = 0,m = 0, result = 0; i < n; i++) {
-    m = m + 1
-    result = Math.trunc(N / 10 ** (m - 1)) % 10
+  for (var i = 0, result = 0; i < n; i++) {
+    result = Math.trunc(N / 10 ** (i)) % 10
     console.log(result)
   }
 
@@ -980,89 +978,165 @@ console.log(result)
 
 <script type=xxx id="ch0105/29">
 
+  var N = prompt('N')
+  var n = N.length
+  var result = ''
 
+  if (N == 0) {
+    result = 0
+  } else {
+    if (N < 0) {
+      result = '-'
+      n = n - 1
+    }
+    for (var i = 0, m = 0, a = ''; i < n; i++) {
+      a = Math.abs(Math.trunc(N / (10 ** i)) % 10)
+
+      while (a === 0) {
+        a = ''
+      }
+
+      result = result + a
+    }
+  }
+
+  console.log(result)
 
 </script>
 
 <script type=xxx id="ch0105/30">
 
+  var m = prompt('m')
+  var n = m.length
+  var k = Number(prompt('k'))
 
-
-</script>
-
-<script type=xxx id="ch0105/20">
-
-
-
-</script>
-
-<script type=xxx id="ch0105/20">
-
-
-
-</script>
-
-<script type=xxx id="ch0105/20">
-
-
+  if (m % 19 == 0) {
+    for (var i = 0, a = 0, s = 0; i < n; i++) {
+      a = Math.trunc(m / 10 ** (i)) % 10
+      if (a == 3) {
+        s = s + 1
+      }
+    }
+    if (s = k) {
+      console.log('YES')
+    }
+  } else {
+    console.log('NO')
+  }
 
 </script>
 
-<script type=xxx id="ch0105/20">
+<script type=xxx id="ch0105/31">
 
+  var N = Number(prompt('N'))
+  var M = Number(prompt('M'))
+  var status = 1
 
+// n是每个灯对应的编号
+// m是操作人员的编号
 
-</script>
+  for (n = 1; n <= N; n++) {
+      status = 1
+    for (m = 1; m <= M; m++) {
+      if (n % m == 0) {
+        status = status * (-1)
+      } else {
+        status = status
+      }
+    }
 
-<script type=xxx id="ch0105/20">
-
-
-
-</script>
-
-<script type=xxx id="ch0105/20">
-
-
-
-</script>
-
-<script type=xxx id="ch0105/20">
-
-
-
-</script>
-
-<script type=xxx id="ch0105/20">
-
-
+    if (status == -1) {
+      console.log(n)
+    }
+  }
 
 </script>
 
-<script  id="ch0105/20">
+<script type=xxx id="ch0105/32">
 
+  var n = Number(prompt('n'))
 
+  for (i = 0, a = 1, s = 0; i < n ; i ++) {
+    a = 1 / a + 1
+    s = s + a
+  }
+  console.log(s.toFixed(4))
 
 </script>
 
-<script  id="ch0105/20">
-
-
-
-</script>
-
-<script  id="ch0105/20">
+<script  id="ch0105/33">
 
 
 
 </script>
 
-<script  id="ch0105/20">
+<script type=xxx id="ch0105/34">
 
 
 
 </script>
 
-<script  id="ch0105/20">
+<script type=xxx id="ch0105/35">
+
+
+
+</script>
+
+<script type=xxx id="ch0105/36">
+
+
+
+</script>
+
+<script type=xxx id="ch0105/37">
+
+
+
+</script>
+
+<script type=xxx id="ch0105/38">
+
+
+
+</script>
+
+<script  id="ch0105/39">
+
+
+
+</script>
+
+<script  id="ch0105/40">
+
+
+
+</script>
+
+<script  id="ch0105/41">
+
+
+
+</script>
+
+<script  id="ch0105/42">
+
+
+
+</script>
+
+<script  id="ch0105/43">
+
+
+
+</script>
+
+<script  id="ch0105/44">
+
+
+
+</script>
+
+<script  id="ch0105/45">
 
 
 
