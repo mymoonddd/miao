@@ -1222,10 +1222,10 @@ var n = Number(prompt('n'))
   var y = 0
 
   // 坐标 (i % (w + 1), Math.ceil(i / (w + 1)))
-  for (i = 0, p = ''; i < ((w + 1) * h); i ++) {
+  for (i = 1, p = ''; i < ((w + 1) * h); i ++) {
     x = i % (w + 1)
     y = Math.ceil(i / (w + 1))
-    if (x == 0) {
+    if (x == 0 ) {
       p = p + '\n'
     } else if (b == 0 && 1 < x && x < w && 1 < y && y < h) {
       p = p + ' '
