@@ -196,10 +196,17 @@
 
 </script>
 
-<script>
+<script type=xxx id="itoa">
   /* itoa: 给定一个整数，将其转换为字符串：不能使用String等现成函数，
         但可以使用非此功能的其它函数，也不能利用任意运算符的自动类型转换 */
-  
+
+  var n = prompt('n')
+  var N = n.length
+  for (i = 0, a = 0, result = '';i < N;i ++){
+    a = Math.trunc(n / (10 ** i)) % 10
+    result = a + result
+  }
+  console.log(result)
 
 </script>
 
