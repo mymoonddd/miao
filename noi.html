@@ -142,7 +142,7 @@
 
 </script>
 
-<script type=xxx id="complete-numbe1rs">
+<script type=xxx id="complete-numbers">
   // complete-numbers: 输出1000以内的完全数
   for (n = 1; n < 1000; n++) {
     for (i = 1, s = 0; i < n ; i++) {
@@ -161,7 +161,7 @@
   // prime: 输入一个数，判断它是否是素数
 
   var n = Number(prompt('n'))
-  if (n < 2 || n != Math.trunc(n)){
+  if (n < 1 || n != Math.trunc(n)){
     console.log('请输入大于1的自然数')
   } else {
     for (i = 2, s = 0; i < n; i++){
@@ -169,7 +169,9 @@
         s = s + 1
       }
     }
-    if (s == 0){
+    if (n == 1){
+      console.log('NO')
+    } else if (s == 0){
       console.log('YES')
     } else {
       console.log('NO')
