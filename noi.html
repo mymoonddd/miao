@@ -1,3 +1,161 @@
+<!-- 以下所有“是否”的题目都输出YES/NO -->
+<script type=xxx id="narcissistic">
+  // narcissistic: 输入一个数，判断是否是水仙花数
+  var n = Number(prompt('n'))
+  var N = String(n).length
+  for (var i = 0, a = 0, s = 0; i < N; i++) {
+    a = Math.trunc(n / 10 ** (i)) % 10
+    s = s + a ** 3
+  }
+  if (s == n) {
+    console.log('YES')
+  } else {
+    console.log('NO')
+  }
+</script>
+
+<script type=xxx id="narcissistics">
+// narcissistics: 输出10000以内的水仙花数
+  for (n = 0; n < 10000; n ++) {
+    var N = String(n).length
+    if (N == 3) {
+      for (i = 0, a = 0, s = 0; i < N; i++) {
+        a = Math.trunc(n / 10 ** (i)) % 10
+        s = s + a ** 3
+      }
+      if (s == n) {
+        console.log(n)
+      }
+    }
+  }
+</script>
+
+<script type=xxx id="palindrom">
+  // palindrom: 输入一个数，判断它数是否是回文数，如1223221
+  var n = Number(prompt('n'))
+  var N = String(n).length
+  var result = true
+  for (i = 0, a = 0, b = 0; i < N / 2; i++) {
+    a = Math.trunc(n / 10 ** (i)) % 10
+    b = Math.trunc(n / 10 ** (N - i - 1)) % 10
+    if (a != b) {
+      result = false
+    }
+  }
+  if (result == true) {
+    console.log('YES')
+  } else {
+    console.log('NO')
+  }
+
+</script>
+
+<script Xtype=xxx id="weekday">
+  // weekday: 输入年份与月份，输出这个月的第一天是周几（视具体设定，周一可以用1或0表示）
+  var Y = Number(prompt('Y'))
+  var M = Number(prompt('M'))
+
+  var YD = 0
+  var MD = 0
+  var result = 0
+
+  // 当年以前公历共经过多少闰年
+  for (i = 1, R = 0; i < Y; i ++) {
+    if (i % 4 == 0 && i % 100 != 0 || i % 400 == 0) {
+      R = R + 1
+    }
+  }
+  // 当年以前公历共经过多少天
+  YD = 365 * (Y - 1) + R
+
+  // 本年不足31天的月数天数
+  for (ii = 1, X = 0; ii < M; ii ++) {
+    if (ii == 4 || ii == 6 || ii == 9 || ii == 11) {
+      X = X + 1
+    }
+    if (ii == 2) {
+      if (Y % 4 == 0 && Y % 100 != 0 || Y % 400 == 0) {
+        X = X + 2
+      } else {
+        X = X + 3
+      }
+    }
+  }
+  // 当月以前今年共经历多少天 (假设每个月31天)
+  MD = 31 * (M - 1) - X
+
+  var result = (YD + MD + 1) % 7
+
+//  if (result == 1)  {
+//     console.log('周一');
+//   } else if (result == 2) {
+//     console.log('周二');
+//   } else if (result == 3) {
+//     console.log('周三');
+//   } else if (result == 4) {
+//     console.log('周四');
+//   } else if (result == 5) {
+//     console.log('周五');
+//   } else if (result == 6) {
+//     console.log('周六');
+//   } else if (result == 0) {
+//     console.log('周日');
+//   }
+
+  switch (String(result)) {
+    case "1":
+      console.log('周一');
+      break;
+    case "2":
+      console.log('周二');
+      break;
+    case "3":
+      console.log('周三');
+      break;
+    case "4":
+      console.log('周四');
+      break;
+    case "5":
+      console.log('周五');
+      break;
+    case "6":
+      console.log('周六');
+      break;
+    case "0":
+      console.log('周日');
+      break;
+  }
+
+</script>
+
+<script type=xxx id="complete-number">
+  // complete-number: 输入一个数，判断它是否是完全数（自行查相关概念）
+
+</script>
+<script type=xxx id="complete-numbers">
+  // complete-numbers: 输出1000以内的完全数
+
+</script>
+<script type=xxx id="prime">
+  // prime: 输入一个数，判断它是否是素数
+
+</script>
+<script type=xxx id="primes">
+  // primes: 输出1000以内的素数
+
+</script>
+<script type=xxx id="lcf&lcm">
+  // lcf&lcm: 输入两个数，输出它们的最大公约数和最小公倍数
+
+</script>
+<script type=xxx id="sqrt">
+  // sqrt: 输入一个数，求它的平方根，精确到小数点后3位，不能使用Math.sqrt
+
+</script>
+
+
+
+
 <script type=xxx id="ch0103/01">
 
   var a = Number(prompt('a'))
