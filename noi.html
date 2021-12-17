@@ -1210,22 +1210,30 @@ var n = Number(prompt('n'))
 
 </script>
 
-<script type=xxx id="ch0105/42">
+<script id="ch0105/42">
 
   var w = Number(prompt('w'))
   var h = Number(prompt('h'))
   var a = prompt('图形')
   var b = prompt('实心')
 
+  var n = 0
+  var x = 0
+  var y = 0
+
+  // 坐标 (i % (w + 1) , i % h)
   for (i = 0, p = ''; i < ((w + 1) * h); i ++) {
-    if (i % (w + 1) == 0) {
+    x = i % (w + 1)
+    y = Math.ceil(i / (w + 1))
+    if (x == 0) {
       p = p + '\n'
+    } else if (b == 0 && 1 < x && x < w && 1 < y && y < h) {
+      p = p + ' '
     } else {
       p = p + a
     }
   }
-
-  console.log (p)
+  console.log(p)
 
 </script>
 
