@@ -1210,7 +1210,7 @@ var n = Number(prompt('n'))
 
 </script>
 
-<script id="ch0105/42">
+<script type=xxx id="ch0105/42">
 
   var w = Number(prompt('w'))
   var h = Number(prompt('h'))
@@ -1221,7 +1221,7 @@ var n = Number(prompt('n'))
   var x = 0
   var y = 0
 
-  // 坐标 (i % (w + 1) , i % h)
+  // 坐标 (i % (w + 1), Math.ceil(i / (w + 1)))
   for (i = 0, p = ''; i < ((w + 1) * h); i ++) {
     x = i % (w + 1)
     y = Math.ceil(i / (w + 1))
