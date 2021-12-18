@@ -196,7 +196,7 @@
 
 </script>
 
-<script xtype=xxx id="itob">
+<script type=xxx id="itob">
   /* itob: 给定一个整数，将其转换为字符串：不能使用String等现成函数，
         但可以使用非此功能的其它函数，也不能利用任意运算符的自动类型转换 */
   var n = Number(prompt('n'))
@@ -204,7 +204,7 @@
   var N = 0
   var a = 0
   var s = ''
-  
+
   if (n < 0){
     s = '-'
     n = Math.abs(n)
@@ -531,17 +531,18 @@
 <script type=xxx  id="ch0104/09">
 
   var a = Number(prompt('a'))
-  var result = '';
   if (a % 3 == 0){
-    result = result + '3';
-  } else if (a % 5 == 0){
-    result = result +' 5';
-  } else if (a % 7 == 0){
-    result = result +' 7';
-  } else if (a % 3 != 0 && a % 5 != 0 && a % 7 != 0){
-    result = 'n';
+    console.log(3)
   }
-  console.log(result)
+  if (a % 5 == 0){
+    console.log(5)
+  }
+  if (a % 7 == 0){
+    console.log(7)
+  }
+  if (a % 3 != 0 && a % 5 != 0 && a % 7 != 0){
+    console.log('n')
+  }
 
 </script>
 
@@ -1470,6 +1471,8 @@ var n = Number(prompt('n'))
   }
 
 </script>
+
+
 
 
 
