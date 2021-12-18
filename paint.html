@@ -83,13 +83,13 @@
   // 画一条30度的斜线（与x轴或y轴的夹角呈30度）
   for (x = 1; x < width; x ++){
     y = x * Math.sqrt(3)
-    dot(x, y.toFixed(0), color)
+    dot(x, y, color)
   }
 
   // 画一条跨越画布左上角和右下角的对角线
   for (x = 1; x < width; x ++){
     y = x * (height / width)
-    dot(x, y.toFixed(0), color)
+    dot(x, y, color)
   }
 
   // 画一个空心矩形
@@ -125,18 +125,18 @@
   for (x = (x0 - r);x < (x0 + r);x++){
     y = 0
     y = y0 + Math.sqrt(r ** 2 - (x - x0) ** 2)
-    dot(x, y.toFixed(0), color)
+    dot(x, y, color)
     y = y0 - Math.sqrt(r ** 2 - (x - x0) ** 2)
-    dot(x, y.toFixed(0), color)
+    dot(x, y, color)
   }
 
   r = 200
   for (x = (x0 - r);x < (x0 + r);x++){
     y = 0
     y = y0 + Math.sqrt(r ** 2 - (x - x0) ** 2)
-    dot(x, y.toFixed(0), color)
+    dot(x, y, color)
     y = y0 - Math.sqrt(r ** 2 - (x - x0) ** 2)
-    dot(x, y.toFixed(0), color)
+    dot(x, y, color)
   }
 
   // 画一个实心的圆，半径至少为100像素
@@ -155,14 +155,28 @@
   // 画一个【大小合适】的sin(x)的图像
   for (x = 0; x < width; x ++){
     y = 12 * Math.sin(x / 10) + 70
-    dot(x , y.toFixed(0), color)
+    dot(x , y, color)
   }
 
   // 画出rgb色彩空间的某一面（尺寸要大于100x100）
+  var r = 0
+  var g = 0
+  var b = 0
+  // 128 * 128
+  for (x = 372; x <= 500 ;x++){
+    for (y = 272, g = 128; y <= 400; y++){
+      for (x = 372, r = 0; x <= 500; x++){
+        color = 2 * r + ',' + 2 * g + ',' + 255
+        dot(x, y, 'rgb(' + color + ')')
+        r++
+      }
+      g--
+    }
+  }
 
 
-
-  // 如果做出上一题后，尝试将其每个点的坐标乘以一个矩阵（如(2,0,0,2)或(1,0.27得到新的位置，即绘制出被线性变幻后的色彩空间某一面
+  // 如果做出上一题后，尝试将其每个点的坐标乘以一个矩阵（
+  // 如(2,0,0,2)或(1,0.27得到新的位置，即绘制出被线性变幻后的色彩空间某一面
   //       可以考虑如下几种矩阵：
   //          2 0
   //          0 2
@@ -172,6 +186,8 @@
   //          ------
   //          0.5    0.87
   //          -0.87  0.5
+
+
 
 
 </script>
