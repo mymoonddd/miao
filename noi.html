@@ -1405,8 +1405,7 @@ var n = Number(prompt('n'))
   for (i = 0; i < w; i++){
     border += a
   }
-  border = border + '\n'
-  for (ii = 0; ii < h -2; ii++){
+  for (ii = 0; ii < h - 2; ii++){
       for (i = 0, content = a; i < w - 2; i++){
         if (b == 0) {
           content += ' '
@@ -1417,7 +1416,7 @@ var n = Number(prompt('n'))
     content += a + '\n'
     contents += content
   }
-  console.log(border + contents + border)
+  console.log(border + '\n' + contents + border)
 
 </script>
 
