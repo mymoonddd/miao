@@ -204,8 +204,8 @@
     for (y = 1, g = 128; y <= 128; y++){
       for (x = 1, r = 0; x <= 128; x++){
         color = 2 * r + ',' + 2 * g + ',' + 255
-        xm = x + 0.27 * y
-        ym = y
+        xm = x
+        ym = 0.27 * x + y
         dot(xm, ym, 'rgb(' + color + ')')
         r++
       }
@@ -220,9 +220,9 @@
     for (y = 1, g = 128; y <= 128; y++){
       for (x = 1, r = 0; x <= 128; x++){
         color = 2 * r + ',' + 2 * g + ',' + 255
-        xm = 0.5 * x + 0.8 * y
-        ym = -0.87 * x + 2.5 * y
-        dot(xm, ym, 'rgb(' + color + ')')
+        xm = 0.5 * x - 0.87 * y
+        ym = 0.87 * x + 0.5 * y
+        dot(xm + 200, ym + 200, 'rgb(' + color + ')')
         r++
       }
       g--
