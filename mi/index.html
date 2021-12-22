@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <link rel="stylesheet" href="less.min.js">
-  <title>mi.com</title>
+  <title>小米商城 - 小米11、Redmi Note 9、小米MIX Alpha，小米电视官方网站</title>
   <style type="text/less">
 
     html {
+      scroll-behavior: smooth;
       height: 100%;
-      font-size: 12px;
+      font: 12px/1.5 Helvetica Neue,Helvetica,Arial,Microsoft Yahei,Hiragino Sans GB,Heiti SC,WenQuanYi Micro Hei,sans-serif;
 
       /* iconfont */
       @font-face {
@@ -17,107 +17,12 @@
         src: url(./mi.woff);
       }
 
-      [icon="f-cart"]::before {
-        content: "\E60c";
+      [icon]::before {
+        content:"";
         font-family: mifont;
-        font-style: initial;
+        font-style: inherit;
         vertical-align: middle;
-        font-size: 2em;
-        line-height: 76.9%;
-        vertical-align: -24%;
       }
-      [icon="f-search"]::before {
-        content: "\E616";
-        font-family: MIfont;
-        font-style: initial;
-        font-size: 1.8em;
-        line-height: 58.8%;
-        vertical-align: -30%;
-      }
-      [icon="f-arrow"]::after {
-        content: "\E623";
-        font-family: MIfont;
-        font-style: initial;
-      }
-      [icon="f-left"]::after {
-        content: "\E628";
-        font-family: MIfont;
-        font-style: initial;
-      }
-      [icon="f-play"]::after {
-        content: "\E601";
-        font-family: MIfont;
-        font-style: initial;
-        font-size: 2.7em;
-        line-height: 65%;
-      }
-      [icon="f-close"]::after {
-        content: "\E602";
-        font-family: MIfont;
-        font-style: initial;
-        font-size: 1.75em;
-        line-height: 147%;
-      }
-      [icon="f-tool"]::before {
-        content: "\E634";
-        font-family: MIfont;
-        font-style: initial;
-        font-size: 1.5em;
-        line-height: 58.8%;
-        vertical-align: -22%;
-      }
-      [icon="f-seven"]::before {
-        content: "\E635";
-        font-family: MIfont;
-        font-style: initial;
-        font-size: 1.5em;
-        line-height: 58.8%;
-        vertical-align: -22%;
-      }
-      [icon="f-fifteen"]::before {
-        content: "\E636";
-        font-family: MIfont;
-        font-style: initial;
-        font-size: 1.5em;
-        line-height: 58.8%;
-        vertical-align: -22%;
-      }
-      [icon="f-gift"]::before {
-        content: "\E638";
-        font-family: MIfont;
-        font-style: initial;
-        font-size: 1.5em;
-        line-height: 58.8%;
-        vertical-align: -22%;
-      }
-      [icon="f-locate"]::before {
-        content: "\E637";
-        font-family: MIfont;
-        font-style: initial;
-        font-size: 1.5em;
-        line-height: 58.8%;
-        vertical-align: -22%;
-      }
-      [icon="f-message"]::before {
-        content: "\E600";
-        font-family: MIfont;
-        font-style: initial;
-      }
-      [icon="f-weibo"]::before {
-        content: "\E630";
-        font-family: MIfont;
-        font-style: initial;
-        font-size: 1.4em;
-        line-height: 66%;
-      }
-      [icon="f-weixin"]::before {
-        content: "\E608";
-        font-family: MIfont;
-        font-style: initial;
-        font-size: 1.3em;
-        line-height: 77%;
-      }
-
 
       body {
         height: 100%;
@@ -126,39 +31,36 @@
 
       a {
         text-decoration: none;
-        color: initial;
+        color: inherit;
       }
 
       ul {
-        list-style: none;
+        list-style-type: none;
         padding: 0;
         margin: 0;
       }
     }
 
-    /* 设置背景黑条 */
     header {
+      /* 设置背景黑条 */
       width: 100%;
       background-color: #333333;
       color: #B0B0B0;
       /* 顶部盒居中 */
       .header-box {
-        position: relative;
         width: 1226px;
         height: 40px;
         margin: auto;
       }
       /* 分隔符 */
       .sep {
-          margin: 0 .26em;
+          margin: 0 .3em;
           color: #6666;
         }
       /* 文字 */
       a {
-        padding: 12px 0;
+        font-size: .8em;
         line-height: 40px;
-        text-decoration: none;
-        color: inherit;
         &:hover {
           color: #fff;
           cursor: pointer;
@@ -167,27 +69,27 @@
       /* 内容盒排版 */
       .header-nav {
         float: left;
+        position: relative;
         /* “下载APP”展开盒 */
         .header-appQR {
           width: 125px;
           height: 0;
           position: absolute;
-          text-align: center;
-          left: 550px;
+          left: 540px;
+          font-size: 1.2em;
           line-height: 2em;
+          text-align: center;
           background-color: #fff;
           overflow: hidden;
-          transition: .3s;
-          /* 展开盒图片内容 */
+          transition: height .3s;
+          z-index: 10000;
           img {
+            display: block;
             width: 90px;
-            height: 90px;
             margin: 20px;
-            margin-bottom: 0;
+            margin-bottom: 5px;
           }
-          /* 展开盒文字内容 */
           span {
-            display: inline-block;
             color: #000;
           }
         }
@@ -197,22 +99,26 @@
           &:hover {
             +.header-appQR {
             height: 150px;
-            transition: .3s;
+            transition: height .3s;
             }
             &::after {
-            content: "▲";
-            position: absolute;
-            top: 1.3em;
-            left: 1.4em;
-            color: #fff;
+              content: "▲";
+              position: absolute;
+              top: .2em;
+              left: 1.5em;
+              color: #fff;
+              z-index:10;
+            }
           }
-        }
         }
       }
       /* “登录” “注册” “消息通知” */
       .header-user {
         float: left;
         margin-left: 160px;
+        a:nth-of-type(2) {
+          margin-left: -3px;
+        }
       }
       /* “购物车” */
       .header-cart {
@@ -222,9 +128,27 @@
         text-align: center;
         position: relative;
         transition: background-color .1s .3s;
-        a:hover {
-          color: #ff6a00;
+        .header-cart-out {
+          /* 清除之前设置的hover样式 */
+          &:hover {
+            color: #ff6a00;
+          }
+          &::before {
+            content: "\E60C";
+            font-size: 2em;
+            line-height: 50%;
+            vertical-align: -30%;
+           }
+        }
+        /* “购物车”互动样式 */
+        &:hover {
           cursor: pointer;
+          background-color: #fff;
+          color: #ff6a00;
+          transition: .3s;
+          .header-cart-in {
+            height: 100px;
+          }
         }
         /* 购物车展开盒 */
         .header-cart-in {
@@ -239,48 +163,33 @@
           line-height: 100px;
           box-shadow: 1px 1px 10px #2222;
           overflow: hidden;
-          transition: .3s;
-          z-index: 10;
-        }
-        /* “购物车”互动样式 */
-        &:hover {
-          cursor: pointer;
-          background-color: #fff;
-          color: #ff6a00;
-          transition: none;
-          .header-cart-in {
-            height: 100px;
-            transition: .3s;
-          }
+          transition: height .3s;
+          z-index: 10000;
         }
       }
     }
 
     nav {
-      width: 100%;
-      overflow: hidden;
       /* 导航盒居中 */
       .nav-box {
         width: 1226px;
-        height: 100px;
         margin: auto;
         /* 导航1/3 */
         .nav-row1 {
+          height: 100px;
           /* 左边小米logo */
           .nav-row1-icon {
             float: left;
             width: 56px;
             height: 56px;
-            margin-top: 25px;
+            margin: 20px auto;
           }
           /* 中间商品导航栏外框 */
           .nav-row1-list {
             float: left;
             display: flex;
-            margin-left: 170px;
-            height: 100px;
-            line-height: 100px;
-            font-size: 1.3em;
+            margin: 38px 0 38px 180px;
+            font-size: 1.33em;
             &.extra {
               margin-left: 0;
             }
@@ -289,8 +198,7 @@
               transition: height .5s .2s;
               cursor: pointer;
               .nav-row1-list-hidden-product {
-                display: block;
-                transition: none;
+                visibility: 1;
               }
             }
             /* 中间商品导航栏内容与互动 */
@@ -303,32 +211,31 @@
               }
             /* 导航展开盒长条外框 */
               .nav-row1-list-hidden-border {
-                position: absolute;
                 width: 100%;
                 height: 0;
-                transition: .5s;
-                left: 0;
-                overflow: hidden;
-                box-shadow: 1px 1px 10px #E0E0E0;
-                z-index: 50;
                 background-color: white;
+                transition: height .5s;
+                position: absolute;
+                left: 0;
+                top: 140px;
+                overflow: hidden;
+                box-shadow: 1px 1px 3px #E0E0E0;
+                z-index: 50;
                 /* 导航展开盒内容框外框 */
                 .nav-row1-list-hidden-product {
                   width: 1226px;
                   margin: auto;
                   height: 100%;
-                  list-style: none;
-                  display: none;
-                  padding: 0;
+                  visibility: 0;
                   background-color: white;
+                  transition: .5s;
                   /* 导航展开盒内容框内容 */
                   li {
                     float: left;
-                    width: (100% /6);
+                    width: calc(100% / 6);
                     height: 100%;
                     text-align: center;
                     line-height: 1.2em;
-                    padding: 0;
                     position: relative;
                     /* 内容分隔栏 */
                     &:not(:first-child)::before {
@@ -340,15 +247,13 @@
                       top: 40px;
                       color: #8881;
                     }
-                    /* 内容框图片 */
                     img {
                       margin-top: 40px;
                       margin-bottom: 15px;
                     }
-                    /* 内容框文字 */
                     span {
                       display: block;
-                      font-size: .7em;
+                      font-size: .8em;
                       padding: 2px 0;
                       color: #000;
                       &:last-of-type {
@@ -359,27 +264,25 @@
                 }
               }
             }
-
-          }
-          .nav-row1-list-extra{
-
           }
           /* 右边搜索外框 */
           .nav-row1-search {
             float: right;
-            font-size: 0;
+            display: flex;
             background-color: #fff;
-            margin-top: 25px;
+            margin: 25px auto;
             position: relative;
+            z-index: 1000;
             /* 输入与互动 */
             input {
-              width: 226px;
+              width: 245px;
               height: 50px;
               padding: 0 10px;
               border: 1px solid #b0b0b0;
               border-right: none;
+              box-sizing: border-box;
               outline-style: none;
-              font-size: 1rem;
+              font-size: 1.1em;
               &:focus {
                 border-color: #ff6a00;
                 +button {
@@ -393,33 +296,30 @@
             /* 输入展开盒 */
             .nav-row1-search-box {
               position: absolute;
+              top: 50px;
               border: 1px solid #ff6a00;
               border-top: none;
               background-color: #fff;
               display: none;
-              z-index: 1;
               li {
-                width: 231px;
+                width: 229px;
                 height: 30px;
-                font-size: 1rem;
+                font-size: 1em;
                 padding-left: 15px;
                 line-height: 30px;
                 &:hover {
                   background-color: #FAFAFA;
                   cursor: pointer;
                 }
-                span {
-                  vertical-align: middle;
-                }
               }
             }
             /* 提交与互动 */
             button {
               width: 50px;
-              height: 52px;
+              height: 50px;
               text-align: center;
+              background-color: white;
               border: 1px solid #b0b0b0;
-              background-color: transparent;
               transition: .1s linear;
               &:hover {
                 background-color: #ff6a00;
@@ -428,24 +328,18 @@
                 transition: .1s linear;
                 cursor: pointer;
               }
-            }
-            select {
-              position: absolute;
-              left: 0;
-              width: 248px;
-              height: 53px;
-              border: none;
-              color: transparent;
-              background-color: transparent;
+              &::before {
+                content:"\E616";
+                font-size: 1.4em;
+                line-height: 71.4%;
+              }
             }
           }
         }
         /* 导航2/3 */
-        /* 未解决问题：展开盒的边框阴影未设置 */
-        /* 外框浮动布局 */
         .nav-row2 {
-          float: left;
           width: 1226px;
+          height: 460px;
           /* 左边列表外框 */
           .nav-row2-product {
             padding: 20px 0;
@@ -454,7 +348,7 @@
             background-color: #8885;
             position: relative;
             float: left;
-            /* 左边列表内容布局 */
+            /* 左边列表内容 */
             .nav-row2-product-catogory {
               width: 204px;
               height: 42px;
@@ -466,7 +360,8 @@
               position: relative;
               z-index: 10;
               /* 右箭头伪元素 */
-              &::after {
+              &::before {
+                content:"\E623";
                 position: absolute;
                 right: 20px;
                 top: 0;
@@ -481,21 +376,18 @@
                   visibility: visible;
                 }
               }
-              /* 文字布局 */
-              span {
-                vertical-align: center;
-              }
             }
             .nav-row2-product-list {
               /* 左边列表展开盒整体 */
-              font-size: 1.2em;
+              font-size: 1.25em;
               position: absolute;
               left: 234px;
               top: 0;
-              display: flex;
+              display: inline-block;
               height: 460px;
-              flex-flow: column wrap;
               color: black;
+              box-shadow: 1px 1px 10px #b2b2b2;
+              background-color: white;
               visibility: hidden;
               z-index: 10;
               &:hover {
@@ -505,26 +397,34 @@
               /* 展开盒内容布局 */
               li {
                 width: 248px;
-                height: 76.5px;
+                height: calc(460px / 6);
                 line-height: 76.5px;
                 box-sizing: border-box;
-                padding-left: 20px;
-                background-color: white;
-                /* 图片 */
+                padding: 0 20px;
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
                 img {
-                  vertical-align: middle;margin-right: 15px;
+                  vertical-align: middle;
+                  margin-right: 10px;
                 }
-                /* 文字 */
-                span {
-                 text-overflow: ellipsis;
+                &:nth-child(6n + 7) {
+                  margin-top: -460px;
+                }
+                &:nth-child(-n + 24) {
+                  margin-left: 744px;
+                }
+                &:nth-child(-n + 18) {
+                  margin-left: 496px;
+                }
+                &:nth-child(-n + 12) {
+                  margin-left: 248px;
+                }
+                &:nth-child(-n + 6) {
+                  margin-left: 0;
                 }
               }
-              /* 填补空出来的背景颜色 */
-              &::after {
-                content: "";
-                flex-grow: 1;
-                background-color: #fff;
-              }
+
             }
           }
           /* 右边轮播图 */
@@ -533,54 +433,41 @@
             width: 100%;
             height: 460px;
             position: relative;
-            left: 0;
             /* 第一组label-腰部两侧图片箭头 */
             .nav-row2-switch-arrow {
               display: none;
               /* 四个小图标切图 */
-              [icon="f-right"]::after {
-                content: "\E624";
-                font-family: MIfont;
+              .light, .dark {
                 font-style: initial;
-                position: absolute;
-                font-size: 3.4em;
-                width: 41px;
-                height: 69px;
-                right: -3px;
-                top: 210px;
-                color: white;
-              }
-              [icon="f-left"]::after {
-                content: "\E629";
                 font-family: MIfont;
-                font-size: 3.4em;
-                font-style: initial;
-                position: absolute;
+                font-size: 3.46em;
                 width: 41px;
                 height: 69px;
-                left: 232px;
-                top: 210px;
-                color: white;
-              }
-              [icon="p-darkRight"] {
+                line-height: 69px;
                 position: absolute;
-                width: 41px;
-                height: 69px;
-                right: 0px;
-                top: 195px;
-                background: url(https://i1.mifile.cn/f/i/2014/cn/icon/icon-slides.png) no-repeat -41px 0;
-                display: none;
+                margin-top: 196px;
+                color: #cfcfcf;
+                &[icon="f-right"]::after {
+                  content: "\E624";
+                  margin-left: 951px;
+                }
+                &[icon="f-left"]::after {
+                  content: "\E629";
+                  margin-left: -2px;
+                }
+                &[icon="p-darkRight"] {
+                  margin-left: 1183px;
+                  margin-top: 195px;
+                  background: url(https://i1.mifile.cn/f/i/2014/cn/icon/icon-slides.png) no-repeat -41px 0;
+                  display: none;
+                }
+                &[icon="p-darkleft"] {
+                  margin-left: 234px;
+                  margin-top: 195px;
+                  background: url(https://i1.mifile.cn/f/i/2014/cn/icon/icon-slides.png) no-repeat;
+                  display: none;
+                }
               }
-              [icon="p-darkleft"] {
-                position: absolute;
-                width: 41px;
-                height: 69px;
-                left: 234px;
-                top: 195px;
-                background: url(https://i1.mifile.cn/f/i/2014/cn/icon/icon-slides.png) no-repeat;
-                display: none;
-              }
-              /* 点击时由亮变暗 */
               .light:hover +.dark {
                 display: block;
                 cursor: pointer;
@@ -622,7 +509,7 @@
                 }
               }
             }
-            /* input互动 ！ */
+            /* label互动 ！ */
             input:checked {
               +.nav-row2-switch-arrow {
                 display: block;
@@ -650,11 +537,9 @@
           }
         }
         /* 导航3/3 */
-        /* 浮动定位 */
         .nav-row3 {
-          height: 210px;
+          height: 200px;
           width: 1226px;
-          float: left;
           padding-top: 15px;
           /* 块元素横向布局 */
           >* {
@@ -699,8 +584,7 @@
                   vertical-align: middle;
                 }
                 p {
-                  margin: 0;
-                  margin-top: 5px;
+                  margin: 5px auto;
                 }
               }
             }
@@ -708,13 +592,13 @@
               width: 321px;
               height: 170px;
               margin-left: 6px;
+              box-shadow: 0 0 0 #ffff;
               transition: .3s;
               img {
                 max-width: 100%;
               }
               &:hover {
-                box-shadow: 1px 1px 20px #3333;
-                transition: .3s;
+                box-shadow: 1px 1px 20px #b2b2b2b2;
                 cursor: pointer;
               }
             }
@@ -724,192 +608,228 @@
     }
 
     main {
+      /* 全宽背景 */
       background-color: #f5f5f5;
-      height: 6550px;
+      /* 主内容盒居中 */
       .main-box {
         width: 1226px;
-        height: 1000px;
         margin: auto;
+        padding-bottom: 25px;;
+        /* 长条图 */
         .main-img {
-          width: 100%;
-          height: 120px;
-          margin-bottom: 15px;
+          line-height: 0;
           img {
-            height: 100%;
+            height: 120px;
+            margin-top: 40px;
+            &.topLongPic {
+              margin-top: 25px;
+            }
           }
         }
+        /* 产品区 */
         .main-common {
-          height: 694px;
-          margin-bottom: 25px;
+          height: 685px;
+          padding-top: 10px;
+          /* 左上角文字 */
           .main-common-text {
             display: inline-block;
             position: absolute;
             font-size: 1.8em;
+            font-weight: lighter;
           }
+          /* 右边文字及其包含的产品列表 */
+          /* 特效 - 纯CSS实现hover离开后产品列表不消失 */
           .main-common-package {
             position: relative;
-            &:hover {
-              .main-common-group {
-                span.main-common-title {
-                    color: #000;
-                    transition: none;
-                    cursor: pointer;
-                    &::after {
-                      opacity: 0;
-                      transition: none;
-                    }
-                  }
-                ul.main-common-content {
-                  visibility: hidden;
-                  transition: none;
+            .main-common-group:last-child .main-common-title:not(.noswitch) {
+                color: #ff6a00;
+                &::after {
+                    opacity: 1;
+                }
+                +.main-common-content {
+                  visibility: visible;
+                  color: #000;
                 }
               }
+            &:hover div.main-common-group span.main-common-title:not(.noswitch)  {
+                color: #000;
+                transition: none;
+                cursor: pointer;
+                &::after {
+                  opacity: 0;
+                  transition: none;
+                }
+                +.main-common-content {
+                  visibility: hidden;
+                  transition: none;
+              }
             }
-            .main-common-group {
+            div.main-common-group {
+              margin-top: 25px;
               float: right;
-              padding-right: 10px;
-              margin-top: 30px;
-              span.main-common-title {
-                margin-left: 18px;
-                padding-bottom: 10px;
+              .main-common-title {
+                margin-left: 30px;
+                padding-bottom: 3px;
                 position: relative;
                 font-size: 1.3em;
                 float: right;
-                transition: color 1s 99999s;
                 overflow: hidden;
-                color: #000;
+                transition: color 0s 99999s;
                 &::after {
                   content:"";
                   width: 10em;
-                  height: 0;
+                  height: .1em;
                   background-color: #ff6a00;
-                  border: 1px solid transparent;
                   position: absolute;
                   bottom: 0;
                   right: 0;
                   opacity: 0;
-                  transition: opacity 1s 99999s;
+                  transition: opacity 1.5s 99999s;
                 }
-              }
-              .main-common-content {
-                width: 1226px;
-                height: 628px;
-                position: absolute;
-                top: 70px;
-                left: 0;
-                visibility: hidden;
-                transition: visibility 1s 99999s;
-                &.noswitch {
-                  visibility: visible;
-                }
-                li {
-                  float: left;
-                  width: 234px;
-                  height: 300px;
-                  margin-left: 14px;
-                  margin-bottom: 14px;
-                  text-align: center;
-                  background-color: #fff;
-                  transform: translate(0, 0);
-                  border: transparent;
-                  transition: transform .3s, box-shadow .5s -0.3s;
-                  box-shadow: 0 0 0 0;
-                  &:first-child.main-common-longfirst {
-                    height: 614px;
-                    margin-left: 0;
-                    img {
-                      height: 100%;
-                    }
+                +.main-common-content {
+                  width: 1226px;
+                  height: 614px;
+                  overflow: hidden;
+                  position: absolute;
+                  top: 70px;
+                  left: 0;
+                  visibility: hidden;
+                  transition: visibility 0s 99999s;
+                  &.noswitch {
+                    visibility: visible;
                   }
-                  &:first-child:not(.main-common-longfirst), &.main-common-group-leftpic {
+                  li {
+                    float: left;
+                    width: 234px;
                     height: 300px;
-                    margin: 0;
-                    img {
-                      width: 234px;
-                    }
-                  }
-                  &:nth-child(n+10) {
-                    height: 143px;
-                    line-height: 143px;
+                    margin-left: 14px;
+                    margin-bottom: 14px;
                     text-align: center;
-                    * {
-                      display: none;
+                    background-color: #fff;
+                    transform: translate(0, 0);
+                    transition: .3s;
+                    box-shadow: 0 0 0 #fff5;
+                    &:first-child.main-common-longfirst {
+                      height: 614px;
+                      margin-left: 0;
+                      img {
+                        height: 100%;
+                      }
                     }
-                    &::after {
-                      content: "浏览更多";
-                      vertical-align: middle;
-                      font-size: 2em;
-                    }
-                  }
-                  &:not(:first-child):not(.main-common-group-leftpic) {
-                    img {
-                      width: 160px;
-                      margin: 30px;
-                      margin-bottom: 15px;
-                    }
-                    p {
+                    &:first-child:not(.main-common-longfirst), &.main-common-group-leftpic {
+                      height: 300px;
                       margin: 0;
-                      &:first-of-type {
-                        font-size: 1.15em;
-                        +p {
-                          font-size: 1em;
-                          color: #b0b0b0;
-                          margin-top: .5em;
+                      img {
+                        width: 234px;
+                      }
+                    }
+                    &:nth-child(n+10) {
+                      height: 143px;
+                      line-height: 143px;
+                      text-align: center;
+                      * {
+                        display: none;
+                      }
+                      &::after {
+                        content: "浏览更多";
+                        vertical-align: middle;
+                        font-size: 2em;
+                      }
+                    }
+                    &:not(:first-child):not(.main-common-group-leftpic) {
+                      img {
+                        width: 160px;
+                        margin: 30px;
+                        margin-bottom: 15px;
+                      }
+                      p {
+                        margin: 0;
+                        &:first-of-type {
+                          font-size: 1.15em;
                           +p {
-                            font-size: 1.1em;
-                            color: #ff6a00;
-                            margin-top: 1em;
+                            font-size: 1em;
+                            color: #b0b0b0;
+                            margin-top: 0;
+                            +p {
+                              font-size: 1.1em;
+                              color: #ff6a00;
+                              margin-top: 1em;
+                            }
                           }
                         }
                       }
                     }
+                    &:hover {
+                      transform: translate(0, -2px);
+                      box-shadow: 0 0 10px 2px #b4b4b4b4;
+                      cursor: pointer;
+                    }
+                    del {
+                      color: #b0b0b0;
+                    }
+                  }
+                }
+                &.noswitch {
+                  color: black;
+                  font-weight: normal;
+                  font-size: 1.3em;
+                  float: right;
+                  transition: .8s;
+                  >[icon="f-oArrow"]::after {
+                    content: "\E623";
+                    margin-left: .5em;
+                    font-family: MIfont;
+                    font-style: initial;
+                    font-size: .9em;
+                    background-color: #fff;
+                    border-radius: 10px;
+                    padding: 0.2em;
+                    color: white;
+                    background-color: #b0b0b0;
+                    transition: .3s;
                   }
                   &:hover {
-                    transform: translate(0, -2px);
-                    box-shadow: 0 0 10px 2px #b4b4b4b4;
+                    color: #ff6a00;
+                    transition: .8s;
                     cursor: pointer;
-                  }
-                  del {
-                    color: #b0b0b0;
+                    i::after {
+                      background-color: #ff6a00;
+                      transition: .8s;
+                    }
+                    +.main-common-content {
+                      visibility: visible;
+                    }
                   }
                 }
               }
               &:hover {
-                span.main-common-title {
+                span.main-common-title:not(.noswitch) {
                   color: #ff6a00;
+                  transition: none;
                   cursor: pointer;
                   &::after {
                     opacity: 1;
                   }
-                }
-                ul.main-common-content {
-                  visibility: visible;
-                  transition: visibility none;
-                }
-              }
-              &:last-child {
-                color: #ff6a00;
-                transition: none;
-                span::after {
-                    opacity: 1;
-                }
-                .main-common-content {
-                  visibility: visible;
-                  color: #000;
+                  +ul.main-common-content {
+                    visibility: visible;
+                    transition: visibility 0s;
+                  }
                 }
               }
             }
           }
         }
+        /* 视频 */
         .main-video {
+          height: 357px;
           .main-video-text {
             p {
               display: inline-block;
-              font-size: 1.8em;
+              font-size: 1.7em;
               font-weight: lighter;
               +p {
                 font-weight: normal;
-                font-size: 1.3em;
+                font-size: 1.2em;
                 padding-top: 10px;
               }
             }
@@ -920,7 +840,6 @@
               opacity: 1;
               z-index: 10;
               /* display: block; */
-              height: 360px;
               box-shadow: 1px 1px 0 10000px #2229;
               transition: 1s;
             }
@@ -928,7 +847,7 @@
               margin-right: 14px;
               float: left;
               width: 296px;
-              height: 270px;
+              height: 285px;
               background-color: white;
               text-align: center;
               position: relative;
@@ -953,15 +872,22 @@
                 left: 20px;
                 width: 32px;
                 height: 20px;
+                text-align: center;
                 border-radius: 15px;
                 color: white;
                 border: 2px solid white;
                 background-color: #202020b0;
                 transition: .3s;
+                &::before {
+                  content: "\E601";
+                  font-style: initial;
+                  font-size: 2.7em;
+                  line-height: 70%;
+                }
               }
               &:hover {
                 cursor: pointer;
-                margin-top: -5px;
+                transform: translatey(-5px);
                 box-shadow: 1px 1px 10px #b0b0b0;
                 transition: .3s;
                 i {
@@ -997,6 +923,12 @@
                 color: #757575;
                 border-radius: 100px;
                 transition: .2s;
+                &:before {
+                  content: "\E602";
+                  font-style: initial;
+                  font-size: 1.75em;
+                  line-height: 147%;
+                }
                 &:hover {
                   cursor: pointer;
                   color: white;
@@ -1024,9 +956,7 @@
             }
           }
         }
-        .main-common-text {
-          font-weight: lighter;
-        }
+
         [class*="-noswitch"] {
           color: initial;
           font-weight: normal;
@@ -1056,109 +986,12 @@
           }
         }
       }
-
-    }
-
-    aside {
-      background-color: red;
-      .aside-box {
-        width: 90px;
-        table {
-          border-collapse: collapse;
-          position: fixed;
-          right: 0;
-          bottom: 70px;
-          td:not(:empty) {
-            height: 87px;
-            width: 79px;
-            text-align: center;
-            position: relative;
-            background-color: #fff;
-            border: 1px solid #eee;
-            img {
-              position: absolute;
-              width: 30px;
-              margin: auto;
-              top: 20px;
-              right: 0;
-              left: 0;
-            }
-            .hover {
-              display: none;
-              cursor: pointer;
-            }
-            p {
-              margin: 0;
-              margin-top: 3em;
-              font-size: 1.2em;
-              color: rgba(68, 68, 68, 0.76);
-            }
-            &:hover {
-              color: #ff6a00;
-              cursor: pointer;
-              .origin {
-                display: none;
-              }
-              .hover, .appQRcode {
-                display: block;
-                cursor: pointer;
-              }
-            }
-            .appQRcode {
-              position: absolute;
-              width: 130px;
-              height: 190px;
-              left: -135px;
-              top: 0;
-              background-color: #fff;
-              border: 1px solid #b2b2b222;
-              text-align: center;
-              display: none;
-              img {
-                width: 99px;
-              }
-              p {
-                width: 5em;
-                vertical-align: bottom;
-                margin: auto;
-                margin-top: 135px;
-                color: #b2b2b2;
-              }
-            }
-          }
-          td:empty {
-            height: 20px;
-            border-left: transparent;
-            border-right: transparent;
-          }
-          @media (max-width: 1400px) {
-            right: 0;
-            td:not(:empty) {
-              width: 28px;
-              height: 38px;
-              img {
-                width: 20px;
-                top: 0;
-                bottom: 0;
-              }
-              >p, >a p {
-                display: none;
-
-              }
-            }
-            td:empty {
-              display: none;
-            }
-          }
-        }
-      }
     }
 
     footer {
+      /* 底部 */
       width: 100%;
-      background: linear-gradient(white 300px, #f5f5f5 0);
       .footer-box {
-        padding-bottom: 130px;
         width: 1226px;
         margin: auto;
         .footer-box-row1 {
@@ -1176,8 +1009,26 @@
             height: 80px;
             vertical-align: middle;
             position: relative;
-            &::before {
+            i {
               margin-right: .2em;
+              font-style: initial;
+              font-size: 1.5em;
+              line-height: 58.8%;
+              &[icon="f-tool"]::before {
+                content: "\E634";
+              }
+              &[icon="f-seven"]::before {
+                content: "\E635";
+              }
+              &[icon="f-fifteen"]::before{
+                content: "\E636";
+              }
+              &[icon="f-gift"]::before {
+                content: "\E638";
+              }
+              &[icon="f-locate"]::before {
+                content: "\E637";
+              }
             }
             &:not(:last-child)::after {
               content: "";
@@ -1198,6 +1049,8 @@
           }
         }
         .footer-box-row2 {
+          /* 闭合浮动 */
+          display: flow-root;
           .footer-box-row2-left {
             padding: 30px 0;
             text-align: left;
@@ -1254,6 +1107,11 @@
                 line-height: 28px;
                 vertical-align: middle;
                 margin: auto;
+                i[icon="f-message"]::before {
+                  content: "\E600";
+                  font-family: MIfont;
+                  font-style: initial;
+                }
                 &:hover {
                   color: white;
                   background-color: #ff3a00;
@@ -1265,11 +1123,26 @@
                 position: relative;
                 i {
                   font-size: 1.5em;
-                  line-height: 66.7%;
                   vertical-align: -30%;
+                  font-family: MIfont;
+                  font-style: initial;
+                  line-height: 66%;
+                  &[icon="f-message"]::before {
+                    content: "\E600";
+                  }
+                  &[icon="f-weibo"]::before {
+                    content: "\E630";
+                  }
+                  &[icon="f-weixin"]::before {
+                    content: "\E608";
+                  }
                   &:hover {
                     color: #ff6a00;
                     cursor: pointer;
+                    +img {
+                      display: block;
+                      cursor: pointer;
+                    }
                   }
                 }
                 img {
@@ -1280,18 +1153,20 @@
                   right: 30px;
                   display: none;
                 }
-                &:hover img {
-                  display: block;
-                  cursor: pointer;
-                }
               }
             }
-
           }
         }
-        .footer-box-row3 {
-          height: 100px;
-          clear: both;
+
+      }
+    }
+
+    .footerBottom {
+      background-color: #f5f5f5;
+      padding-top: 20px;
+      .footer-box-row3 {
+        width: 1226px;
+        margin: auto;
           .footer-box-row3-icon {
             width: 50px;
             float: left;
@@ -1319,27 +1194,112 @@
             padding-bottom: 30px;
           }
         }
+    }
+
+    aside {
+      /* 侧边栏 */
+      .aside-box {
+        width: 90px;
+        table {
+          border-collapse: collapse;
+          position: fixed;
+          right: 0;
+          bottom: 70px;
+          td:not(:empty) {
+            height: 87px;
+            width: 79px;
+            text-align: center;
+            position: relative;
+            background-color: #fff;
+            border: 1px solid #eee;
+            img {
+              position: absolute;
+              width: 30px;
+              margin: auto;
+              top: 20px;
+              right: 0;
+              left: 0;
+            }
+            .hover {
+              display: none;
+              cursor: pointer;
+            }
+            p {
+              margin: 0;
+              margin-top: 3em;
+              font-size: 1.2em;
+              color: rgba(68, 68, 68, 0.76);
+            }
+            &:hover {
+              cursor: pointer;
+              p {
+                color: #ff6e07;
+              }
+              .origin {
+                display: none;
+              }
+              .hover, .appQRcode {
+                display: block;
+                cursor: pointer;
+              }
+            }
+            .appQRcode {
+              position: absolute;
+              width: 130px;
+              height: 190px;
+              left: -135px;
+              top: 0;
+              background-color: #fff;
+              border: 1px solid #b2b2b222;
+              display: none;
+              img {
+                width: 99px;
+              }
+              p {
+                width: 5em;
+                margin: auto;
+                margin-top: 135px;
+                color: #b2b2b2;
+              }
+            }
+          }
+          td:empty {
+            height: 20px;
+            border-left: transparent;
+            border-right: transparent;
+          }
+          @media (max-width: 1400px) {
+            right: 0;
+            td:not(:empty) {
+              width: 28px;
+              height: 38px;
+              img {
+                width: 20px;
+                top: 0;
+                bottom: 0;
+              }
+              >p, >a p {
+                display: none;
+              }
+              .appQRcode {
+                img {
+                  margin-bottom: 70px;
+                }
+              }
+            }
+            td:empty {
+              display: none;
+            }
+          }
+        }
       }
     }
 
-    .footer-background {
-      width: 100%;
-      background-color: red;
-      position: absolute;
-      bottom: 0;
-      height: 260px;
-    }
-
-
 
   </style>
+  <script src="./less.min.js"></script>
 </head>
 <body>
-  <!--
-  未解决的问题
-  √.上拉式导航栏隐藏内容交替变换效果
-  2.hover功能区需要不会消失的图片 【选择器优先级问题】
- -->
   <div class="pageContent">
     <header>
       <div class="header-box">
@@ -1372,7 +1332,7 @@
           <span class="sep">|</span>
           <a href="#">智能生活</a>
           <span class="sep">|</span>
-          <a href="#">SelectLocation </a>
+          <a href="#">Select Location </a>
         </div>
         <div class="header-user">
           <a href="#">登录</a>
@@ -1382,7 +1342,7 @@
           <a href="#">消息通知</a>
         </div>
         <div class="header-cart">
-          <a href="#" class="header-cart-out"><i icon="f-cart"></i> 购物车（0）</a>
+          <a href="#" class="header-cart-out" icon="f-cart"> 购物车（0）</a>
           <div class="header-cart-in">购物车中还没有商品，赶紧选购吧！</div>
         </div>
       </div>
@@ -1657,16 +1617,16 @@
           </ul>
           <form class="nav-row1-search" action="https://www.mi.com/search?">
             <input type="text" id="nav-search" name="keyword" placeholder="手机">
-            <button><i icon="f-search"></i></button>
+            <button icon="f-search"></button>
             <ul class="nav-row1-search-box">
-              <a href="https://www.mi.com/search?keyword=%E5%85%A8%E9%83%A8%E5%95%86%E5%93%81"><li><span>全部商品</span></li></a>
-              <a href="https://www.mi.com/search?keyword=%E6%89%8B%E6%9C%BA"><li><span>手机</span></li></a>
-              <a href="https://www.mi.com/search?keyword=%E6%B4%97%E8%A1%A3%E6%9C%BA"><li><span>洗衣机</span></li></a>
-              <a href="https://www.mi.com/search?keyword=%E7%A9%BA%E8%B0%83"><li><span>空调</span></li></a>
-              <a href="https://www.mi.com/search?keyword=%E7%94%B5%E8%A7%86"><li><span>电视</span></li></a>
-              <a href="https://www.mi.com/search?keyword=%E5%87%80%E6%B0%B4%E5%99%A8"><li><span>净水器</span></li></a>
-              <a href="https://www.mi.com/search?keyword=%E8%80%B3%E6%9C%BA"><li><span>耳机</span></li></a>
-              <a href="https://www.mi.com/search?keyword=%E7%BA%A2%E7%B1%B3"><li><span>红米</span></li></a>
+              <li><a href="https://www.mi.com/search?keyword=%E5%85%A8%E9%83%A8%E5%95%86%E5%93%81"><span>全部商品</span></a></li>
+              <li><a href="https://www.mi.com/search?keyword=%E6%89%8B%E6%9C%BA"><span>手机</span></a></li>
+              <li><a href="https://www.mi.com/search?keyword=%E6%B4%97%E8%A1%A3%E6%9C%BA"><span>洗衣机</span></a></li>
+              <li><a href="https://www.mi.com/search?keyword=%E7%A9%BA%E8%B0%83"><span>空调</span></a></li>
+              <li><a href="https://www.mi.com/search?keyword=%E7%94%B5%E8%A7%86"><span>电视</span></a></li>
+              <li><a href="https://www.mi.com/search?keyword=%E5%87%80%E6%B0%B4%E5%99%A8"><span>净水器</span></a></li>
+              <li><a href="https://www.mi.com/search?keyword=%E8%80%B3%E6%9C%BA"><span>耳机</span></a></li>
+              <li><a href="https://www.mi.com/search?keyword=%E7%BA%A2%E7%B1%B3"><span>红米</span></a></li>
             </ul>
           </form>
         </div>
@@ -2589,13 +2549,13 @@
     <main>
       <div class="main-box">
         <section class="main-img">
-          <img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/f334fbd05d5681bb838fefd1c815d88c.jpg?thumb=1&w=1103&h=108&f=webp&q=90" alt="">
+          <img class="topLongPic" src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/f334fbd05d5681bb838fefd1c815d88c.jpg?thumb=1&w=1103&h=108&f=webp&q=90" alt="">
         </section>
         <div class="main-common">
           <p class="main-common-text">手机</p>
           <div class="main-common-package">
             <div class="main-common-group">
-              <span class="main-common-title-noswitch">查看更多<i icon="f-oArrow"></i></span>
+              <span class="main-common-title noswitch">查看更多<i icon="f-oArrow"></i></span>
               <ul class="main-common-content noswitch">
                 <li class="main-common-longfirst">
                   <img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/c583f2edc613f1be20fa415910b13ce3.jpg?thumb=1&w=211&h=553&f=webp&q=90" alt="">
@@ -4189,74 +4149,16 @@
           </div>
         </section>
       </div>
-
     </main>
-    <aside>
-      <div class="aside-box">
-        <table>
-          <tbody>
-            <tr>
-              <td>
-                <img src="https://i8.mifile.cn/b2c-mimall-media/74c4fcb4475af8308e9a670db9c01fdf.png" class="hover" alt="">
-                <img src="https://i8.mifile.cn/b2c-mimall-media/98a23aae70f25798192693f21c4d4039.png
-                " alt="" class="origin">
-                <p>手机APP</p>
-                <div class="appQRcode">
-                  <img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/78c30d4f259ed43ab20e810a522a6249.png" alt="">
-                  <p>扫码领取新人百元礼包</p>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>
-              <img src="https://i8.mifile.cn/b2c-mimall-media/41f858550f42eb1770b97faf219ae215.png" class="hover" alt="">
-              <img src="https://i8.mifile.cn/b2c-mimall-media/55cad219421bee03a801775e7309b920.png" alt="" class="origin">
-              <p>个人中心</p>
-              </td>
-            </tr>
-            <tr>
-              <td>
-              <img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/95fbf0081a06eec7be4d35e277faeca0.png" class="hover" alt="">
-              <img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/12eb0965ab33dc8e05870911b90f3f13.png" alt="" class="origin">
-              <p>售后服务</p>
-              </td>
-            </tr>
-            <tr>
-              <td>
-              <img src="https://i8.mifile.cn/b2c-mimall-media/5e9f2b1b0da09ac3b3961378284ef2d4.png" class="hover" alt="">
-              <img src="https://i8.mifile.cn/b2c-mimall-media/4f036ae4d45002b2a6fb6756cedebf02.png" alt="" class="origin">
-              <p>人工客服</p>
-              </td>
-            </tr>
-            <tr>
-              <td>
-              <img src="https://i8.mifile.cn/b2c-mimall-media/692a6c3b0a93a24f74a29c0f9d68ec71.png" class="hover" alt="">
-              <img src="https://i8.mifile.cn/b2c-mimall-media/d7db56d1d850113f016c95e289e36efa.png" alt="" class="origin">
-               <p> 购物车</p>
-              </td>
-            </tr>
-            <tr>
-              <td></td>
-            </tr>
-            <tr>
-              <td>
-              <img src="https://i1.mifile.cn/f/i/2018/home/totop_hover.png" class="hover" alt="">
-              <img src="https://i1.mifile.cn/f/i/2018/home/totop.png" alt="" class="origin">
-               <a href="#top"><p> 回顶部</p></a>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </aside>
+
     <footer>
       <div class="footer-box">
         <ul class="footer-box-row1">
-          <li icon="f-tool">预约维修服务</li>
-          <li icon="f-seven">7天无理由退货</li>
-          <li icon="f-fifteen">15天免费换货</li>
-          <li icon="f-gift">满69包邮</li>
-          <li icon="f-locate">520余家售后网点</li>
+          <li><i icon="f-tool"></i>预约维修服务</li>
+          <li><i icon="f-seven"></i>7天无理由退货</li>
+          <li><i icon="f-fifteen"></i>15天免费换货</li>
+          <li><i icon="f-gift"></i>满69包邮</li>
+          <li><i icon="f-locate"></i>520余家售后网点</li>
         </ul>
         <div class="footer-box-row2">
           <table class="footer-box-row2-left">
@@ -4316,7 +4218,7 @@
           <div class="footer-box-row2-right">
             <p>400-100-5678</p>
             <p>8:00-18:00（仅收市话费）</p>
-            <p icon="f-message">人工客服</p>
+            <p><i icon="f-message"></i>人工客服</p>
             <p>关注小米:
               <i icon="f-weibo"></i>
               <i icon="f-weixin"></i>
@@ -4324,27 +4226,87 @@
             </p>
           </div>
         </div>
-        <div class="footer-box-row3">
-          <img class="footer-box-row3-icon" src="https://s02.mifile.cn/assets/static/image/logo-mi2.png" alt="">
-          <div class="footer-box-row3-info">
-            <p>小米商城 | MIUI | 米家 | 米聊 | 多看 | 游戏 | 政企服务 | 小米天猫店 | 小米集团隐私政策 | 小米公司儿童信息保护规则 | 小米商城隐私政策 | 小米商城用户协议 | 问题反馈 | Select Location</p>
-            <p>北京互联网法院法律服务工作站 | 中国消费者协会 | 北京市消费者协会</p>
-            <p>© mi.com 京ICP证110507号 京ICP备10046444号 京公网安备11010802020134号 京网文[2020]0276-042号</p>
-            <p>（京）网械平台备字（2018）第00005号 互联网药品信息服务资格证 (京)-非经营性-2014-0090 营业执照 医疗器械质量公告</p>
-            <p>增值电信业务许可证 网络食品经营备案 京食药网食备202010048   食品经营许可证</p>
-            <p>违法和不良信息举报电话：171-5104-4404 知识产权侵权投诉 本网站所列数据，除特殊说明，所有数据均出自我司实验室测试</p>
-            <p>
-              <a href="#"><img src="https://i1.mifile.cn/f/i/17/site/truste.png" alt=""></a>
-              <a href="#"><img src="https://s01.mifile.cn/i/v-logo-2.png" alt=""></a>
-              <a href="#"><img src="https://xyt.xinchacha.com/img/icon/icon3.png" alt=""></a>
-              <a href="#"><img src="https://i8.mifile.cn/b2c-mimall-media/ba10428a4f9495ac310fd0b5e0cf8370.png" alt=""></a>
-              <a href="#"><img src="https://cnbj1.fds.api.xiaomi.com/b2c-misite-activity/2cd898363ad7ff822970f4c299a8ca1f.png" alt=""></a>
-            </p>
-          </div>
-          <img class="footer-box-row3-slogan" src="https://cdn.cnbj1.fds.api.mi-img.com/staticsfile/global/slogan2020.png" alt="">
-        </div>
       </div>
     </footer>
+    <section class = "footerBottom">
+      <div class="footer-box-row3">
+        <img class="footer-box-row3-icon" src="https://s02.mifile.cn/assets/static/image/logo-mi2.png" alt="">
+        <div class="footer-box-row3-info">
+          <p>小米商城 | MIUI | 米家 | 米聊 | 多看 | 游戏 | 政企服务 | 小米天猫店 | 小米集团隐私政策 | 小米公司儿童信息保护规则 | 小米商城隐私政策 | 小米商城用户协议 | 问题反馈 | Select Location</p>
+          <p>北京互联网法院法律服务工作站 | 中国消费者协会 | 北京市消费者协会</p>
+          <p>© mi.com 京ICP证110507号 京ICP备10046444号 京公网安备11010802020134号 京网文[2020]0276-042号</p>
+          <p>（京）网械平台备字（2018）第00005号 互联网药品信息服务资格证 (京)-非经营性-2014-0090 营业执照 医疗器械质量公告</p>
+          <p>增值电信业务许可证 网络食品经营备案 京食药网食备202010048   食品经营许可证</p>
+          <p>违法和不良信息举报电话：171-5104-4404 知识产权侵权投诉 本网站所列数据，除特殊说明，所有数据均出自我司实验室测试</p>
+          <p>
+            <a href="#"><img src="https://i1.mifile.cn/f/i/17/site/truste.png" alt=""></a>
+            <a href="#"><img src="https://s01.mifile.cn/i/v-logo-2.png" alt=""></a>
+            <a href="#"><img src="https://xyt.xinchacha.com/img/icon/icon3.png" alt=""></a>
+            <a href="#"><img src="https://i8.mifile.cn/b2c-mimall-media/ba10428a4f9495ac310fd0b5e0cf8370.png" alt=""></a>
+            <a href="#"><img src="https://cnbj1.fds.api.xiaomi.com/b2c-misite-activity/2cd898363ad7ff822970f4c299a8ca1f.png" alt=""></a>
+          </p>
+        </div>
+        <img class="footer-box-row3-slogan" src="https://cdn.cnbj1.fds.api.mi-img.com/staticsfile/global/slogan2020.png" alt="">
+      </div>
+    </section>
+    <aside>
+      <div class="aside-box">
+        <table>
+          <tbody>
+            <tr>
+              <td>
+                <img src="https://i8.mifile.cn/b2c-mimall-media/74c4fcb4475af8308e9a670db9c01fdf.png" class="hover" alt="">
+                <img src="https://i8.mifile.cn/b2c-mimall-media/98a23aae70f25798192693f21c4d4039.png
+                " alt="" class="origin">
+                <p>手机APP</p>
+                <div class="appQRcode">
+                  <img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/78c30d4f259ed43ab20e810a522a6249.png" alt="">
+                  <p>扫码领取新人百元礼包</p>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+              <img src="https://i8.mifile.cn/b2c-mimall-media/41f858550f42eb1770b97faf219ae215.png" class="hover" alt="">
+              <img src="https://i8.mifile.cn/b2c-mimall-media/55cad219421bee03a801775e7309b920.png" alt="" class="origin">
+              <p>个人中心</p>
+              </td>
+            </tr>
+            <tr>
+              <td>
+              <img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/95fbf0081a06eec7be4d35e277faeca0.png" class="hover" alt="">
+              <img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/12eb0965ab33dc8e05870911b90f3f13.png" alt="" class="origin">
+              <p>售后服务</p>
+              </td>
+            </tr>
+            <tr>
+              <td>
+              <img src="https://i8.mifile.cn/b2c-mimall-media/5e9f2b1b0da09ac3b3961378284ef2d4.png" class="hover" alt="">
+              <img src="https://i8.mifile.cn/b2c-mimall-media/4f036ae4d45002b2a6fb6756cedebf02.png" alt="" class="origin">
+              <p>人工客服</p>
+              </td>
+            </tr>
+            <tr>
+              <td>
+              <img src="https://i8.mifile.cn/b2c-mimall-media/692a6c3b0a93a24f74a29c0f9d68ec71.png" class="hover" alt="">
+              <img src="https://i8.mifile.cn/b2c-mimall-media/d7db56d1d850113f016c95e289e36efa.png" alt="" class="origin">
+               <p> 购物车</p>
+              </td>
+            </tr>
+            <tr>
+              <td></td>
+            </tr>
+            <tr>
+              <td>
+                <a href="#top">
+              <img src="https://i1.mifile.cn/f/i/2018/home/totop_hover.png" class="hover" alt="">
+              <img src="https://i1.mifile.cn/f/i/2018/home/totop.png" alt="" class="origin">
+               <p> 回顶部</p></a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </aside>
 </body>
-<script src="./less.min.js"></script>
 </html>
