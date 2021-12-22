@@ -208,7 +208,17 @@
     s = '-'
     n = Math.abs(n)
   }
-  do { N++ } while (n / (10 ** N) > 1)
+
+  for (N = 0; N < 18; N++) {
+    if (n == 1) {
+      N = 1
+      break
+    }
+    if (n / (10 ** N) <= 1) {
+      break
+    }
+  }
+  // do { N++ } while (n / (10 ** N) > 1)
   for (ii = 0;ii < N;ii++){
     a = Math.trunc(n / (10 ** ii)) % 10
     result = a + result
@@ -244,9 +254,14 @@
   var i = -1
   var N = n * 100000000
   if (n >= 0){
-    do {
-      i++
-    } while (i ** 2 < N)
+    for (i = -1; ; i++) {
+      if (i * i >= N) {
+        break
+      }
+    }
+    // do {
+    //   i++
+    // } while (i ** 2 < N)
     console.log((i / 10000).toFixed(3))
   } else {
     console.log('请输入正数')
@@ -919,20 +934,32 @@
 
   var N = Number(prompt('N'))
   var K = Number(prompt('K'))
-  var Y = 1
+  var Y = 0
   var money = N
 
-  do {
-    Y = Y + 1
+  for (Y = 1; Y <= 20; Y++) {
     money = N * Y
     price = 200 * (1 + 0.01 * K) ** (Y - 1)
-  } while (money < price && Y < 20);
-  if (money < price){
+    if (money >= price) {
+      console.log(Y)
+      break
+    }
+  }
+  if (money < price) {
     console.log('Impossible')
   }
-  else {
-    console.log(Y)
-  }
+
+  // do {
+  //   Y = Y + 1
+  //   money = N * Y
+  //   price = 200 * (1 + 0.01 * K) ** (Y - 1)
+  // } while (money < price && Y < 20);
+  // if (money < price){
+  //   console.log('Impossible')
+  // }
+  // else {
+  //   console.log(Y)
+  // }
 
 </script>
 
@@ -1127,11 +1154,20 @@
   var K = Number(prompt('K'))
   var n = 0
   var Sn = 0
-  do {
-    n = n + 1
-    Sn = Sn + 1 / n;
-  } while (Sn <= K)
-  console.log(n)
+
+  for(n = 1; ; n++) {
+    Sn = Sn + 1 / n
+    if (Sn > K) {
+      console.log(n)
+      break
+    }
+  }
+
+  // do {
+  //   n = n + 1
+  //   Sn = Sn + 1 / n;
+  // } while (Sn <= K)
+  // console.log(n)
 
 </script>
 
