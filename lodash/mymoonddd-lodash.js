@@ -296,4 +296,5 @@ var mymoonddd = function() {
     sum: sum,
     repeat: repeat,
     range: range,
+  }
 }()
