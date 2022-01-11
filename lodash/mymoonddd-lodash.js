@@ -305,11 +305,30 @@ var mymoonddd = function() {
     }
   }
 
-  // function flattenDepth(array, depth=1) {
+  function flattenDepth(array, depth=1) {
+    let hasArray = true
+    let result = []
 
-  // }
-
-  
+    if (!depth) {
+      return array
+    }
+    
+    while (depth) {
+      let hasArray = false
+      for (let i = 0; i < array.length; i++) {
+          if (Array.isArray(array[i])) {
+              for (let j = 0; j < array[i].length; j++) {
+                  result.push(array[i][j])
+              }
+          } else {
+              result.push(array[i])
+          }
+      }
+      array = result 
+      depth--
+    }
+    return result
+  }
 
 
   return {
@@ -339,6 +358,6 @@ var mymoonddd = function() {
     range: range,
     difference: difference,
     flattenDeep: flattenDeep,
-    // flattenDepth: ,
+    flattenDepth: flattenDepth,
   }
 }()
