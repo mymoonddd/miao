@@ -249,11 +249,7 @@ var mymoonddd = function() {
 
   function range(start=0, end, step=1) {
     let result = []
-    if (step) {
-      var len = (end - start) / step
-    } else {
-      len = end - start
-    }
+    let len = 0
     if (arguments.length == 1) {
       end = start
       start = 0
@@ -261,19 +257,30 @@ var mymoonddd = function() {
         step = -1
       }
     }
-
-    if (len > 0) {
-      for (let count = 0, i = start; count < len; count++, i += step) {
-        result.push(i)
-      }
+    if (step) {
+      len = (end - start) / step
+    } else {
+      len = end - start
     }
+
+    for (let count = 0, i = start; count < len; count++, i += step) {
+      result.push(i)
+    }
+
     return result
   }
 
-  function difference(array, values) {
+  function difference(array, ...values) {
     let result = []
     for (let i = 0; i < array.length; i++) {
-      if (!values.includes(array[i])) {
+      let exist = false
+      for (let j = 0; j < values.length; j++) {
+        if (values[j].includes(array[i])) {
+          exist = true
+          break
+        } 
+      }
+      if (!exist) {
         result.push(array[i])
       }
     }
@@ -301,6 +308,8 @@ var mymoonddd = function() {
   // function flattenDepth(array, depth=1) {
 
   // }
+
+  
 
 
   return {
