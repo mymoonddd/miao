@@ -330,6 +330,48 @@ var mymoonddd = function() {
     return result
   }
 
+  function concat(array, ...values) {
+    for (let i = 0; i < values.length; i++){
+      if (Array.isArray(values[i])) {
+        for (let j = 0; j < values[i].length; j++) {
+          array.push(values[i][j])
+        }
+      } else (array.push(values[i]))
+    }
+    return array
+  }
+
+  function toArray(value) {
+    if (value === null) {
+      return value
+    }
+    if (value.length) {
+      var array = Array(value.length)
+      for (let i = 0; i < value.length; i++) {
+        array[i] = value[i]
+      }
+      return array
+    }
+    if (typeof(value) == 'object') {
+      var array = []
+      for (item in value) {
+        array.push(value[item])
+      }
+      return array
+    }
+    return null
+  }
+
+  function nth(array, n=0) {
+    if (n < 0) {
+      n = array.length + n
+    }
+    return array[n]
+  }
+
+
+
+
 
   return {
     chunk: chunk,
@@ -359,5 +401,8 @@ var mymoonddd = function() {
     difference: difference,
     flattenDeep: flattenDeep,
     flattenDepth: flattenDepth,
+    concat: concat,
+    toArray: toArray,
+    nth: nth,
   }
 }()
