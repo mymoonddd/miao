@@ -1,4 +1,30 @@
 var mymoonddd = function() {
+  function shorthand(predicate) {
+    if (typeof(predicate) != "function") {
+      let val = predicate
+      if (typeof(val) == "object") {
+        if (Array.isArray(val)) {
+          let t = {}
+          t[val[0]] = val[1]
+          val = t
+        }
+
+        predicate = function(it) {
+          for (let key in val) {
+            var flag = true
+            if (val[key] != it[key]) {
+              flag = false
+              break
+            } 
+          }
+          return flag
+        }
+      } else {
+        predicate = it => it[val]
+      }
+    }
+    return predicate
+  }
 
   function chunk(array, size = 1) {
       let result = []
@@ -493,12 +519,6 @@ var mymoonddd = function() {
     return result
   }
 
-  // function negate(f) {
-  //   return function(...args){
-  //     return !f(...args)
-  //   }
-  // }
-
   function map(collection, iteratee) {
     let res = []
     if (typeof(iteratee) != "function") {
@@ -545,20 +565,66 @@ var mymoonddd = function() {
     return res
   }
 
+  function reduce(collection, iteratee, accumulator) {
+    let result = accumulator 
+    for (let key in collection) {
+      let it = collection[key]
+      result = iteratee(result, it, key)
+    }
+    return result
+  }
 
+  function reduceRight(collection, iteratee, accumulator) {
+    // 仅考虑了collection为数组的情况
+    if (collection.length) {
+      let result = accumulator 
+      let len = collection.length
+      for (let i = len - 1; i >= 0; i--) {
+        let it = collection[i]
+        result = iteratee(result, it, i)
+      }
+      return result
+    }
+  }
 
+  function reject(collection, predicate) {
+    predicate = shorthand(predicate)
 
+    let res = []
+    for (let key in collection) {
+      let it = collection[key]
+      if (!predicate(it)) {
+        res.push(it)
+      } 
+    }
+    return res
+  }
 
+  function some(collection, predicate) {
+    predicate = shorthand(predicate)
+    for (let key in collection) {
+      let it = collection[key]
+      if (predicate(it)) {
+        return true
+      }
+    }
+    return false
+  }
+
+  // function negate(f) {
+  //   return function(...args){
+  //     return !f(...args)
+  //   }
+  // }
 
 
   return {
     map: map,
     partition: partition,
-    // reduce: ,
-    // reduceRight: ,
-    // reject: ,
-    // shuffle: ,
-    // some: ,
+    reduce: reduce,
+    reduceRight: reduceRight,
+    reject: reject,
+    some: some,
     chunk: chunk,
     compact: compact,
     drop: drop,
