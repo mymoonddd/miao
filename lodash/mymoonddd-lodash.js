@@ -1,6 +1,5 @@
 var mymoonddd = function() {
   function shorthand(predicate) {
-    if (typeof(predicate) != "function") {
       let val = predicate
       if (typeof(val) == "object") {
         if (Array.isArray(val)) {
@@ -22,7 +21,6 @@ var mymoonddd = function() {
       } else {
         predicate = it => it[val]
       }
-    }
     return predicate
   }
 
@@ -494,7 +492,8 @@ var mymoonddd = function() {
         removed.unshift(array.pop())
       }
     }
-    return removed
+    array = removed
+    return array
 
     function swap(array, i, j) {
       let t = array[i]
@@ -532,7 +531,9 @@ var mymoonddd = function() {
   }
 
   function partition(collection, predicate) {
-    predicate = shorthand(predicate)
+    if (typeof(predicate) != "function") {
+      predicate = shorthand(predicate)
+    }
     let T = []
     let F = []
     let res = [T, F]
@@ -567,7 +568,9 @@ var mymoonddd = function() {
   }
 
   function reject(collection, predicate) {
-    predicate = shorthand(predicate)
+    if (typeof(predicate) != "function") {
+      predicate = shorthand(predicate)
+    }
 
     let res = []
     for (let key in collection) {
@@ -580,7 +583,9 @@ var mymoonddd = function() {
   }
 
   function some(collection, predicate) {
-    predicate = shorthand(predicate)
+    if (typeof(predicate) != "function") {
+      predicate = shorthand(predicate)
+    }
     for (let key in collection) {
       let it = collection[key]
       if (predicate(it)) {
@@ -596,8 +601,64 @@ var mymoonddd = function() {
   //   }
   // }
 
+  function every(collection, predicate) {
+    if (typeof(predicate) != "function") {
+      predicate = shorthand(predicate)
+    }
+    for (let key in collection) {
+      let it = collection[key]
+      if (!predicate(it)) {
+        return false
+      }
+    }
+    return true
+  }
+
+  function filter(collection, predicate) {
+   if (typeof(predicate) != "function") {
+      predicate = shorthand(predicate)
+    }
+    let res = []
+    for (let key in collection) {
+      let item = collection[key]
+      if (predicate(item)) {
+        res.push(item)
+      }
+    }
+    return res
+  }
+
+  function find(collection, predicate, fromIndex=0)  {
+    if (typeof(predicate) != "function") {
+      predicate = shorthand(predicate)
+    }
+    if (collection.length) {
+      let len = collection.length
+      if (fromIndex < 0) {
+        fromIndex = len - formIndex
+      }
+      for (let i = fromIndex; i < len; i++) {
+        let item = collection[i]
+        if (predicate(item)) {
+          return item
+        }
+      }
+    }
+    for (let key in collection) {
+      let item = collection[key]
+      if (predicate(item)) {
+        return item
+      }
+    }
+  }
+
+
+
 
   return {
+    every: every,
+    filter: filter,
+    find: find,
     map: map,
     partition: partition,
     reduce: reduce,
