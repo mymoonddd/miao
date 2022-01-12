@@ -364,7 +364,23 @@ var mymoonddd = function() {
     return array[n]
   }
 
+  function intersection(...arrays) {
 
+    let result = []
+    let comp = arrays[0]
+    for (let i = 0; i < comp.length; i++) {
+      let hasItem = true
+      for (let j = 1; j < arrays.length; j++) {
+        if (!arrays[j].includes(comp[i])) {
+          hasItem = false
+        }
+      }
+      if (hasItem == true) {
+        result.push(comp[i])
+      }
+    }
+    return result
+  }
 
 
 
@@ -399,5 +415,12 @@ var mymoonddd = function() {
     concat: concat,
     toArray: toArray,
     nth: nth,
+    intersection: intersection,
+    // pull: ,
+    // puAll: ,
+    // tail: ,
+    // take: ,
+    // takeRight: ,
+
   }
 }()
