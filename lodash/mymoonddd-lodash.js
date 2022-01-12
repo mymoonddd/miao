@@ -97,8 +97,46 @@ var mymoonddd = function() {
   }
 
   function initial(array) {
-    array.length -= 1
-    return array
+    let len = array.length - 1
+    let res = Array(len)
+    for (let i = 0; i < len; i++) {
+      res[i] = array[i]
+    }
+    return res
+  }
+
+  function take(array, n=1) {
+    if (n < 1) {
+      return []
+    }
+    let len = n < array.length ? n : array.length 
+    let res = Array(len)
+    for (let i = 0; i < len; i++) {
+      res[i] = array[i]
+    }
+    return res
+  }
+
+  function takeRight(array, n=1) {
+    if (n < 1) {
+      return []
+    }
+    let len = array.length
+    let start = len > n ? len - n : 0
+    let res = []
+    for (let i = start; i < len; i++) {
+      res.push(array[i])
+    }
+    return res
+  }
+
+  function tail(array) {
+    let len = array.length - 1
+    let res = Array(len)
+    for (let i = 1; i < len + 1; i++) {
+      res[i - 1] = array[i]
+    }
+    return res
   }
 
   function join(array, separator=',') {
@@ -331,7 +369,9 @@ var mymoonddd = function() {
         for (let j = 0; j < values[i].length; j++) {
           array.push(values[i][j])
         }
-      } else (array.push(values[i]))
+      } else {
+        array.push(values[i])
+      }
     }
     return array
   }
@@ -349,7 +389,7 @@ var mymoonddd = function() {
     }
     if (typeof(value) == 'object') {
       var array = []
-      for (item in value) {
+      for (let item in value) {
         array.push(value[item])
       }
       return array
@@ -373,6 +413,7 @@ var mymoonddd = function() {
       for (let j = 1; j < arrays.length; j++) {
         if (!arrays[j].includes(comp[i])) {
           hasItem = false
+          break
         }
       }
       if (hasItem == true) {
@@ -381,6 +422,84 @@ var mymoonddd = function() {
     }
     return result
   }
+
+  function pull(array, ...values) {
+      let len =  array.length
+      for (let i = len - 1; i >= 0; i--) {
+        if (values.includes(array[i])) {
+          swap(array, i, array.length - 1)
+          array.pop()
+        }
+      }
+      return array
+
+      function swap(array, i, j) {
+        let t = array[i]
+        array[i] = array[j]
+        array[j] = t
+        return array
+      }
+  } 
+  
+  function pullAll(array, values) {
+    let len =  array.length
+    for (let i = len - 1; i >= 0; i--) {
+      if (values.includes(array[i])) {
+        swap(array, i, array.length - 1)
+        array.pop()
+      }
+    }
+    return array
+
+    function swap(array, i, j) {
+      let t = array[i]
+      array[i] = array[j]
+      array[j] = t
+      return array
+    }
+  }
+
+  function remove(array, predicate) {
+    let removed = []
+    let len =  array.length
+    for (let i = len - 1; i >= 0; i--) {
+      if (predicate(array[i])) {
+        swap(array, i, array.length - 1)
+        removed.unshift(array.pop())
+      }
+    }
+    return removed
+
+    function swap(array, i, j) {
+      let t = array[i]
+      array[i] = array[j]
+      array[j] = t
+      return array
+    }
+  }
+
+  function mapValues(obj, mapper) {
+    if (arguments.length == 1) {
+      return obj
+    }
+    if (typeof(mapper) != "function") {
+      let val = mapper
+      mapper = key => key[val]
+    }
+    let result = {}
+    for (let key in obj) {
+      result[key] = mapper(obj[key]) 
+    }
+    return result
+  }
+
+  // function negate(f) {
+  //   return function(...args){
+  //     return !f(...args)
+  //   }
+  // }
+
+
 
 
 
@@ -416,11 +535,13 @@ var mymoonddd = function() {
     toArray: toArray,
     nth: nth,
     intersection: intersection,
-    // pull: ,
-    // puAll: ,
-    // tail: ,
-    // take: ,
-    // takeRight: ,
+    pull: pull,
+    pullAll: pullAll,
+    remove: remove,
+    tail: tail,
+    take: take,
+    takeRight: takeRight,
+    mapValues: mapValues,
 
   }
 }()
