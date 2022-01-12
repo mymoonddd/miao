@@ -306,28 +306,23 @@ var mymoonddd = function() {
   }
 
   function flattenDepth(array, depth=1) {
-    let hasArray = true
-    let result = []
 
-    if (!depth) {
-      return array
-    }
-    
-    while (depth) {
-      let hasArray = false
+    while (depth > 0) {
+      let temp = []
       for (let i = 0; i < array.length; i++) {
           if (Array.isArray(array[i])) {
               for (let j = 0; j < array[i].length; j++) {
-                  result.push(array[i][j])
+                  temp.push(array[i][j])
               }
           } else {
-              result.push(array[i])
+              temp.push(array[i])
           }
       }
-      array = result 
+      array = temp 
       depth--
     }
-    return result
+    return array
+
   }
 
   function concat(array, ...values) {
@@ -343,7 +338,7 @@ var mymoonddd = function() {
 
   function toArray(value) {
     if (value === null) {
-      return value
+      return []
     }
     if (value.length) {
       var array = Array(value.length)
@@ -359,7 +354,7 @@ var mymoonddd = function() {
       }
       return array
     }
-    return null
+    return []
   }
 
   function nth(array, n=0) {
