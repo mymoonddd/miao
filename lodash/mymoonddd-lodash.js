@@ -499,11 +499,66 @@ var mymoonddd = function() {
   //   }
   // }
 
+  function map(collection, iteratee) {
+    let res = []
+    if (typeof(iteratee) != "function") {
+      let val = iteratee
+      iteratee = it => it[val]
+    }
+    for (let key in collection) {
+      res.push(iteratee(collection[key]))
+    }
+    return res
+  }
+
+  function partition(collection, predicate) {
+    let T = []
+    let F = []
+    let res = [T, F]
+    
+    if (typeof(predicate) != "function") {
+      let val = predicate
+      if (typeof(val) == "object") {
+        if (Array.isArray(val)) {
+          let t = {}
+          t[val[0]] = val[1]
+          val = t
+        }
+        predicate = function(it) {
+          for (let key in val) {
+            var flag = true
+            if (val[key] != it[key]) {
+              flag = false
+              break
+            } 
+          }
+          return flag
+        }
+      } else {
+        predicate = it => it[val]
+      }
+    }
+    for (let key in collection) {
+      let item = collection[key]
+      predicate(item) ? T.push(item) : F.push(item)
+    }
+    return res
+  }
+
+
+
 
 
 
 
   return {
+    map: map,
+    partition: partition,
+    // reduce: ,
+    // reduceRight: ,
+    // reject: ,
+    // shuffle: ,
+    // some: ,
     chunk: chunk,
     compact: compact,
     drop: drop,
