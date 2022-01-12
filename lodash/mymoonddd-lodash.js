@@ -532,32 +532,11 @@ var mymoonddd = function() {
   }
 
   function partition(collection, predicate) {
+    predicate = shorthand(predicate)
     let T = []
     let F = []
     let res = [T, F]
     
-    if (typeof(predicate) != "function") {
-      let val = predicate
-      if (typeof(val) == "object") {
-        if (Array.isArray(val)) {
-          let t = {}
-          t[val[0]] = val[1]
-          val = t
-        }
-        predicate = function(it) {
-          for (let key in val) {
-            var flag = true
-            if (val[key] != it[key]) {
-              flag = false
-              break
-            } 
-          }
-          return flag
-        }
-      } else {
-        predicate = it => it[val]
-      }
-    }
     for (let key in collection) {
       let item = collection[key]
       predicate(item) ? T.push(item) : F.push(item)
@@ -566,7 +545,7 @@ var mymoonddd = function() {
   }
 
   function reduce(collection, iteratee, accumulator) {
-    let result = accumulator 
+    let result = accumulator ?? 0
     for (let key in collection) {
       let it = collection[key]
       result = iteratee(result, it, key)
