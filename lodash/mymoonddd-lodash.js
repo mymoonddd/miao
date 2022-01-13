@@ -24,6 +24,13 @@ var mymoonddd = function() {
     return predicate
   }
 
+  function swap(array, i, j) {
+    let t = array[i]
+    array[i] = array[j]
+    array[j] = t
+    return array
+  }
+
   function chunk(array, size = 1) {
       let result = []
       for (let i = 0; i < array.length;) {
@@ -456,13 +463,6 @@ var mymoonddd = function() {
         }
       }
       return array
-
-      function swap(array, i, j) {
-        let t = array[i]
-        array[i] = array[j]
-        array[j] = t
-        return array
-      }
   } 
   
   function pullAll(array, values) {
@@ -705,17 +705,25 @@ var mymoonddd = function() {
     return collection
   }
 
-
-
-
+  function shuffle(collection) {
+    // 仅考虑了collection为数组时的情况
+    let len = collection.length - 1
+    while (len > 1) {
+      i = len
+      let j = Math.round(Math.random() * len)
+      swap(collection, i, j)
+      i-- 
+      len-- 
+    }
+    return collection
+  }
 
 
   return {
     findIndex: findIndex,
     findLastIndex: findLastIndex,
     forEach: forEach,
-    // shuffle: ,
-    // cloneDeep: ,
+    shuffle: shuffle,
     every: every,
     filter: filter,
     find: find,
