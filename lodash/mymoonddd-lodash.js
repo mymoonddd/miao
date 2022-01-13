@@ -215,6 +215,22 @@ var mymoonddd = function() {
     return result
   }
 
+  function uniqBy(array, iteratee) {
+    if (typeof(iteratee) != "function") {
+      iteratee = shorthand(iteratee)
+    }
+    let result = []
+    let temp = []
+    for (let i = 0; i < array.length; i++) {
+      let it = iteratee(array[i])
+      if (!(temp.includes(it))) {
+        temp.push(it)
+        result.push(array[i])
+      }
+    }
+    return result
+  }
+
   function without(array, ...values) {
     let result = []
     for (let i = 0; i < array.length; i++) {
@@ -297,10 +313,38 @@ var mymoonddd = function() {
     return max
   }
 
+  function maxBy(array, iteratee) {
+    if (typeof(iteratee) != "function") {
+      iteratee = shorthand(iteratee)
+    }
+    let max = iteratee(array[0])
+    let maxItem = array[0]
+    for (let i = 1; i < array.length; i++) {
+      let it = iteratee(array[i])
+      if (it > max) {
+        max = array[i]
+        maxItem = array[i]
+      }
+    }
+    return maxItem
+  }
+
   function sum(array) {
     let sum = array[0]
     for (let i = 1; i < array.length; i++) {
         sum += array[i]
+    }
+    return sum
+  }
+
+  function sumBy(array, iteratee) {
+    if (typeof(iteratee) != "function") {
+      iteratee = shorthand(iteratee)
+    }
+    let sum = iteratee(array[0])
+    for (let i = 1; i < array.length; i++) {
+      let it = iteratee(array[i])
+      sum += it
     }
     return sum
   }
@@ -718,8 +762,53 @@ var mymoonddd = function() {
     return collection
   }
 
+  function countBy(collection, iteratee) {
+    if (typeof(iteratee) != "function") {
+      iteratee = shorthand(iteratee)
+    }
+    let result = {}
+      for (let key in collection) {
+        let it = iteratee(collection[key])
+        if (!(it in result)) {
+          result[it] = 0
+        }
+        result[it]++
+      }
+      return result
+  }
+
+  function groupBy(collection, iteratee) {
+    if (typeof(iteratee) != "function") {
+      iteratee = shorthand(iteratee)
+    }
+    let result = {}
+    for (let key in collection) {
+      let it = iteratee(collection[key])
+      if (!(it in result)) {
+        result[it] = []
+      }
+      result[it].push(collection[key])
+    }
+    return result
+  }
+
+  function keyBy(array, iteratee) {
+    if (typeof(iteratee) != "function") {
+      iteratee = shorthand(iteratee)
+    }
+    let result = {}
+    for (let i in array) {
+      let it = iteratee(array[i])
+      result[it] = array[i]
+    }
+    return result
+  }
+
 
   return {
+    countBy: countBy,
+    groupBy: groupBy,
+    keyBy: keyBy,
     findIndex: findIndex,
     findLastIndex: findLastIndex,
     forEach: forEach,
@@ -748,13 +837,16 @@ var mymoonddd = function() {
     lastIndexOf: lastIndexOf,
     reverse: reverse,
     uniq: uniq,
+    uniqBy: uniqBy,
     without: without,
     zip: zip,
     size: size,
     isBoolean: isBoolean,
     ceil: ceil,
     max: max,
+    maxBy: maxBy,
     sum: sum,
+    sumBy: sumBy,
     repeat: repeat,
     range: range,
     difference: difference,
