@@ -7,7 +7,6 @@ var mymoonddd = function() {
           t[val[0]] = val[1]
           val = t
         }
-
         predicate = function(it) {
           for (let key in val) {
             var flag = true
@@ -21,6 +20,9 @@ var mymoonddd = function() {
       } else {
         predicate = it => it[val]
       }
+      // if (typeof(val) == "string") {
+
+      // }
     return predicate
   }
 
@@ -329,6 +331,16 @@ var mymoonddd = function() {
     return maxItem
   }
 
+  function min(array) {
+    let min = array[0]
+    for (let i = 1; i < array.length; i++) {
+      if (array[i] < min) {
+        min = array[i]
+      }
+    }
+    return min
+  }
+
   function sum(array) {
     let sum = array[0]
     for (let i = 1; i < array.length; i++) {
@@ -563,11 +575,10 @@ var mymoonddd = function() {
   }
 
   function map(collection, iteratee) {
-    let res = []
     if (typeof(iteratee) != "function") {
-      let val = iteratee
-      iteratee = it => it[val]
+      iteratee = shorthand(iteratee)
     }
+    let res = []
     for (let key in collection) {
       res.push(iteratee(collection[key]))
     }
@@ -834,9 +845,15 @@ var mymoonddd = function() {
     }
   }
 
+  function add(augend, addend) {
+    return augend + addend
+  }
+
+
 
 
   return {
+    add: add,
     dropRightWhile: dropRightWhile,
     dropWhile: dropWhile,
     countBy: countBy,
@@ -876,6 +893,7 @@ var mymoonddd = function() {
     size: size,
     isBoolean: isBoolean,
     ceil: ceil,
+    min: min,
     max: max,
     maxBy: maxBy,
     sum: sum,
