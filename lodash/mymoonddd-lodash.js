@@ -531,7 +531,9 @@ var mymoonddd = function() {
   }
 
   function partition(collection, predicate) {
-    predicate = shorthand(predicate)
+    if (typeof(predicate) != "function") {
+      predicate = shorthand(predicate)
+    }
 
     let T = []
     let F = []
@@ -700,9 +702,9 @@ var mymoonddd = function() {
   return {
     findIndex: findIndex,
     findLastIndex: findLastIndex,
-    // forEach: ,
-    // shuffle: ,
-    // cloneDeep: ,
+    forEach: ,
+    shuffle: ,
+    cloneDeep: ,
     every: every,
     filter: filter,
     find: find,
