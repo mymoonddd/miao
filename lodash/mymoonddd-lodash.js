@@ -688,9 +688,9 @@ var mymoonddd = function() {
     return -1
   }
 
-  function forEach(collection, iteratee) {
-    
-  }
+  // function forEach(collection, iteratee) {
+
+  // }
 
 
 
@@ -700,9 +700,9 @@ var mymoonddd = function() {
   return {
     findIndex: findIndex,
     findLastIndex: findLastIndex,
-    forEach: ,
-    shuffle: ,
-    cloneDeep: ,
+    // forEach: ,
+    // shuffle: ,
+    // cloneDeep: ,
     every: every,
     filter: filter,
     find: find,
