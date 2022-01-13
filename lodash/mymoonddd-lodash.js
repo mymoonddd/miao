@@ -585,7 +585,7 @@ var mymoonddd = function() {
     
     for (let key in collection) {
       let item = collection[key]
-      predicate(item) ? T.push(item) : F.push(item)
+      predicate(item, key, collection) ? T.push(item) : F.push(item)
     }
     return res
   }
@@ -620,7 +620,7 @@ var mymoonddd = function() {
     let res = []
     for (let key in collection) {
       let it = collection[key]
-      if (!predicate(it)) {
+      if (!predicate(it, key, collection)) {
         res.push(it)
       } 
     }
@@ -633,7 +633,7 @@ var mymoonddd = function() {
     }
     for (let key in collection) {
       let it = collection[key]
-      if (predicate(it)) {
+      if (predicate(it, key, collection)) {
         return true
       }
     }
@@ -652,7 +652,7 @@ var mymoonddd = function() {
     }
     for (let key in collection) {
       let it = collection[key]
-      if (!predicate(it)) {
+      if (!predicate(it, key, collection)) {
         return false
       }
     }
@@ -666,7 +666,7 @@ var mymoonddd = function() {
     let res = []
     for (let key in collection) {
       let item = collection[key]
-      if (predicate(item)) {
+      if (predicate(item, key, collection)) {
         res.push(item)
       }
     }
@@ -684,7 +684,7 @@ var mymoonddd = function() {
       }
       for (let i = fromIndex; i < len; i++) {
         let item = collection[i]
-        if (predicate(item)) {
+        if (predicate(item, i, collection)) {
           return item
         }
       }
@@ -707,7 +707,7 @@ var mymoonddd = function() {
     }
     for (let i = fromIndex; i < len; i++) {
       let item = array[i]
-      if (predicate(item)) {
+      if (predicate(item, i, array)) {
         return i
       }
     }
@@ -727,7 +727,7 @@ var mymoonddd = function() {
     }
     for (let i = fromIndex; i >= 0; i--) {
       let item = array[i]
-      if (predicate(item)) {
+      if (predicate(item, i, array)) {
         return i
       }
     }
@@ -804,8 +804,41 @@ var mymoonddd = function() {
     return result
   }
 
+  function dropRightWhile(array, predicate) {
+    if (typeof(predicate) != "function") {
+      predicate = shorthand(predicate)
+    }
+    let len = array.length - 1
+    while (len > -1) {
+      let it = predicate(array[len], len, array) 
+      if (!it) {
+        return array
+      }
+      array = initial(array)
+      len--
+    }
+  }
+
+  function dropWhile(array, predicate) {
+    if (typeof(predicate) != "function") {
+      predicate = shorthand(predicate)
+    }
+    let len = array.length - 1
+    while (len > -1) {
+      let it = predicate(array[0], 0, array) 
+      if (!it) {
+        return array
+      }
+      array = tail(array)
+      len--
+    }
+  }
+
+
 
   return {
+    dropRightWhile: dropRightWhile,
+    dropWhile: dropWhile,
     countBy: countBy,
     groupBy: groupBy,
     keyBy: keyBy,
