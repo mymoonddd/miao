@@ -531,9 +531,8 @@ var mymoonddd = function() {
   }
 
   function partition(collection, predicate) {
-    if (typeof(predicate) != "function") {
-      predicate = shorthand(predicate)
-    }
+    predicate = shorthand(predicate)
+
     let T = []
     let F = []
     let res = [T, F]
@@ -651,7 +650,6 @@ var mymoonddd = function() {
       }
     }
   }
-
 
 
 
