@@ -634,7 +634,7 @@ var mymoonddd = function() {
     if (collection.length) {
       let len = collection.length
       if (fromIndex < 0) {
-        fromIndex = len - formIndex
+        fromIndex = len + fromIndex
       }
       for (let i = fromIndex; i < len; i++) {
         let item = collection[i]
@@ -651,9 +651,58 @@ var mymoonddd = function() {
     }
   }
 
+  function findIndex(array, predicate, fromIndex=0) {
+    if (typeof(predicate) != "function") {
+      predicate = shorthand(predicate)
+    }
+    let len = array.length
+    if (fromIndex < 0) {
+      fromIndex = len + fromIndex
+    }
+    for (let i = fromIndex; i < len; i++) {
+      let item = array[i]
+      if (predicate(item)) {
+        return i
+      }
+    }
+    return -1
+  }
+
+  function findLastIndex(array, predicate, fromIndex=array.length-1) {
+    if (typeof(predicate) != "function") {
+      predicate = shorthand(predicate)
+    }
+    let len = array.length
+    if (fromIndex < 0) {
+      fromIndex = len + fromIndex
+    }
+    if (fromIndex > len - 1) {
+      fromIndex = len - 1 
+    }
+    for (let i = fromIndex; i >= 0; i--) {
+      let item = array[i]
+      if (predicate(item)) {
+        return i
+      }
+    }
+    return -1
+  }
+
+  function forEach(collection, iteratee) {
+    
+  }
+
+
+
+
 
 
   return {
+    findIndex: findIndex,
+    findLastIndex: findLastIndex,
+    forEach: ,
+    shuffle: ,
+    cloneDeep: ,
     every: every,
     filter: filter,
     find: find,
