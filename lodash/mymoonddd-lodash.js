@@ -690,9 +690,20 @@ var mymoonddd = function() {
     return -1
   }
 
-  // function forEach(collection, iteratee) {
-
-  // }
+  function forEach(collection, iteratee) {
+    if (collection.length) {
+      for (let i = 0; i < collection.length; i++) {
+        let it = collection[i]
+        iteratee(it, i, collection)
+      }
+    } else {
+      for (let key in collection) {
+        let it = collection[key]
+        iteratee(it, key, collection)
+      }
+    }
+    return collection
+  }
 
 
 
@@ -702,9 +713,9 @@ var mymoonddd = function() {
   return {
     findIndex: findIndex,
     findLastIndex: findLastIndex,
-    forEach: ,
-    shuffle: ,
-    cloneDeep: ,
+    forEach: forEach,
+    // shuffle: ,
+    // cloneDeep: ,
     every: every,
     filter: filter,
     find: find,
