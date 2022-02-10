@@ -21,7 +21,14 @@ var mymoonddd = function() {
         predicate = it => it[val]
       }
       // if (typeof(val) == "string") {
+      //   for (let i = 0; i < val.length; i++) {
+      //     if (val[i] == ".") {
+      //       var split = true 
+      //     }
+      //   }
+      //   if (split) {
 
+      //   }
       // }
     return predicate
   }
@@ -451,16 +458,20 @@ var mymoonddd = function() {
   }
 
   function concat(array, ...values) {
+    let res = []
+    for (let i = 0; i < array.length; i++) {
+      res.push(array[i])
+    }
     for (let i = 0; i < values.length; i++){
       if (Array.isArray(values[i])) {
         for (let j = 0; j < values[i].length; j++) {
-          array.push(values[i][j])
+          res.push(values[i][j])
         }
       } else {
-        array.push(values[i])
+        res.push(values[i])
       }
     }
-    return array
+    return res
   }
 
   function toArray(value) {
@@ -849,10 +860,94 @@ var mymoonddd = function() {
     return augend + addend
   }
 
+  function xor(...arrays) {
+    let res = []
+    let set = concat(...arrays)
+    if (arrays) {
+      for (let i = 0; i < set.length; i++) {
+        var hasAll = true
+        for (let j = 0; j < arrays.length; j++) {
+          if (!arrays[j].includes(set[i])) {
+            hasAll = false
+            break
+          }
+        }
+        if (!hasAll)
+        res.push(set[i])
+      }
+    }
+    return res
+  } 
 
+  function isArray(value) {
+    return Array.isArray(value)
+  }
 
+  function isArrayLike(value) {
+    if ( value.length ) {
+      return true
+    }
+    return false
+  }
+
+  function isArrayLikeObject(value) {
+    if ( typeof(value) == 'object' && value.length ) {
+      return true
+    }
+    return false
+  }
+
+  function isBoolean(value) {
+    return Object.prototype.toString.call(value) == '[object Boolean]'
+  }
+
+  function isDate(value) {
+    return Object.prototype.toString.call(value) == '[object Date]'
+  }
+
+  function isFunction(value) {
+    return Object.prototype.toString.call(value) == '[object Function]'
+  }
+
+  function isInteger(value) {
+    if (value == Infinity || value == -Infinity) {
+      return false
+    }
+    if (Object.prototype.toString.call(value) == '[object Number]') {
+      return value == Math.floor(value)
+    }
+    return false
+  }
+
+  function isNumber(value) {
+    return Object.prototype.toString.call(value) == '[object Number]'
+  }
+
+  function isObject(value) {
+    while (value) {
+      if (typeof(value) == 'object') {
+        return true
+      }
+      value = value.prototype
+    }
+    return false
+  }
+
+  function isObjectLike(value) {
+    if (value) {
+      if (typeof(value) == 'object') {
+        return true
+      }
+    }
+    return false
+  }
+
+  function isString(value) {
+    return Object.prototype.toString.call(value) == '[object String]'
+  }
 
   return {
+    xor: xor,
     add: add,
     dropRightWhile: dropRightWhile,
     dropWhile: dropWhile,
@@ -914,6 +1009,16 @@ var mymoonddd = function() {
     take: take,
     takeRight: takeRight,
     mapValues: mapValues,
-
+    isArray: isArray,
+    isArrayLike: isArrayLike,
+    isArrayLikeObject: isArrayLikeObject,
+    isBoolean: isBoolean,
+    isDate: isDate,
+    isFunction: isFunction,
+    isInteger: isInteger,
+    isNumber: isNumber,
+    isObject: isObject,
+    isObjectLike: isObjectLike,
+    isString: isString,
   }
 }()
