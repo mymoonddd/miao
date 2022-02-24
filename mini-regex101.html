@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mini-regex101</title>
+    <style>
+
+      result:nth-child(odd) {
+        background-color: rgb(130, 210, 247)
+      }
+      result:nth-child(even) {
+        background-color: rgb(203, 235, 248)
+      }
+      result:empty {
+        display: inline-block;
+        width: 2px;
+        height: 1em;
+        vertical-align: bottom;
+        background-color: rgb(248, 161, 248);
+        margin-left: -1px;
+        margin-right: -1px;
+      }
+
+      pre, textarea {
+        position: absolute;
+        width: 300px;
+        height: 150px;
+        border: 1px solid;
+        white-space: pre-wrap;
+        overflow-wrap: break-word;
+        overflow: auto;
+        padding: 10px;
+        margin: 0;
+        background-color: transparent;
+        font-size: 1.3em;
+      }
+
+    </style>
+  </head>
+
+  <body>
+    <p>REGUILAR EXPRESSION</p>
+    <input type="text" id = 'inputRe' value = 'f..' oninput="run()">
+    <button onclick="run()">run</button>
+    <div>
+      <label><input type="checkbox" checked id='flagGlobal' oninput="run()">g</label>
+      <label><input type="checkbox" id='flagMultiline' oninput="run()">m</label>
+      <label><input type="checkbox" id='flagIgnorecase' oninput="run()">i</label>
+    </div>
+    <p>TEST STRING</p>
+    <div>
+      <pre id="textOutput"></pre>
+      <textarea id="textInput" oninput="run()" onscroll="scrollSync()">dwndeifooehiohcdfdasdw</textarea>
+    </div>
+
+    <script>
+      run()
+
+      function run() {
+        scrollSync(textOutput, textInput)
+        let re = inputRe.value
+        let flags = getFlags()
+        let testString = textInput.value
+        let htmlText = ''
+
+        try {
+          re = new RegExp(re, flags)
+        } catch(e) {
+          if (e instanceof SyntaxError) {
+            return
+          } else {
+            throw e
+          }
+        }
+
+        let startIdx = 0
+        let match
+        while (match = re.exec(testString)) {
+          htmlText += testString.slice(startIdx, match.index)
+          htmlText += `<result>${match[0]}</result>`
+          startIdx = re.lastIndex
+          if (match[0] == '') {
+            re.lastIndex++
+          }
+          if (!re.global) {
+            startIdx = match.index + match[0].length
+            break
+          }
+        }
+        htmlText += testString.slice(startIdx)
+        textOutput.innerHTML = htmlText + '\n'
+      }
+
+      function getFlags() {
+        let flags = ''
+        if (flagGlobal.checked) {
+          flags += 'g'
+        }
+        if (flagMultiline.checked) {
+          flags += 'm'
+        }
+        if (flagIgnorecase.checked) {
+          flags += 'i'
+        }
+        return flags
+      }
+
+      function scrollSync() {
+        textOutput.scrollTop = textInput.scrollTop
+      }
+
+    </script>
+
+  </body>
+</html>
