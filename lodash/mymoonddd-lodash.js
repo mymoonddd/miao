@@ -1,37 +1,177 @@
 var mymoonddd = function() {
-  function shorthand(predicate) {
-      let val = predicate
-      if (typeof(val) == "object") {
-        if (Array.isArray(val)) {
-          let t = {}
-          t[val[0]] = val[1]
-          val = t
-        }
-        predicate = function(it) {
-          for (let key in val) {
-            var flag = true
-            if (val[key] != it[key]) {
-              flag = false
-              break
-            } 
-          }
-          return flag
-        }
-      } else {
-        predicate = it => it[val]
-      }
-      // if (typeof(val) == "string") {
-      //   for (let i = 0; i < val.length; i++) {
-      //     if (val[i] == ".") {
-      //       var split = true 
-      //     }
-      //   }
-      //   if (split) {
+  
+  // 辅助型函数
 
-      //   }
-      // }
-    return predicate
+  function identity(...values) {
+    return values[0]
   }
+
+  function isEqual(value, other) {
+    /**
+     * This method supports comparing:
+     * 
+     * arrays, array buffers, booleans, 
+     * date objects, error objects, maps, 
+     * numbers, Object objects, regexes, 
+     * sets, strings, symbols, and typed arrays.
+     * 
+     * 仅实现了:
+     * arrays, booleans, objects. strings, numbers
+     */
+    let typeValue = Object.prototype.toString.call(value)
+    let typeOther = Object.prototype.toString.call(other)
+    if (typeValue !== typeOther) {
+      return false
+    }
+    if (typeValue == '[object Object]') {
+      return isEqualObject(value, other)
+    }
+    if (typeValue == '[object Array]') {
+      return isEqualArray(value, other)
+    }
+    return value == other
+  
+    function isEqualObject(value, other) {
+      for (let key in value) {
+        if (!isEqual(value[key],other[key])) {
+          return false
+        }
+      }
+      for (let key in other) {
+        if (!isEqual(value[key],other[key])) {
+          return false
+        }
+      }
+      return true
+    }
+  
+    function isEqualArray(value, other) {
+      if (value.length != other.length) {
+        return false
+      }
+      for(let i in value) {
+        if (!isEqual(value[i], other[i])) {
+          return false
+        }
+      }
+      return true
+    }
+  }
+
+  function isMatch(object, source) {
+    if (typeof(source) !== 'object') {
+      return false
+    }
+    let len = 0
+    for (let key in source) {
+      if (!isEqual(object[key],source[key])) {
+        return false
+      }
+    }
+    return true
+  }
+
+  function matches(source) {
+    return function(obj) {
+       return isMatch(obj, source)
+    }
+  }
+
+  function matchesProperty(path, srcValue) {
+    path = toPath(path)
+
+    return function(obj) {
+        for (let prop of path) {
+          obj = obj[prop]
+        }
+        return obj === srcValue
+    }
+  }
+
+  function property(path) {
+    path = toPath(path)
+    return function(obj) {
+      for (let prop of path) {
+        obj = obj[prop]
+      }
+      return obj
+    }
+  }
+
+  function toPath(value) {
+    if (Array.isArray(value))  {
+      return value
+    }
+    let path = []
+    if (typeof value == 'string') {
+      parsePart()
+      return path 
+    }
+
+    function parsePart() {
+      let str = ''
+      for (let i = 0; i < value.length; i++) {
+        if (value[i] == '.' || value[i] == '[' || value[i] == ']') {
+          if (str != '') path.push(str)
+          str = ''
+        } else {
+          str += value[i]
+        }
+      }
+      if (str != '') path.push(str)
+    }
+  }
+
+  function split(string='', separator, limit = Infinity) {
+    let res = []
+    let str = ''
+    for (let i = 0; i < string.length; i++) {
+      if (string[i] == separator) {
+        if (str != '') res.push(str)
+        str = ''
+      } else {
+        str += string[i]
+      }
+      if (res.length == limit) {
+        break
+      }
+    }
+    if (res.length < limit && str !== '') {
+      res.push(str)
+    }
+    return res
+  }
+
+  function Iteratee(func=identity) {
+    let funcType = Object.prototype.toString.call(func)
+    if (funcType == '[object String]') {
+      func = property(func)
+    } else if (funcType == '[object Array]') {
+      func = matchesProperty(func[0], func[1])
+    } else if (funcType == '[object Object]') {
+      func = matches(func)
+    }
+    return func
+  }
+  
+  function get(object, path, defaultValue = 'default') {
+    let value = object
+    path = toPath(path)
+    try {
+      for (let prop of path) {
+        value = value[prop]
+      }
+    } catch(e) {
+      if (e instanceof TypeError) {
+        return defaultValue
+      } else {
+        throw e
+      }
+    }
+    return value
+  }
+
+  //实用型函数
 
   function swap(array, i, j) {
     let t = array[i]
@@ -225,9 +365,7 @@ var mymoonddd = function() {
   }
 
   function uniqBy(array, iteratee) {
-    if (typeof(iteratee) != "function") {
-      iteratee = shorthand(iteratee)
-    }
+    iteratee = Iteratee(iteratee)
     let result = []
     let temp = []
     for (let i = 0; i < array.length; i++) {
@@ -323,9 +461,7 @@ var mymoonddd = function() {
   }
 
   function maxBy(array, iteratee) {
-    if (typeof(iteratee) != "function") {
-      iteratee = shorthand(iteratee)
-    }
+    iteratee = Iteratee(iteratee)
     let max = iteratee(array[0])
     let maxItem = array[0]
     for (let i = 1; i < array.length; i++) {
@@ -357,9 +493,7 @@ var mymoonddd = function() {
   }
 
   function sumBy(array, iteratee) {
-    if (typeof(iteratee) != "function") {
-      iteratee = shorthand(iteratee)
-    }
+    iteratee = Iteratee(iteratee)
     let sum = iteratee(array[0])
     for (let i = 1; i < array.length; i++) {
       let it = iteratee(array[i])
@@ -586,9 +720,7 @@ var mymoonddd = function() {
   }
 
   function map(collection, iteratee) {
-    if (typeof(iteratee) != "function") {
-      iteratee = shorthand(iteratee)
-    }
+    iteratee = Iteratee(iteratee)
     let res = []
     for (let key in collection) {
       res.push(iteratee(collection[key]))
@@ -597,9 +729,7 @@ var mymoonddd = function() {
   }
 
   function partition(collection, predicate) {
-    if (typeof(predicate) != "function") {
-      predicate = shorthand(predicate)
-    }
+    predicate = Iteratee(predicate)
 
     let T = []
     let F = []
@@ -635,9 +765,7 @@ var mymoonddd = function() {
   }
 
   function reject(collection, predicate) {
-    if (typeof(predicate) != "function") {
-      predicate = shorthand(predicate)
-    }
+    predicate = Iteratee(predicate)
 
     let res = []
     for (let key in collection) {
@@ -650,9 +778,7 @@ var mymoonddd = function() {
   }
 
   function some(collection, predicate) {
-    if (typeof(predicate) != "function") {
-      predicate = shorthand(predicate)
-    }
+    predicate = Iteratee(predicate)
     for (let key in collection) {
       let it = collection[key]
       if (predicate(it, key, collection)) {
@@ -669,9 +795,7 @@ var mymoonddd = function() {
   // }
 
   function every(collection, predicate) {
-    if (typeof(predicate) != "function") {
-      predicate = shorthand(predicate)
-    }
+    predicate = Iteratee(predicate)
     for (let key in collection) {
       let it = collection[key]
       if (!predicate(it, key, collection)) {
@@ -681,24 +805,9 @@ var mymoonddd = function() {
     return true
   }
 
-  function filter(collection, predicate) {
-   if (typeof(predicate) != "function") {
-      predicate = shorthand(predicate)
-    }
-    let res = []
-    for (let key in collection) {
-      let item = collection[key]
-      if (predicate(item, key, collection)) {
-        res.push(item)
-      }
-    }
-    return res
-  }
 
   function find(collection, predicate, fromIndex=0)  {
-    if (typeof(predicate) != "function") {
-      predicate = shorthand(predicate)
-    }
+    predicate = Iteratee(predicate)
     if (collection.length) {
       let len = collection.length
       if (fromIndex < 0) {
@@ -720,9 +829,7 @@ var mymoonddd = function() {
   }
 
   function findIndex(array, predicate, fromIndex=0) {
-    if (typeof(predicate) != "function") {
-      predicate = shorthand(predicate)
-    }
+    predicate = Iteratee(predicate)
     let len = array.length
     if (fromIndex < 0) {
       fromIndex = len + fromIndex
@@ -737,9 +844,7 @@ var mymoonddd = function() {
   }
 
   function findLastIndex(array, predicate, fromIndex=array.length-1) {
-    if (typeof(predicate) != "function") {
-      predicate = shorthand(predicate)
-    }
+    predicate = Iteratee(predicate)
     let len = array.length
     if (fromIndex < 0) {
       fromIndex = len + fromIndex
@@ -785,9 +890,7 @@ var mymoonddd = function() {
   }
 
   function countBy(collection, iteratee) {
-    if (typeof(iteratee) != "function") {
-      iteratee = shorthand(iteratee)
-    }
+    iteratee = Iteratee(iteratee)
     let result = {}
       for (let key in collection) {
         let it = iteratee(collection[key])
@@ -800,9 +903,7 @@ var mymoonddd = function() {
   }
 
   function groupBy(collection, iteratee) {
-    if (typeof(iteratee) != "function") {
-      iteratee = shorthand(iteratee)
-    }
+    iteratee = Iteratee(iteratee)
     let result = {}
     for (let key in collection) {
       let it = iteratee(collection[key])
@@ -815,9 +916,7 @@ var mymoonddd = function() {
   }
 
   function keyBy(array, iteratee) {
-    if (typeof(iteratee) != "function") {
-      iteratee = shorthand(iteratee)
-    }
+    iteratee = Iteratee(iteratee)
     let result = {}
     for (let i in array) {
       let it = iteratee(array[i])
@@ -827,9 +926,7 @@ var mymoonddd = function() {
   }
 
   function dropRightWhile(array, predicate) {
-    if (typeof(predicate) != "function") {
-      predicate = shorthand(predicate)
-    }
+    predicate = Iteratee(predicate)
     let len = array.length - 1
     while (len > -1) {
       let it = predicate(array[len], len, array) 
@@ -842,9 +939,7 @@ var mymoonddd = function() {
   }
 
   function dropWhile(array, predicate) {
-    if (typeof(predicate) != "function") {
-      predicate = shorthand(predicate)
-    }
+    predicate = Iteratee(predicate)
     let len = array.length - 1
     while (len > -1) {
       let it = predicate(array[0], 0, array) 
@@ -933,7 +1028,7 @@ var mymoonddd = function() {
     return false
   }
 
-  function isObjectLike(value) {
+  function isObjectLike(value) { 
     if (value) {
       if (typeof(value) == 'object') {
         return true
@@ -946,7 +1041,30 @@ var mymoonddd = function() {
     return Object.prototype.toString.call(value) == '[object String]'
   }
 
+  function filter(collection, predicate=identity) {
+    predicate = Iteratee(predicate)
+    let res = []
+    for (let key in collection) {
+      let item = collection[key]
+      if (predicate(item, key, collection)) {
+        res.push(item)
+      }
+    }
+    return res
+  }
+
   return {
+    identity: identity,
+    isEqual: isEqual,
+    isMatch: isMatch,
+    property: property,
+    matches: matches,
+    matchesProperty: matchesProperty,
+    toPath: toPath,
+    get: get,
+    split: split,
+    iteratee: Iteratee,
+    filter: filter,
     xor: xor,
     add: add,
     dropRightWhile: dropRightWhile,
@@ -959,7 +1077,6 @@ var mymoonddd = function() {
     forEach: forEach,
     shuffle: shuffle,
     every: every,
-    filter: filter,
     find: find,
     map: map,
     partition: partition,
@@ -1020,5 +1137,23 @@ var mymoonddd = function() {
     isObject: isObject,
     isObjectLike: isObjectLike,
     isString: isString,
+    // reduce: reduce,
+    // bind : bind, // 下划线（变量名)
+    // parseInt: parseInt,
+    // negate: negate,
+    // spread: spread,
+    // flip: flip,
+    // reverse: reverse,
+    // before: before,
+    // after: after,
+    // memorize: memorize,
+    // shuffle用递归试试看: shuffle用递归试试看,
+    // curry: curry,
+    // value: value,
+    // chunk: chunk,
+    // chain: chain,
+    // take: take,
+    // isRegExp: isRegExp,
+    // wrap,  
   }
 }()
