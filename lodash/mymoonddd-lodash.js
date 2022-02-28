@@ -153,7 +153,7 @@ var mymoonddd = function() {
     } else if (funcType == '[object Object]') {
       return func = matches(func)
     }
-    return
+    return identity(func)
   }
   
   function get(object, path, defaultValue = 'default') {
@@ -330,8 +330,8 @@ var mymoonddd = function() {
 
   function tail(array) {
     let res = []
-    for (let i = 1; i < array.length; i++) {
-      res[i - 1] = array[i]
+    for (it of array) {
+      res.push(it)
     }
     return res
   }
@@ -386,8 +386,8 @@ var mymoonddd = function() {
     iteratee = Iteratee(iteratee)
     let result = []
     let map = {}
-    for (let i of array) {
-      let item = iteratee(i)
+    for (let i in array) {
+      let item = iteratee(array[i], i, array)
       if (map[item] == undefined) {
         map[item] = true
         result.push(i)
@@ -430,21 +430,14 @@ var mymoonddd = function() {
   }
 
   function size(collection) {
+    if (collection.length) {
+      return collection.length
+    }    
     if (typeof(collection) == "boolean") {
       return 0
     }
     if (typeof(collection) == "number") {
       return 0
-    }
-    if (typeof(collection) == "string") {
-      let i = 0
-      while (collection[i]) {
-        i++
-      }
-      return i
-    }
-    if (Array.isArray(collection)) {
-      return collection.length
     }
     if (typeof(collection) == "object") {
       let count = 0
@@ -478,12 +471,12 @@ var mymoonddd = function() {
     return max
   }
 
-  function maxBy(array, iteratee) {
+  function maxBy(array, iteratee=identity) {
     iteratee = Iteratee(iteratee)
     let max = iteratee(array[0])
     let maxItem = array[0]
     for (let i = 1; i < array.length; i++) {
-      let it = iteratee(array[i])
+      let it = iteratee(array[i], i, array)
       if (it > max) {
         max = array[i]
         maxItem = array[i]
@@ -510,11 +503,11 @@ var mymoonddd = function() {
     return sum
   }
 
-  function sumBy(array, iteratee) {
+  function sumBy(array, iteratee=identity) {
     iteratee = Iteratee(iteratee)
     let sum = iteratee(array[0])
     for (let i = 1; i < array.length; i++) {
-      let it = iteratee(array[i])
+      let it = iteratee(array[i], i, array)
       sum += it
     }
     return sum
@@ -659,11 +652,11 @@ var mymoonddd = function() {
     }
   }
 
-  function remove(array, predicate) {
+  function remove(array, predicate=identity) {
     let removed = []
     let len =  array.length
     for (let i = len - 1; i >= 0; i--) {
-      if (predicate(array[i])) {
+      if (predicate(array[i], i, array)) {
         swap(array, i, array.length - 1)
         removed.unshift(array.pop())
       }
@@ -694,16 +687,16 @@ var mymoonddd = function() {
     return result
   }
 
-  function map(collection, iteratee) {
+  function map(collection, iteratee=identity) {
     iteratee = Iteratee(iteratee)
     let res = []
     for (let key in collection) {
-      res.push(iteratee(collection[key]))
+      res.push(iteratee(collection[key], key, collection))
     }
     return res
   }
 
-  function partition(collection, predicate) {
+  function partition(collection, predicate=identity) {
     predicate = Iteratee(predicate)
 
     let T = []
@@ -717,7 +710,7 @@ var mymoonddd = function() {
     return res
   }
 
-  function reduce(collection, iteratee, accumulator) {
+  function reduce(collection, iteratee=identity, accumulator) {
     let result = accumulator ?? 0
     for (let key in collection) {
       let it = collection[key]
@@ -726,7 +719,7 @@ var mymoonddd = function() {
     return result
   }
 
-  function reduceRight(collection, iteratee, accumulator) {
+  function reduceRight(collection, iteratee=identity, accumulator) {
     // 仅考虑了collection为数组的情况
     if (collection.length) {
       let result = accumulator 
@@ -739,21 +732,23 @@ var mymoonddd = function() {
     }
   }
 
-  function reject(collection, predicate) {
+  function reject(collection, predicate=identity) {
     predicate = Iteratee(predicate)
     let res = []
-    for (let it of collection) {
-      if (!predicate(it)) {
+    for (let key in collection) {
+      it = collection[key]
+      if (!predicate(it, key, collection)) {
         res.push(it)
       } 
     }
     return res
   }
 
-  function some(collection, predicate) {
+  function some(collection, predicate=identity) {
     predicate = Iteratee(predicate)
     for (let it in collection) {
-      if (predicate(it)) {
+      it = collection[key]
+      if (predicate(it, key, collection)) {
         return true
       }
     }
@@ -768,8 +763,8 @@ var mymoonddd = function() {
 
   function every(collection, predicate=identity) {
     predicate = Iteratee(predicate)
-    for (let it of collection) {
-      if (!predicate(it)) {
+    for (let key in collection) {
+      if (!predicate(collection[key], key, collection)) {
         return false
       }
     }
@@ -777,7 +772,7 @@ var mymoonddd = function() {
   }
 
 
-  function find(collection, predicate, fromIndex=0)  {
+  function find(collection, predicate=identity, fromIndex=0)  {
     predicate = Iteratee(predicate)
     if (collection.length) {
       let len = collection.length
@@ -792,14 +787,13 @@ var mymoonddd = function() {
       }
     }
     for (let key in collection) {
-      let item = collection[key]
-      if (predicate(item)) {
+      if (predicate(collection[key], key, collection)) {
         return item
       }
     }
   }
 
-  function findIndex(array, predicate, fromIndex=0) {
+  function findIndex(array, predicate=identity, fromIndex=0) {
     predicate = Iteratee(predicate)
     let len = array.length
     if (fromIndex < 0) {
@@ -814,7 +808,7 @@ var mymoonddd = function() {
     return -1
   }
 
-  function findLastIndex(array, predicate, fromIndex=array.length-1) {
+  function findLastIndex(array, predicate=identity, fromIndex=array.length-1) {
     predicate = Iteratee(predicate)
     let len = array.length
     if (fromIndex < 0) {
@@ -832,17 +826,9 @@ var mymoonddd = function() {
     return -1
   }
 
-  function forEach(collection, iteratee) {
-    if (collection.length) {
-      for (let i = 0; i < collection.length; i++) {
-        let it = collection[i]
-        iteratee(it, i, collection)
-      }
-    } else {
-      for (let key in collection) {
-        let it = collection[key]
-        iteratee(it, key, collection)
-      }
+  function forEach(collection, iteratee=identity) {
+    for (let key in collection) {
+      iteratee(collection[key], key, collection)
     }
     return collection
   }
@@ -863,8 +849,8 @@ var mymoonddd = function() {
   function countBy(collection, iteratee = identity) {
     iteratee = Iteratee(iteratee)
     let result = {}
-      for (let item of collection) {
-        let it = iteratee(item)
+      for (let key in collection) {
+        let it = iteratee(collection[key] , key, collection)
         if (result[it] === undefined) {
           result[it] = 0
         }
@@ -873,12 +859,12 @@ var mymoonddd = function() {
       return result
   }
 
-  function groupBy(collection, iteratee) {
+  function groupBy(collection, iteratee=identity) {
     iteratee = Iteratee(iteratee)
     let result = {}
     for (let key in collection) {
-      let it = iteratee(collection[key])
-      if (!(it in result)) {
+      let it = iteratee(collection[key], key, collection)
+      if (result[it] === undefined) {
         result[it] = []
       }
       result[it].push(collection[key])
@@ -886,17 +872,17 @@ var mymoonddd = function() {
     return result
   }
 
-  function keyBy(array, iteratee) {
+  function keyBy(array, iteratee=identity) {
     iteratee = Iteratee(iteratee)
     let result = {}
     for (let i in array) {
-      let it = iteratee(array[i])
+      let it = iteratee(array[i], i, array)
       result[it] = array[i]
     }
     return result
   }
 
-  function dropRightWhile(array, predicate) {
+  function dropRightWhile(array, predicate=identity) {
     predicate = Iteratee(predicate)
     let len = array.length - 1
     while (len > -1) {
@@ -909,7 +895,7 @@ var mymoonddd = function() {
     }
   }
 
-  function dropWhile(array, predicate) {
+  function dropWhile(array, predicate=identity) {
     predicate = Iteratee(predicate)
     let len = array.length - 1
     while (len > -1) {
