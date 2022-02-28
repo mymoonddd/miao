@@ -407,7 +407,7 @@ var mymoonddd = function() {
       let item = iteratee(array[i], i, array)
       if (map[item] == undefined) {
         map[item] = true
-        result.push(i)
+        result.push(array[i])
       }
     }
     return result
@@ -785,7 +785,7 @@ var mymoonddd = function() {
 
   function some(collection, predicate=identity) {
     predicate = Iteratee(predicate)
-    for (let it in collection) {
+    for (let key in collection) {
       it = collection[key]
       if (predicate(it, key, collection)) {
         return true
