@@ -271,6 +271,23 @@ var mymoonddd = function() {
     return res
   }
 
+  function flatMap(collection, iteratee=identity) {
+    return flatMapDepth(collection, iteratee)
+  }
+
+  function flatMapDeep(collection, iteratee=identity) {
+    return flatMapDepth(collection, iteratee, Infinity)
+  }
+
+  function flatMapDepth(collection, iteratee=identity, depth=1) {
+    iteratee = Iteratee(iteratee)
+    let res = []
+    for (let key in collection) {
+      res.push(iteratee(collection[key]))
+    }
+    return flattenDepth(res,depth)
+  }
+
   function fromPairs(pairs) {
     let result = {}
     for (let i = 0; i < pairs.length; i++) {
@@ -330,8 +347,8 @@ var mymoonddd = function() {
 
   function tail(array) {
     let res = []
-    for (it of array) {
-      res.push(it)
+    for (let i = 1; i < array.length; i++) {
+      res.push(array[i])
     }
     return res
   }
@@ -407,18 +424,28 @@ var mymoonddd = function() {
     return result
   }
 
-  function zip() {
-    let n = arguments.length
-    let m = arguments[0].length
-    let result = Array(m)
-    for (let i = 0; i < m; i++) {
-      let inner = []
-      for (let j = 0; j < n; j++) {
-        inner[j] = arguments[j][i]
+  function zip(...args) {
+    let res = []
+    for (let i in args[0]) {
+      inner = []
+      for (let j in args) {
+        inner[j] = args[j][i]
       }
-      result[i] = inner
+      res.push(inner)
     }
-    return result
+    return res
+  }
+
+  function unzip(array) {
+    let res = []
+    for (let i in array[0]) {
+      let inner = []
+      for (let j in array) {
+        inner[j] = array[j][i]
+      }
+      res.push(inner)
+    }
+    return res
   }
 
   function sample(collection) {
@@ -1017,6 +1044,56 @@ var mymoonddd = function() {
     return value > other
   }
 
+  function sortedIndex(array, value, idx=0) {
+    // 用二分法
+    if (array[0] >= value) {
+      return 0 + idx
+    }
+    if (array[array.length - 1] < value) {
+      return array.length + idx
+    }
+    let mid = array.length >> 1 
+    if (array[mid] >= value) {
+      return sortedIndex(array.slice(0, mid), value, idx)
+    } else {
+      return sortedIndex(array.slice(mid, array.length),value, idx+mid)
+    }
+  }
+
+  function union(...arrays) {
+    let res = []
+    let map = {}
+    for (let array of arrays) {
+      for (let it of array) {
+        if (map[it] === undefined) {
+          map[it] = true 
+          res.push(it)
+        } 
+      }
+    }
+    return res
+  }
+
+  function unionBy(...args) {
+    let iteratee = args.pop()
+    let arrays = args
+    iteratee = Iteratee(iteratee)
+    let res = []
+    let map = {}
+    for (let array of arrays) {
+      for (let it of array) {
+        let trans = iteratee(it)
+        if (map[trans] === undefined) {
+          map[trans] = true 
+          res.push(it)
+        } 
+      }
+    }
+    return res
+  }
+
+
+
   return {
     identity,
     isEqual,
@@ -1054,6 +1131,11 @@ var mymoonddd = function() {
     dropRight,
     fill,
     flatten,
+    flattenDeep,
+    flattenDepth,
+    flatMap,
+    flatMapDeep,
+    flatMapDepth,
     fromPairs,
     head,
     indexOf,
@@ -1066,6 +1148,7 @@ var mymoonddd = function() {
     uniqBy,
     without,
     zip,
+    unzip,
     size,
     isBoolean,
     ceil,
@@ -1077,8 +1160,6 @@ var mymoonddd = function() {
     repeat,
     range,
     difference,
-    flattenDeep,
-    flattenDepth,
     concat,
     toArray,
     nth,
@@ -1103,6 +1184,9 @@ var mymoonddd = function() {
     isString,
     slice,
     gt,
+    sortedIndex,
+    union,
+    unionBy,
     // reduce: reduce,
     // bind : bind, // 下划线（变量名)
     // parseInt: parseInt,
