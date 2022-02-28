@@ -144,14 +144,16 @@ var mymoonddd = function() {
 
   function Iteratee(func=identity) {
     let funcType = Object.prototype.toString.call(func)
-    if (funcType == '[object String]') {
-      func = property(func)
+    if (funcType == '[object Function]') {
+      return func
+    } else if (funcType == '[object String]') {
+      return func = property(func)
     } else if (funcType == '[object Array]') {
-      func = matchesProperty(func[0], func[1])
+      return func = matchesProperty(func[0], func[1])
     } else if (funcType == '[object Object]') {
-      func = matches(func)
+      return func = matches(func)
     }
-    return func
+    return
   }
   
   function get(object, path, defaultValue = 'default') {
@@ -239,17 +241,34 @@ var mymoonddd = function() {
   }
 
   function flatten(array) {
-      let result = []
-      for (let i = 0; i < array.length; i++) {
-          if (Array.isArray(array[i])) {
-              for (let j = 0; j < array[i].length; j++) {
-                  result.push(array[i][j])
-              }
-          } else {
-              result.push(array[i])
-          }
+      return flattenDepth(array)
+  }
+
+  function flattenDeep(array) {
+    return flattenDepth(array, Infinity)
+  }
+
+  function flattenDepth(array, depth=1) {
+    let res = array
+    let temp = []
+    while (true) {
+      let hasArray = false
+      for (let i of res) {
+        if (isArray(i)) {
+          temp.push(...i)
+          hasArray = true
+        } else {
+          temp.push(i)
+        }
       }
-      return result
+      res = temp
+      temp = []
+      depth--
+      if (depth == 0 || hasArray == false) {
+        break
+      }
+    }
+    return res
   }
 
   function fromPairs(pairs) {
@@ -277,9 +296,8 @@ var mymoonddd = function() {
   }
 
   function initial(array) {
-    let len = array.length - 1
-    let res = Array(len)
-    for (let i = 0; i < len; i++) {
+    let res = []
+    for (let i = 0; i < array.length - 1; i++) {
       res[i] = array[i]
     }
     return res
@@ -311,9 +329,8 @@ var mymoonddd = function() {
   }
 
   function tail(array) {
-    let len = array.length - 1
-    let res = Array(len)
-    for (let i = 1; i < len + 1; i++) {
+    let res = []
+    for (let i = 1; i < array.length; i++) {
       res[i - 1] = array[i]
     }
     return res
@@ -355,24 +372,25 @@ var mymoonddd = function() {
 
   function uniq(array) {
     let result = []
-    for (let i = 0; i < array.length; i++) {
-      let p = array[i]
-      if (!(result.includes(p))) {
-        result.push(p)
+    let map = {}
+    for (let i of array) {
+      if (map[i] === undefined) {
+        result.push(i)
+        map[i] = true
       }
     }
     return result
   }
 
-  function uniqBy(array, iteratee) {
+  function uniqBy(array, iteratee = identity) {
     iteratee = Iteratee(iteratee)
     let result = []
-    let temp = []
-    for (let i = 0; i < array.length; i++) {
-      let it = iteratee(array[i])
-      if (!(temp.includes(it))) {
-        temp.push(it)
-        result.push(array[i])
+    let map = {}
+    for (let i of array) {
+      let item = iteratee(i)
+      if (map[item] == undefined) {
+        map[item] = true
+        result.push(i)
       }
     }
     return result
@@ -553,59 +571,16 @@ var mymoonddd = function() {
     return result
   }
 
-  function flattenDeep(array) {
-  let result = []
-  flatten(array)
-  return result  
-
-  function flatten(array) {
-      for (let i = 0; i < array.length; i++) {
-        let p = array[i]
-        if (Array.isArray(p)) {
-          p = flatten(p)
-        } 
-        if (p) {
-          result.push(p)
-        }
-      }
-    }
-  }
-
-  function flattenDepth(array, depth=1) {
-
-    while (depth > 0) {
-      let temp = []
-      for (let i = 0; i < array.length; i++) {
-          if (Array.isArray(array[i])) {
-              for (let j = 0; j < array[i].length; j++) {
-                  temp.push(array[i][j])
-              }
-          } else {
-              temp.push(array[i])
-          }
-      }
-      array = temp 
-      depth--
-    }
-    return array
-
-  }
-
   function concat(array, ...values) {
-    let res = []
-    for (let i = 0; i < array.length; i++) {
-      res.push(array[i])
-    }
-    for (let i = 0; i < values.length; i++){
-      if (Array.isArray(values[i])) {
-        for (let j = 0; j < values[i].length; j++) {
-          res.push(values[i][j])
-        }
+    let res = slice(array)
+    values.forEach(it => {
+      if (isArray(it)) {
+        res.push(...it)
       } else {
-        res.push(values[i])
+        res.push(it)
       }
-    }
-    return res
+    })
+    return res  
   }
 
   function toArray(value) {
@@ -766,11 +741,9 @@ var mymoonddd = function() {
 
   function reject(collection, predicate) {
     predicate = Iteratee(predicate)
-
     let res = []
-    for (let key in collection) {
-      let it = collection[key]
-      if (!predicate(it, key, collection)) {
+    for (let it of collection) {
+      if (!predicate(it)) {
         res.push(it)
       } 
     }
@@ -779,9 +752,8 @@ var mymoonddd = function() {
 
   function some(collection, predicate) {
     predicate = Iteratee(predicate)
-    for (let key in collection) {
-      let it = collection[key]
-      if (predicate(it, key, collection)) {
+    for (let it in collection) {
+      if (predicate(it)) {
         return true
       }
     }
@@ -794,11 +766,10 @@ var mymoonddd = function() {
   //   }
   // }
 
-  function every(collection, predicate) {
+  function every(collection, predicate=identity) {
     predicate = Iteratee(predicate)
-    for (let key in collection) {
-      let it = collection[key]
-      if (!predicate(it, key, collection)) {
+    for (let it of collection) {
+      if (!predicate(it)) {
         return false
       }
     }
@@ -889,12 +860,12 @@ var mymoonddd = function() {
     return collection
   }
 
-  function countBy(collection, iteratee) {
+  function countBy(collection, iteratee = identity) {
     iteratee = Iteratee(iteratee)
     let result = {}
-      for (let key in collection) {
-        let it = iteratee(collection[key])
-        if (!(it in result)) {
+      for (let item of collection) {
+        let it = iteratee(item)
+        if (result[it] === undefined) {
           result[it] = 0
         }
         result[it]++
@@ -955,34 +926,29 @@ var mymoonddd = function() {
     return augend + addend
   }
 
-  function xor(...arrays) {
-    let res = []
-    let set = concat(...arrays)
-    if (arrays) {
-      for (let i = 0; i < set.length; i++) {
-        var hasAll = true
-        for (let j = 0; j < arrays.length; j++) {
-          if (!arrays[j].includes(set[i])) {
-            hasAll = false
-            break
-          }
-        }
-        if (!hasAll)
-        res.push(set[i])
-      }
-    }
-    return res
-  } 
+
+  // function xor(...arrays) {
+
+  //   let result = []
+  //   let ary = arrays[0]
+  //   let others = flatten(tail(arrays))
+  //   let intersect = intersection(ary,others)
+
+  //   arrays = flatten(arrays) 
+  //   for (let i of arrays) {
+  //     if (!intersect.includes(i)) {
+  //       result.push(i)
+  //     }
+  //   }
+  //   return result
+  // } 
 
   function isArray(value) {
-    return Array.isArray(value)
+    return Object.prototype.toString.call(value) == '[object Array]'
   }
 
   function isArrayLike(value) {
-    if ( value.length ) {
-      return true
-    }
-    return false
+    return value.length ? true : false
   }
 
   function isArrayLikeObject(value) {
@@ -1053,90 +1019,104 @@ var mymoonddd = function() {
     return res
   }
 
+  function slice(array, start=0, end=array.length) {
+    let res = []
+    for (let i = start; i < end; i++) {
+      res.push(array[i])
+    }
+    return res
+  }
+
+  function gt(value, other) {
+    return value > other
+  }
+
   return {
-    identity: identity,
-    isEqual: isEqual,
-    isMatch: isMatch,
-    property: property,
-    matches: matches,
-    matchesProperty: matchesProperty,
-    toPath: toPath,
-    get: get,
-    split: split,
-    iteratee: Iteratee,
-    filter: filter,
-    xor: xor,
-    add: add,
-    dropRightWhile: dropRightWhile,
-    dropWhile: dropWhile,
-    countBy: countBy,
-    groupBy: groupBy,
-    keyBy: keyBy,
-    findIndex: findIndex,
-    findLastIndex: findLastIndex,
-    forEach: forEach,
-    shuffle: shuffle,
-    every: every,
-    find: find,
-    map: map,
-    partition: partition,
-    reduce: reduce,
-    reduceRight: reduceRight,
-    reject: reject,
-    some: some,
-    chunk: chunk,
-    compact: compact,
-    drop: drop,
-    dropRight: dropRight,
-    fill: fill,
-    flatten: flatten,
-    fromPairs: fromPairs,
-    head: head,
-    indexOf: indexOf,
-    initial: initial,
-    join: join,
-    last: last,
-    lastIndexOf: lastIndexOf,
-    reverse: reverse,
-    uniq: uniq,
-    uniqBy: uniqBy,
-    without: without,
-    zip: zip,
-    size: size,
-    isBoolean: isBoolean,
-    ceil: ceil,
-    min: min,
-    max: max,
-    maxBy: maxBy,
-    sum: sum,
-    sumBy: sumBy,
-    repeat: repeat,
-    range: range,
-    difference: difference,
-    flattenDeep: flattenDeep,
-    flattenDepth: flattenDepth,
-    concat: concat,
-    toArray: toArray,
-    nth: nth,
-    intersection: intersection,
-    pull: pull,
-    pullAll: pullAll,
-    remove: remove,
-    tail: tail,
-    take: take,
-    takeRight: takeRight,
-    mapValues: mapValues,
-    isArray: isArray,
-    isArrayLike: isArrayLike,
-    isArrayLikeObject: isArrayLikeObject,
-    isBoolean: isBoolean,
-    isDate: isDate,
-    isFunction: isFunction,
-    isInteger: isInteger,
-    isNumber: isNumber,
-    isObject: isObject,
-    isObjectLike: isObjectLike,
-    isString: isString,
+    identity,
+    isEqual,
+    isMatch,
+    property,
+    matches,
+    matchesProperty,
+    toPath,
+    get,
+    split,
+    Iteratee,
+    filter,
+    // xor,
+    add,
+    dropRightWhile,
+    dropWhile,
+    countBy,
+    groupBy,
+    keyBy,
+    findIndex,
+    findLastIndex,
+    forEach,
+    shuffle,
+    every,
+    find,
+    map,
+    partition,
+    reduce,
+    reduceRight,
+    reject,
+    some,
+    chunk,
+    compact,
+    drop,
+    dropRight,
+    fill,
+    flatten,
+    fromPairs,
+    head,
+    indexOf,
+    initial,
+    join,
+    last,
+    lastIndexOf,
+    reverse,
+    uniq,
+    uniqBy,
+    without,
+    zip,
+    size,
+    isBoolean,
+    ceil,
+    min,
+    max,
+    maxBy,
+    sum,
+    sumBy,
+    repeat,
+    range,
+    difference,
+    flattenDeep,
+    flattenDepth,
+    concat,
+    toArray,
+    nth,
+    intersection,
+    pull,
+    pullAll,
+    remove,
+    tail,
+    take,
+    takeRight,
+    mapValues,
+    isArray,
+    isArrayLike,
+    isArrayLikeObject,
+    isBoolean,
+    isDate,
+    isFunction,
+    isInteger,
+    isNumber,
+    isObject,
+    isObjectLike,
+    isString,
+    slice,
+    gt,
     // reduce: reduce,
     // bind : bind, // 下划线（变量名)
     // parseInt: parseInt,
