@@ -488,6 +488,18 @@ var mymoonddd = function() {
     return (number - remain) + x
   }
 
+  function round(number, precision=0) {
+    let x = 10 ** ( -precision )
+    let remain = number % x
+    if (!remain) {
+      return number
+    } else if (remain / x < 0.5) {
+      return (number - remain)
+    } else {
+      return (number - remain) + x
+    }
+  }
+
   function max(array) {
     let max = array[0]
     for (let i = 1; i < array.length; i++) {
@@ -798,10 +810,9 @@ var mymoonddd = function() {
     return true
   }
 
-
   function find(collection, predicate=identity, fromIndex=0)  {
     predicate = Iteratee(predicate)
-    if (collection.length) {
+    if (collection.length) {   //数组
       let len = collection.length
       if (fromIndex < 0) {
         fromIndex = len + fromIndex
@@ -813,9 +824,18 @@ var mymoonddd = function() {
         }
       }
     }
-    for (let key in collection) {
+    for (let key in collection) { //对象
       if (predicate(collection[key], key, collection)) {
-        return item
+        return collection[key]
+      }
+    }
+  }
+
+  function findKey (object, predicate=identity)  {
+    predicate = Iteratee(predicate)
+    for (let key in object) { //对象
+      if (predicate(object[key], key, object)) {
+        return key
       }
     }
   }
@@ -1092,6 +1112,62 @@ var mymoonddd = function() {
     return res
   }
 
+  function assign(object, ...sources) {
+    for (let source of sources) {
+      for (let key in source) {
+        if (source.hasOwnProperty(key)) {
+          object[key] = source[key]
+        }
+      }
+    }
+    return object
+  }
+
+  function assignIn(object, ...sources) {
+    for (let source of sources) {
+      for (let key in source) {
+          object[key] = source[key]
+      }
+    }
+    return object
+  }
+
+  function defaults(object, ...sources) {
+    for (let source of sources) {
+      for (let key in source) {
+          if (object[key] === undefined) {
+            object[key] = source[key]
+          }
+      }
+    }
+    return object
+  }
+
+  function has(object, path) {
+    let props = toPath(path) 
+    for (let prop of props) {
+      if (!object.hasOwnProperty(prop)) {
+        return false
+      }
+      object = object[prop]
+    }
+    return true
+  }
+
+  function hasIn(object, path) {
+    let props = toPath(path) 
+    for (let prop of props) {
+      if (object[prop] === undefined) {
+        return false
+      }
+      object = object[prop]
+    }
+    return true
+  }
+
+  // function create(prototype, properties) {
+
+  // }
 
 
   return {
@@ -1119,6 +1195,7 @@ var mymoonddd = function() {
     shuffle,
     every,
     find,
+    findKey,
     map,
     partition,
     reduce,
@@ -1187,6 +1264,14 @@ var mymoonddd = function() {
     sortedIndex,
     union,
     unionBy,
+    sample,
+    round,
+    assign,
+    assignIn,
+    defaults,
+    has,
+    hasIn,
+    // create,
     // reduce: reduce,
     // bind : bind, // 下划线（变量名)
     // parseInt: parseInt,
@@ -1205,5 +1290,46 @@ var mymoonddd = function() {
     // take: take,
     // isRegExp: isRegExp,
     // wrap,  
+
+    // invert,
+    // invoke,
+    // keys,
+    // mapKeys,
+    // merge,
+    // omit,
+    // pick,
+    // result,
+    // set,
+    // toPairs,
+    // values,
+    // escape,
+    // unescape,
+    // pad,
+    // padEnd,
+    // parStart,
+    // bindAll,
+    // mixin,
+    // times,
+    // uniqueId,
+    // cloneDeep,
+    // negate,
+    // once,
+    // spread,
+    // curry,
+    // memoize,
+    // constant,
+    // propertyOf,
+
+    // sortBy,
+    // defer,
+    // delay,
+    // random,
+    // forin,
+    // forinRight,
+    // forOwn,
+    // forOwnRight,
+    // functions,
+
+
   }
 }()
