@@ -1165,10 +1165,33 @@ var mymoonddd = function() {
     return true
   }
 
-  // function create(prototype, properties) {
+  function create(prototype, properties) {
+    if (properties) {
+      for (let key in properties) {
+        prototype[key] = properties[key]
+      }
+    }
+    return prototype
+  }
 
-  // }
+  function reduce(collection, iteratee=identity, accumulator=collection[0]) {
+    iteratee = Iteratee(iteratee)
+    for (let key in collection) {
+      let it = collection[key]
+      accumulator = iteratee(accumulator,it, key, collection)
+    }
+    return accumulator
+  }
 
+  function reduceRight(collection, iteratee=identity, accumulator=collection[collection.length - 1]) {
+    //仅考虑collection为数组的情况
+    iteratee = Iteratee(iteratee)
+    for (let i = collection.length; i > 0; i--) {
+      let it = collection[i-1]
+      accumulator = iteratee(accumulator,it, i, collection)
+    }
+    return accumulator
+  }
 
   return {
     identity,
@@ -1271,8 +1294,9 @@ var mymoonddd = function() {
     defaults,
     has,
     hasIn,
-    // create,
-    // reduce: reduce,
+    create,
+    reduce,
+    reduceRight,
     // bind : bind, // 下划线（变量名)
     // parseInt: parseInt,
     // negate: negate,
