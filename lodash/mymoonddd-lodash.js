@@ -726,6 +726,18 @@ var mymoonddd = function() {
     return result
   }
 
+  function mapKeys(object, iteratee=identity) {
+    iteratee = Iteratee(iteratee)
+    let res = {}
+    for (let key in object) {
+      let resKey = iteratee(object[key], key, object)
+      res[resKey] = key
+    }
+    return res
+  }
+
+
+
   function map(collection, iteratee=identity) {
     iteratee = Iteratee(iteratee)
     let res = []
@@ -1193,6 +1205,76 @@ var mymoonddd = function() {
     return accumulator
   }
 
+  // function bind(func, thisArg, partials) {
+  //   return function f(arg) {
+  //     func.call(thisArg)
+  //     return func(partials,arg)
+  //   }
+  // }
+
+  // function parseInt(string, radix=10) {
+  //   let res = 0
+  //   for (let i = string.length - 1, j = 0; i >= 0; i--, j++) {
+  //     let digit = string[i]
+  //     res+= digit * radix ** j
+  //   }
+  //   return res
+  // }
+
+  function invert(object) {
+    let res = {}
+    for (let key in object) {
+      res[object[key]] = key
+    }
+    return res
+  }
+
+  function invertBy(object, iteratee=identity) {
+    iteratee= Iteratee(iteratee)
+    let res = {}
+    for (let key in object) {
+      let resKey = iteratee(object[key])
+      if (res[resKey] === undefined) {
+        res[resKey] = [key]
+      } else {
+        res[resKey].push(key)
+      }
+    }
+    return res
+  }
+
+  function invoke(object, path, ...args) {
+    let paths = toPath(path)
+    let method = paths.pop()
+    for (let path of paths) {
+      object = object[path]
+    }
+    return object[method](...args)
+  }
+
+  function keys(object) {
+    let keys = []
+    for (let key in object) {
+      if (object.hasOwnProperty(key)) {
+        keys.push(key)
+      }
+    }
+    return keys
+  }
+
+  // function pick(object, paths) {
+  //   paths = paths.map(toPath)
+  //   let prop = {}
+  //   for (let path of paths) {
+  //     if (path.length > 1) {
+  //       prop[path[0]] = pick(object, path)
+  //     } else {
+  //       prop[path[0]] = object[path[0]] 
+  //     }
+  //   }
+  //   return prop
+  // }
+
   return {
     identity,
     isEqual,
@@ -1297,7 +1379,10 @@ var mymoonddd = function() {
     create,
     reduce,
     reduceRight,
-    // bind : bind, // 下划线（变量名)
+    invert,
+
+    // bind : bind,
+    // _
     // parseInt: parseInt,
     // negate: negate,
     // spread: spread,
@@ -1315,10 +1400,11 @@ var mymoonddd = function() {
     // isRegExp: isRegExp,
     // wrap,  
 
-    // invert,
-    // invoke,
-    // keys,
-    // mapKeys,
+    invert,
+    invertBy,
+    invoke,
+    keys,
+    mapKeys,
     // merge,
     // omit,
     // pick,
