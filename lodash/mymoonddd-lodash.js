@@ -173,6 +173,8 @@ var mymoonddd = function() {
     return value
   }
 
+
+
   //实用型函数
 
   function swap(array, i, j) {
@@ -1262,15 +1264,157 @@ var mymoonddd = function() {
     return keys
   }
 
+  function times(n, iteratee=identity) {
+    let res = []
+    for (let i = 0; i < n; i++) {
+      res.push(iteratee(i))
+    }
+    return res
+  }
+
+  function constant(value) {
+    return function() {
+      return value
+    }
+  }
+
+  function values(object) {
+    let res = []
+    for (let prop in object) {
+      if (object.hasOwnProperty(prop)) {
+        res.push(object[prop])
+      }
+    }
+    return res
+  }
+
+  function pad(string='', length=0, chars=' ') {
+    let i = 0
+    let repeatTimes = length - string.length
+
+    let padStartTimes = 0
+    let padEndTimes = 0
+    if (repeatTimes % 2) {
+      padStartTimes = Math.floor(repeatTimes / 2)
+      padEndTimes = repeatTimes - padStartTimes
+    } else {
+      padStartTimes = padEndTimes = repeatTimes / 2
+    }
+
+    let padStartStr = ''
+    let padEndStr = ''
+
+    while (padStartTimes > 0) {
+      padStartStr += chars[i++]
+      if (i == chars.length) {
+        i = 0
+      }
+      padStartTimes--
+    }
+    while (padEndTimes > 0) {
+      padEndStr += chars[i++]
+      if (i == chars.length) {
+        i = 0
+      }
+      padEndTimes--
+    }
+    return padStartStr + string + padEndStr
+  }
+
+  function padEnd(string='', length=0, chars=' ') {
+    let i = 0
+    let repeatTimes = length - string.length
+    let str = ''
+    while (repeatTimes > 0) {
+      str += chars[i++]
+      if (i == chars.length) {
+        i = 0
+      }
+      repeatTimes--
+    }
+
+    return string + str
+  }
+
+  function padStart(string='', length=0, chars=' ') {
+    let i = 0
+    let repeatTimes = length - string.length
+    let str = ''
+    while (repeatTimes > 0) {
+      str += chars[i++]
+      if (i == chars.length) {
+        i = 0
+      }
+      repeatTimes--
+    }
+
+    return str + string
+  }
+
+
+  function escape(string='') {
+    let str = ''
+    for (let char of string) {
+      if (char == "&") {
+        str += '&amp;'
+      } else if (char == "<") {
+        str += '&lt;'
+      } else if (char == "&>") {
+        str += '&gt;'
+      } else if (char == "\"") {
+        str += '&quot;'
+      } else if (char == "\'") {
+        str += '&#39;'
+      } else {
+        str += char
+      }
+    }
+    return str
+  }
+
+  function unescape(string='') {
+    let str = ''
+    for (let i = 0; i < string.length; i++) {
+      let char = string[i]
+      if (char == '&') {
+        let escChar = ''
+        while(string[i] != ';') {
+          escChar += string[i]
+          i++
+        } 
+        if (escChar == "&amp") {
+          str += '&'
+        } else if (escChar == "&lt") {
+          str += '<'
+        } else if (escChar == "&gt") {
+          str += '>'
+        } else if (escChar == "&quot") {
+          str += '\"'
+        } else if (escChar == "&#39") {
+          str += '\''
+        } 
+      } else {
+        str += char
+      }
+    }
+    return str
+  }
+
+
+  
+  // function set(object, path, value) {
+  //   let paths = toPath(path)
+
+  //   for (let path of paths) {
+  //   }
+  //   return object
+  // }
+
   // function pick(object, paths) {
   //   paths = paths.map(toPath)
   //   let prop = {}
   //   for (let path of paths) {
-  //     if (path.length > 1) {
-  //       prop[path[0]] = pick(object, path)
-  //     } else {
-  //       prop[path[0]] = object[path[0]] 
-  //     }
+  //       prop[path[0]] = pick(object[path[0]], path.slice(1))
   //   }
   //   return prop
   // }
@@ -1400,7 +1544,6 @@ var mymoonddd = function() {
     // isRegExp: isRegExp,
     // wrap,  
 
-    invert,
     invertBy,
     invoke,
     keys,
@@ -1411,15 +1554,15 @@ var mymoonddd = function() {
     // result,
     // set,
     // toPairs,
-    // values,
-    // escape,
-    // unescape,
-    // pad,
-    // padEnd,
-    // parStart,
+    values,
+    escape,
+    unescape,
+    pad,
+    padEnd,
+    padStart,
     // bindAll,
     // mixin,
-    // times,
+    times,
     // uniqueId,
     // cloneDeep,
     // negate,
@@ -1427,7 +1570,7 @@ var mymoonddd = function() {
     // spread,
     // curry,
     // memoize,
-    // constant,
+    constant,
     // propertyOf,
 
     // sortBy,
@@ -1439,6 +1582,8 @@ var mymoonddd = function() {
     // forOwn,
     // forOwnRight,
     // functions,
+
+    // result,
 
 
   }
