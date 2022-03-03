@@ -54,35 +54,27 @@
   }
 
   // 画一条两个实点两个空点的虚线
-  for (x = 1, y = 30;x < width;x = x + 4){
-    dot(x, y, color)
-    x = x + 1
-    dot(x, y, color)
-    x = x - 1
-  }
+  for (x = 1,y = 30;x < width; x++){
+     if ((x-1) % 4 < 2 ) {
+        dot(x, y, color)
+      }
+   }
 
   // 画一条三个实点两个空点的虚线
-  for (x = 1,y = 40;x < width;x = x + 5){
-    dot(x, y, color)
-    x = x + 1
-    dot(x, y, color)
-    x = x + 1
-    dot(x, y, color)
-    x = x - 2
-  }
+   for (x = 1,y = 40;x < width; x++){
+     if ((x-1) % 5 < 3 ) {
+        dot(x, y, color)
+      }
+   }
 
   // 画一条45度的斜线
   for (x = 1;x < width;x++){
-    for (y = 1;y < height;y++){
-      if (x / y == 1) {
-        dot(x, y, color)
-      }
-    }
+    dot(x, x, color)
   }
 
   // 画一条30度的斜线（与x轴或y轴的夹角呈30度）
   for (x = 1; x < width; x ++){
-    y = x * Math.sqrt(3)
+    y = x / Math.sqrt(3)
     dot(x, y, color)
   }
 
@@ -99,11 +91,11 @@
     y = 200
     dot(x, y, color)
   }
-  for (y = 100;y < 200;y++){
+  for (y = 100 ;y < 200;y++){
     x = 100
-    dot(x, y, color)
+    dot(100, y, color)
     x = 200
-    dot(x, y, color)
+    dot(200, y, color)
   }
 
   // 画一个实心矩形
@@ -121,22 +113,26 @@
   dot (x0, y0, color) //圆心
   var r = 0
 
-  r = 50
-  for (x = (x0 - r);x < (x0 + r);x++){
-    y = 0
-    y = y0 + Math.sqrt(r ** 2 - (x - x0) ** 2)
-    dot(x, y, color)
-    y = y0 - Math.sqrt(r ** 2 - (x - x0) ** 2)
-    dot(x, y, color)
-  }
+  circle(250,200,50)
+  circle(250,200,200)
 
-  r = 200
-  for (x = (x0 - r);x < (x0 + r);x++){
-    y = 0
-    y = y0 + Math.sqrt(r ** 2 - (x - x0) ** 2)
-    dot(x, y, color)
-    y = y0 - Math.sqrt(r ** 2 - (x - x0) ** 2)
-    dot(x, y, color)
+  function circle(cx, cy, r) {
+    for (let x = 0, y = r; x <= y; x++) {
+
+      dot(x + cx, y + cy, color)
+      dot(x + cx, -y + cy, color)
+      dot(-x + cx, y + cy, color)
+      dot(-x + cx, -y + cy, color)
+      dot(y + cx, x + cy, color)
+      dot(y + cx, -x + cy, color)
+      dot(-y + cx, x + cy, color)
+      dot(-y + cx, -x + cy, color)
+      let y1 = y ** 2 + x ** 2
+      let y2 = (y - 1) ** 2 + x ** 2
+      if (Math.abs(y1 - r ** 2) > Math.abs(y2 - r ** 2)) {
+        y = y - 1
+      }
+    }
   }
 
   // 画一个实心的圆，半径至少为100像素
@@ -191,7 +187,7 @@
         color = 2 * r + ',' + 2 * g + ',' + 255
         xm = x * 2
         ym = y * 2
-        dot(xm, ym, 'rgb(' + color + ')')
+        dot(xm + 125, ym + 75, 'rgb(' + color + ')')
         r++
       }
       g--
@@ -222,7 +218,7 @@
         color = 2 * r + ',' + 2 * g + ',' + 255
         xm = 0.5 * x - 0.87 * y
         ym = 0.87 * x + 0.5 * y
-        dot(xm + 200, ym + 200, 'rgb(' + color + ')')
+        dot(xm + 420, ym , 'rgb(' + color + ')')
         r++
       }
       g--

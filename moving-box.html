@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    body {
+      background-color: #c8e0e4;
+      margin: 0;
+    }
+    #moveBlock {
+      width: 20px;
+      height: 20px;
+      position: absolute;
+      background-color: #4354e3;
+    }
+    .itemMove {
+      height: 100vh;
+      /* position: relative; */
+      border: 5px solid white;
+      margin: 0;
+      margin-bottom: 10px;
+    }
+    kbd {
+      border: 1px solid #4444;
+      box-shadow: 1px 1px 0 #2222;
+      border-radius: 2px;
+      padding: 2px;
+      font-size: 0.8em;
+      margin: auto 2px;
+    }
+    p{
+      width: 500px;
+      margin: auto;
+      margin-top: 10px;
+      background-color: rgba(255, 255, 255, 0.349);
+      padding: 8px;
+      border-radius: 8px;
+      color: grey;
+    }
+
+    .text {
+      margin-top: -200px;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="itemMove">
+    <span id="moveBlock" style="top:0; left:0"></span>
+  </div>
+  <div class="text">
+    <p id="moveP"> 使用 <kbd>↑</kbd> <kbd>↓</kbd> <kbd>←</kbd> <kbd>→</kbd> 或 <kbd>W</kbd> <kbd>S</kbd> <kbd>A</kbd> <kbd>D</kbd> 移动   使用 <kbd>shift</kbd> 加速</p>
+    <p id="dragP">点住鼠标左键可以拖拽</p>
+  </div>
+</body>
+
+<!-- 物体移动脚本 -->
+<script>
+  let moveX = 0
+  let moveY = 0
+  let pace = 150
+  let rightDown = false
+  let leftDown = false
+  let upDown = false
+  let downDown = false
+  let space = document.querySelector('.itemMove')
+
+  moveBlock.autofocus = true
+  document.addEventListener('keydown', function(e){
+      if (e.code.startsWith('Shift')) {
+        pace = 250
+      }
+      if (e.code == 'ArrowRight' || e.code == 'KeyD') {
+        moveX = pace
+        rightDown = true
+      }
+      if (e.code == 'ArrowLeft' || e.code == 'KeyA') {
+        moveX = -pace
+        leftDown = true
+      }
+      if (e.code == 'ArrowUp' || e.code == 'KeyW') {
+        moveY = -pace
+        upDown = true
+      }
+      if (e.code == 'ArrowDown' || e.code == 'KeyS') {
+        moveY = pace
+        downDown = true
+      }
+  })
+
+  document.addEventListener('keyup', function(e){
+    if (e.code.startsWith('Shift')) {
+      pace = 150
+    }
+    if (e.code == 'ArrowRight' || e.code == 'KeyD') {
+      rightDown = false
+      if (leftDown) {
+        moveX = -pace
+      } else {
+        moveX = 0
+      }
+    }
+    if (e.code == 'ArrowLeft' || e.code == 'KeyA') {
+      leftDown = false
+      if (rightDown) {
+        moveX = pace
+      } else {
+        moveX = 0
+      }
+    }
+    if (e.code == 'ArrowUp' || e.code == 'KeyW') {
+      upDown = false
+      if (downDown) {
+        moveY = pace
+      } else {
+        moveY = 0
+      }
+    }
+    if (e.code == 'ArrowDown' || e.code == 'KeyS') {
+      downDown = false
+      if (upDown) {
+        moveY = -pace
+      } else {
+        moveY = 0
+      }
+    }
+  })
+
+  let lastTime = null
+  requestAnimationFrame(function ani(time) {
+    let timeDiff
+    if (lastTime === null) {
+      timeDiff = 0
+    } else {
+      timeDiff = (time - lastTime) / 500
+    }
+    moveBlock.style.left = parseInt(moveBlock.style.left) + moveX * timeDiff + 'px'
+    moveBlock.style.top = parseInt(moveBlock.style.top) + moveY * timeDiff + 'px'
+    if (parseInt(moveBlock.style.top) < 5) moveBlock.style.top = '5px'
+    if (parseInt(moveBlock.style.top) > window.innerHeight - 25) moveBlock.style.top =  window.innerHeight - 25 + 'px'
+    if (parseInt(moveBlock.style.left) < 5) moveBlock.style.left = '5px'
+    if (parseInt(moveBlock.style.left) > window.innerWidth - 25) moveBlock.style.left = window.innerWidth - 25 + 'px'
+    lastTime = time
+    requestAnimationFrame(ani)
+  })
+</script>
+
+<!-- 物体拖拽脚本 -->
+<script>
+
+  let leftMouseDown = false
+  window.addEventListener('mousedown', function(e) {
+    if (e.which) {
+      e.which== 1 ? leftMouseDown = true : leftMouseDown = false
+    } else {
+      e.buttons == 1 ? leftMouseDown = true : leftMouseDown = false
+    }
+    e.preventDefault()
+  })
+
+  window.addEventListener('mouseup', function(e){
+    leftMouseDown = false
+  })
+
+  window.addEventListener('mousemove', function(e) {
+    if (leftMouseDown) {
+      moveBlock.style.top = e.pageY - 5 + 'px'
+      moveBlock.style.left = e.pageX - 5 + 'px'
+    }
+    e.preventDefault()
+  })
+
+</script>
+</html>
