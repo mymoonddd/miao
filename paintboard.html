@@ -4,290 +4,679 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>画布</title>
+  <title>Document</title>
   <style>
-    .drawing {
-      display: inline-block;
-      border: 1px solid;
-    }
-    svg {
-      width: 200px;
-      height: 200px;
-      position: relative;
+    x* {
+      background-color: rgba(0,0,0,0.08);
+      box-shadow: inset 0 0 1px red;
     }
 
-    #eraserBlock {
-      width: 10px;
-      height: 10px;
-      position: absolute;
-      border:1px solid;
+    body {
+      margin: 0;
+    }
+
+    .settings {
+      width: 100%;
+      height: 85px;
+      background-color: #f5f6f7;
+      display: flex;
+      justify-content: left;
+      padding-top: 8px;
+      padding-left: 15px;
+    }
+
+    .settings * {
+      cursor: pointer;
+    }
+
+    .settings > div {
+      flex: 0 0 auto;
+      display: inline-block;
+      margin-right: 40px;
+      height: 100%;
+      position: relative;
+      text-align: center;
+    }
+
+    .settings div:not(:last-child)::after {
+      content: '|';
       color: transparent;
+      border-right: 1px solid rgba(128, 128, 128, 0.26);
+      height: 110%;
+      right: -20px;
+      top: -8px;
+      position: absolute;
     }
 
     .tools {
-      width: 100%;
-      border-bottom: 2px solid;
-      margin-bottom: 10px;
+      box-sizing: border-box;
     }
 
-
-    .penShapeSel:checked {
-      background-color: blueviolet;
+    .tools button {
+      width: 80px;
+      height: 20px;
+      font-size: 0.8em;
+      color: rgb(255, 255, 255);
+      background-color: #51c2f39d;
+      border: 1px solid rgba(100, 100, 100, 0.377);
+      border-radius: 8px;
+      display: block;
+      margin-bottom: 5px;
+      line-height: 70%;
+      padding: 2px;
     }
 
-
-    .drawing {
-      width: 100%;
-      height: 500px;
+    .shapes .penShape {
+      display: inline-block;
+      text-align: center;
+      border-collapse: collapse;
+      height: 75px;
+      overflow-y: scroll;
     }
 
-    svg {
-      width: 100%;
-      height: 100%;
+    .shapes .penShape td {
+      font-size: 0.78em;
     }
 
+    .shapes .penShape td span {
+      display: inline-block;
+      width: 70px;
+      border: 1px solid rgba(128, 128, 128, 0.233);
+    }
 
+    .shapes input:checked + span {
+      box-shadow: 0 0 1px 1px rgba(255, 255, 255, 0.342);
+      background-color: rgba(161, 220, 255, 0.363);
+      color : rgb(1, 186, 199);
+      border: 1px solid rgb(1, 186, 199);
+    }
+
+    .shapes .shapeOptions {
+      display: inline-block;
+    }
+
+    .shapes .shapeOptions span {
+      width: 50px;
+      font-size: 0.8em;
+      display: block;
+      border: 1px solid rgb(207, 207, 207);
+    }
+
+    .shapes .shapeOptions label:not(:last-child) span {
+      margin-bottom: 5px;
+    }
+
+    .shapes .shapeOptions #eraserBlock {
+      position: absolute;
+      display: block;
+
+    }
+
+    .strokeWidth #strokeWidthSel {
+      display: block;
+      width: 105px;
+    }
+
+    .strokeWidth #strokeWidthSel + span {
+      display: inline-block;
+      padding-left: 8px;
+      font-size: 0.9em;
+    }
+
+    .colors {
+      vertical-align: middle;
+      line-height: 80%;
+    }
+    .colors > div {
+      display : inline-block;
+
+    }
+    .colors .areaA input {
+      height: 50px;
+      width: 50px;
+      margin: 0;
+      margin-bottom: 20px;
+    }
+
+    .colors .areaA label {
+      position: relative;
+      margin: 0;
+      display: inline-block;
+    }
+
+    .colors .areaA label span {
+      display: inline-block;
+      position: absolute;
+      font-size: 0.8em;
+      top: 52px;
+      left: 5px;
+    }
+
+    .colors .areaA label input:first-child:checked + input {
+      box-shadow: 0 0 1px 1px rgb(97, 97, 245);
+    }
+
+    .colors .areaB .colorSelBlocks {
+      display: inline-block;
+      vertical-align: middle;
+      margin: 0;
+    }
+
+    .colors .areaB .colorSelBlocks td {
+      height: 20px;
+      width: 20px;
+      border: 1px rgba(128, 128, 128, 0.246) solid;
+    }
+
+    .colors .areaB .colorSelBlocks td:hover {
+      border-radius: 2px;
+      border: 1px white solid;
+      box-shadow: 0 0 3px 0 rgba(12, 12, 12, 0.24);
+    }
+
+    button:hover, .shapes span:hover{
+      border: 1px white solid;
+      box-shadow: 0 0 3px 0 rgba(12, 12, 12, 0.24);
+    }
+
+    .info #note {
+      color: gray;
+      font-size: 15px;
+      cursor: auto;
+    }
+
+    .paintBoard {
+      background-color: rgb(137, 185, 248);
+    }
+
+    .paintBoard svg {
+      background-color: #fff;
+      margin: 5px;
+    }
 
 
   </style>
 </head>
 <body>
-  <div class="tools">
-    <span class="colors">
-      <input type="color" value="#000000" id="colorSel">
-      <input type="color" value="#ffffff" id="bgcolorSel">
-    </span>
-    <span class="strokeWidth">
+  <div class="settings">
+    <div class="tools">
+      <button id="undoButton" title="CTRL+Z">撤销</button>
+      <button id="clearButton" title="CTRL+L">清空</button>
+      <button id="saveButton" title="CTRL+S">保存</button>
+    </div>
+    <div class="shapes">
+      <table class="penShape">
+        <tbody>
+          <tr>
+            <td><label><input type="radio" name="penShape" hidden class='penShapeSel' id="shapeDot"checked ><span>点</span></label></td>
+            <td><label><input type="radio" name="penShape" hidden class='penShapeSel' id="shapeLine" ><span>直线</span></label></td>
+            <td><label><input type="radio" name="penShape" hidden class='penShapeSel' id="shapeCurve"><span>曲线</span></label></td>
+          </tr>
+          <tr>
+            <td><label><input type="radio" name="penShape" hidden class='penShapeSel' id="shapeRect"><span>矩形</span></label></td>
+            <td><label><input type="radio" name="penShape" hidden class='penShapeSel' id="shapeEllipse"><span>椭圆</span></label></td>
+            <td> <label><input type="radio" name="penShape" hidden class='penShapeSel' id="roundRect" ><span>圆角矩形</span></label></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="shapeOptions">
+        <label><input type="checkbox" id="strokeBlock" value='none' hidden checked> <span>轮廓</span></label>
+        <label><input type="checkbox" id="fillBlock" value='none' hidden> <span>填充</span></label>
+        <label><input type="radio" name="penShape" hidden class='penShapeSel' id="eraser"><span>橡皮擦</span></label>
+      </div>
+    </div>
+    <div class="strokeWidth">
       <input type="range" value="3" min="1" max="20" id="strokeWidthSel">
-    </span>
-    <span class="penShape">
-      <label><input type="radio" name="shape" class='penShapeSel' id="shapeDot" >点</label>
-      <label><input type="radio" name="shape" class='penShapeSel' id="shapeLine" >直线</label>
-      <label><input type="radio" name="shape" class='penShapeSel' id="shapeCurve">曲线</label>
-      <label><input type="radio" name="shape" class='penShapeSel' id="shapeRect">矩形</label>
-      <label><input type="radio" name="shape" class='penShapeSel' id="shapeEllipse">椭圆</label>
-      <label><input type="radio" name="shape" class='penShapeSel' id="eraser" checked>橡皮擦</label>
-      <span id="eraserBlock" style="top:0;left:0"></span>
-    </span>
-    <span class="fill">
-      <input type="checkbox" id="fillBlock" value="none"> 填充
-    </span>
-    <span class="others">
-      <button id="undoAction">撤销</button>
-      <button id="clearBoard">清空</button>
-    </span>
+      <span>线条宽度:3</span>
+    </div>
+    <div class="colors">
+      <div class="areaA">
+        <label for="noFillColor">
+          <input type="radio" id="noFillColor" name="pen" value="none" checked hidden>
+          <input type="color" value="#000000" id="colorSel">
+          <span>颜色1</span>
+        </label>
+        <label for="fillColor">
+          <input type="radio" id="fillColor" name="pen" value="none" hidden>
+          <input type="color" value="#ffffff" id="bgcolorSel">
+          <span>颜色2</span>
+        </label>
+      </div>
+      <div class="areaB">
+        <table class="colorSelBlocks">
+         <tbody>
+           <tr class="colorSelRow1">
+             <td style="background-color: #000000" title="黑色"></td>
+             <td style="background-color: #7f7f7f" title="灰色-50%"></td>
+             <td style="background-color: #880015" title="深红色"></td>
+             <td style="background-color: #ed1c24" title="红色"></td>
+             <td style="background-color: #ff7f27" title="橙色"></td>
+             <td style="background-color: #fff200" title="黄色"></td>
+             <td style="background-color: #22b14c" title="绿色"></td>
+             <td style="background-color: #00a2e8" title="青绿"></td>
+             <td style="background-color: #3f48cc" title="靛青"></td>
+             <td style="background-color: #a349a4" title="紫色"></td>
+           </tr>
+           <tr class="colorSelRow2">
+             <td style="background-color: #ffffff" title="白色"></td>
+             <td style="background-color: #c3c3c3" title="灰色-25%"></td>
+             <td style="background-color: #b97a57" title="褐色"></td>
+             <td style="background-color: #ffaec9" title="玫瑰色"></td>
+             <td style="background-color: #ffc90e" title="金色"></td>
+             <td style="background-color: #efe4b0" title="浅黄色"></td>
+             <td style="background-color: #b5e61d" title="酸橙色"></td>
+             <td style="background-color: #99d9ea" title="淡青绿色"></td>
+             <td style="background-color: #7092be" title="蓝灰色"></td>
+             <td style="background-color: #c8bfe7" title="淡紫色"></td>
+           </tr>
+           <tr class="colorSelRow3">
+             <td style="background-color: transparent"></td>
+             <td style="background-color: transparent"></td>
+             <td style="background-color: transparent"></td>
+             <td style="background-color: transparent"></td>
+             <td style="background-color: transparent"></td>
+             <td style="background-color: transparent"></td>
+             <td style="background-color: transparent"></td>
+             <td style="background-color: transparent"></td>
+             <td style="background-color: transparent"></td>
+             <td style="background-color: transparent"></td>
+           </tr>
+         </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="info">
+      <p id="note"></p>
+    </div>
   </div>
-  <div class="drawing">
-    <svg id="paintBoard">
-
-    </svg>
+  <div class="paintBoard">
+    <svg id="paintBoard" style="width:100%; height:800px"></svg>
+    <span id="eraserBlock" style="top:0; left:0; width:3px; height:3px; position:absolute; border:2px solid grey; display: none"></span>
   </div>
-  <script>
-    let svg = document.querySelector('svg')
-    let clickCount = 0
-    let lastX
-    let lastY
-    var endX
-    var endY
-    var controlX
-    var controlY
-    var centerX
-    var centerY
 
-    window.addEventListener('click', e => {
-      if (fillBlock.checked) {
-        fillBlock.value = bgcolorSel.value
-      } else {
-        fillBlock.value = 'none'
+<script>
+   strokeBlock.value = colorSel.value
+
+  // 粗细描述
+  strokeWidthSel.addEventListener('mousemove', e=> {
+    let strokeWidthText = document.querySelector('#strokeWidthSel + span')
+    strokeWidthText.innerHTML = `线条宽度:${strokeWidthSel.value}`
+  })
+
+  // 颜色
+  window.addEventListener('click', e=> {
+    // 颜色选择功能
+    if (e.target.matches('.colorSelBlocks td')) {
+      if (noFillColor.checked) {
+        colorSel.value =  RGBtoHex(e.target.style.backgroundColor)
       }
+      if (fillColor.checked) {
+        bgcolorSel.value = RGBtoHex(e.target.style.backgroundColor)
+      }
+      e.preventDefault()
+    }
+    if (e.target.matches('#colorSel')) {
+      noFillColor.checked =true
+    }
+    if (e.target.matches('#bgcolorSel')) {
+      fillColor.checked =true
+    }
+
+    // 描边填充选择功能
+    if (fillBlock.checked) {
+      fillBlock.value = bgcolorSel.value
+    } else {
+      fillBlock.value = 'none'
+    }
+    if (strokeBlock.checked) {
+      strokeBlock.value = colorSel.value
+    } else {
+      strokeBlock.value = 'none'
+    }
+  })
+  function RGBtoHex(color) {
+    return '#' + color.slice(4,-1).split(', ').map(toHex).join('')
+    function toHex(int) {
+      let res = ''
+      let map = ['a','b','c','d','e','f']
+      let i = 1
+      if (int < 10) {
+        return '0' + int
+      } else if (int < 16) {
+        return '0' + map[int - 10]
+      }
+
+      while(int >= 16) {
+        let decDigit = int % 16
+        if (decDigit >= 10) {
+          res = map[decDigit - 10] + res
+        } else {
+          res = decDigit + res
+        }
+        int = (int - decDigit) / 16
+      }
+      if (int >= 10) {
+          res = map[int % 16 - 10] + res
+      } else if (int > 0) {
+        res = int + res
+      }
+      return res
+    }
+  }
+
+  // 清空 撤销 保存
+  clearButton.addEventListener('click', clear)
+  undoButton.addEventListener('click', undo)
+  saveButton.addEventListener('click',save)
+  window.addEventListener('keydown', e=> {
+    if (e.ctrlKey) {
+      // 撤销
+      if (e.code == 'KeyZ') {
+        undo(e)
+      }
+      // 清空
+      if (e.code == 'KeyL') {
+        clear(e)
+        e.preventDefault()
+      }
+      if (e.code == 'KeyS') {
+        save(e)
+        e.preventDefault()
+      }
+    }
+  })
+  function undo(e) {
+    let line = document.querySelector('path:last-child')
+    svg.removeChild(line)
+  }
+  function save(e) {
+    let anchor = document.createElement('a')
+    let blob = new Blob([svg.outerHTML], {type: 'image/svg+xml'})
+    let href = URL.createObjectURL(blob)
+    anchor.href = href
+    anchor.download = '画的画'
+    anchor.click()
+  }
+  function clear(e) {
+    svg.innerHTML = ''
+    clickCount = 0
+  }
+
+
+  // 备注信息显示
+  window.addEventListener('mousemove', e=> {
+    if (e.target.matches('#shapeRect + span') || e.target.matches('#roundRect + span')) {
+      note.innerHTML = '配合 <kbd>shift<\/kbd> 可以画正方形'
+    } else if (e.target.matches('#shapeEllipse + span')) {
+      note.innerHTML = '配合 <kbd>shift<\/kbd> 可以画圆'
+    } else if (e.target.matches('#shapeCurve + span')) {
+      note.innerHTML = '画线确定初始点和结束点，画点确定控制点, <br>再画点确定三次贝塞尔曲线中点。'
+    } else if (e.target == clearButton) {
+      note.innerHTML = '清空操作不可撤销!'
+    } else if (shapeRect.checked || roundRect.checked) {
+      note.innerHTML = '配合 <kbd>shift<\/kbd> 可以画正方形'
+    } else if (shapeEllipse.checked) {
+      note.innerHTML = '配合 <kbd>shift<\/kbd> 可以画圆'
+    } else if (shapeCurve.checked) {
+      note.innerHTML = '画线确定初始点和结束点，画点确定控制点, <br>再画点确定三次贝塞尔曲线中点。'
+    } else {
+      note.innerHTML = ''
+    }
+  })
+
+  // 禁止文本选中
+  window.addEventListener('mousemove', e=> {
+    e.preventDefault()
+  })
+
+  // svg
+  let svg = document.querySelector('svg')
+  let line
+  let clickCount = 0
+  let lastX
+  let lastY
+  let endX
+  let endY
+  let controlX
+  let controlY
+  let centerX
+  let centerY
+  let initialX
+  let initialY
+
+  let dx = svg.getBoundingClientRect().x
+  let dy = svg.getBoundingClientRect().y
+
+  svg.addEventListener('mousedown', function(e) {
+    e.preventDefault()
+
+    if (!shapeCurve.checked) {
+      clickCount = 0
+    }
+    if (clickCount == 0) {
+      lastX = e.pageX - dx
+      lastY = e.pageY - dy
+    }
+
+    line = elt('path', {
+      d: `M ${lastX} ${lastY} L ${lastX} ${lastY}`,
+      fill: fillBlock.value,
+      stroke: strokeBlock.value,
+      'stroke-width': strokeWidthSel.value,
+      'stroke-linecap': 'square',
     })
 
-    svg.addEventListener('mousedown', function(e) {
 
-      if (!shapeCurve.checked) {
-        clickCount = 0
-      }
-      if (clickCount == 0) {
-        lastX = e.offsetX
-        lastY = e.offsetY
-      }
 
-      let line = elt('path', {
-        d: `M ${lastX} ${lastY} L ${lastX} ${lastY}`,
-        fill: fillBlock.value,
-        stroke: colorSel.value,
-        'stroke-width': strokeWidthSel.value,
+    if (shapeDot.checked) {
+      window.addEventListener('mousemove', drawDot)
+      svg.addEventListener('mouseup', function(e) {
+        window.removeEventListener('mousemove', drawDot)
       })
-
-      if (shapeDot.checked) {
-        window.addEventListener('mousemove', drawDot)
-        svg.addEventListener('mouseup', function(e) {
-          window.removeEventListener('mousemove', drawDot)
-        })
-      } else if (shapeLine.checked) {
+    }
+    if (shapeLine.checked) {
+      window.addEventListener('mousemove', drawLine)
+      window.addEventListener('mouseup', function(e) {
+      window.removeEventListener('mousemove', drawLine)
+      })
+    }
+    if (shapeRect.checked) {
+      window.addEventListener('mousemove', drawRect)
+      window.addEventListener('mouseup', function(e) {
+        window.removeEventListener('mousemove', drawRect)
+      })
+    }
+    if (shapeEllipse.checked) {
+      window.addEventListener('mousemove', drawEllipse)
+      window.addEventListener('mouseup', function(e) {
+        window.removeEventListener('mousemove', drawEllipse)
+      })
+    }
+    if (shapeCurve.checked) {
+      if (clickCount == 0) {
         window.addEventListener('mousemove', drawLine)
         window.addEventListener('mouseup', function(e) {
-        window.removeEventListener('mousemove', drawLine)
+          window.removeEventListener('mousemove', drawLine)
         })
-      }
-      if (shapeRect.checked) {
-        window.addEventListener('mousemove', drawRect)
+        clickCount++
+      } else if (clickCount == 1) {
+        let ex = document.querySelector('svg path:last-child')
+        svg.removeChild(ex)
+        window.addEventListener('mousemove', drawQuadraticCurve)
         window.addEventListener('mouseup', function(e) {
-          window.removeEventListener('mousemove', drawRect)
+          window.removeEventListener('mousemove', drawQuadraticCurve)
         })
-      } else if (shapeEllipse.checked) {
-        window.addEventListener('mousemove', drawEllipse)
+        clickCount++
+      } else if (clickCount == 2) {
+        let ex = document.querySelector('svg path:last-child')
+        svg.removeChild(ex)
+        window.addEventListener('mousemove', drawCubeCurve)
         window.addEventListener('mouseup', function(e) {
-          window.removeEventListener('mousemove', drawEllipse)
+          window.removeEventListener('mousemove', drawCubeCurve)
         })
+        clickCount = 0
       }
-      if (shapeCurve.checked) {
-        if (clickCount == 0) {
-          window.addEventListener('mousemove', drawLine)
-          window.addEventListener('mouseup', function(e) {
-            window.removeEventListener('mousemove', drawLine)
-          })
-          clickCount++
-        } else if (clickCount == 1) {
-          let ex = document.querySelector('svg path:last-child')
-          svg.removeChild(ex)
-          window.addEventListener('mousemove', drawQuadraticCurve)
-          window.addEventListener('mouseup', function(e) {
-            window.removeEventListener('mousemove', drawQuadraticCurve)
-          })
-          clickCount++
-        } else if (clickCount == 2) {
-          let ex = document.querySelector('svg path:last-child')
-          svg.removeChild(ex)
-          window.addEventListener('mousemove', drawCubeCurve)
-          window.addEventListener('mouseup', function(e) {
-            window.removeEventListener('mousemove', drawCubeCurve)
-          })
-          clickCount = 0
-        }
-      }
-      if (eraser.checked) {
-        window.addEventListener('mousemove', erase)
-        window.addEventListener('mouseup', function(e) {
-            window.removeEventListener('mousemove', erase)
-        })
-      }
-
-
-      svg.appendChild(line)
-
-      function drawDot(e) {
-        let path = line.getAttribute('d')
-        path += `L ${e.offsetX} ${e.offsetY}`
-        line.setAttribute('d', path)
-        line.setAttribute('fill', 'none')
-      }
-
-      function drawLine(e) {
-        endX = e.offsetX
-        endY = e.offsetY
-        let path = `M ${lastX} ${lastY} L ${e.offsetX} ${e.offsetY}`
-        line.setAttribute('d', path)
-      }
-
-      function drawRect(e) {
-        let path
-        if (e.shiftKey) {
-        path = `M ${lastX} ${lastY} H ${e.offsetX} V ${e.offsetX - lastX + lastY} H ${lastX} V ${lastY}`
-        } else {
-          path = `M ${lastX} ${lastY} H ${e.offsetX} V ${e.offsetY} H ${lastX} V ${lastY}`
-        }
-        line.setAttribute('d', path)
-      }
-
-      function drawEllipse(e) {
-        let rx = (e.offsetX-lastX)/2
-        let ry = (e.offsetY-lastY)/2
-        if (e.shiftKey) {
-          ry = rx
-        }
-        let path = `M ${lastX} ${lastY}
-                A ${rx} ${ry} 0 1 0 ${e.offsetX} ${e.offsetY}
-                A ${rx} ${ry} 0 0 0 ${lastX} ${lastY}`
-        line.setAttribute('d', path)
-      }
-
-      function drawQuadraticCurve(e) {
-        controlX = e.offsetX
-        controlY = e.offsetY
-        let path = `M ${lastX} ${lastY} Q ${e.offsetX} ${e.offsetY} ${endX} ${endY}`
-        line.setAttribute('d', path)
-      }
-
-      function drawCubeCurve(e) {
-        let path = `M ${lastX} ${lastY} Q ${controlX} ${controlY} ${e.offsetX} ${e.offsetY} T ${ endX} ${endY}`
-        line.setAttribute('d', path)
-        console.log(clickCount)
-      }
-
-
-      // svg.addEventListener('mousemove',eraseFollow)
-
-      // function eraseFollow(e) {
-      //   if (eraser.checked) {
-      //     eraserBlock.style.left = e.pageX -5 +  'px'
-      //     eraserBlock.style.top = e.pageY -5 + 'px'
-      //     console.log(e.pageX)
-      //   }
-      //   svg.addEventListener('mouseup', e => {
-      //     svg.removeEventListener(eraseFollow)
-      //   })
-      // }
-
-      function erase(e) {
-        let path = line.getAttribute('d')
-        path += `L ${e.offsetX} ${e.offsetY}`
-        line.setAttribute('d', path)
-        line.setAttribute('fill', 'none')
-        line.setAttribute('stroke', 'white')
-      }
-
-
-    })
-
-
-
-    // 清空
-    clearBoard.addEventListener('click', e => {
-      svg.innerHTML = ''
-    })
-
-    // 撤销
-    undoAction.addEventListener('click', e => {
-      let child = document.querySelector('svg path:last-child')
-      svg.removeChild(child)
-    })
-
-    window.addEventListener('keydown', function(e) {
-      if (e.ctrlKey && e.code =='KeyZ') {
-        let line = document.querySelector('path:last-child')
-        svg.removeChild(line)
-      }
-
-    })
-
-
-    function elt(tagName, attrs={}, ...children) {
-      let node = document.createElementNS('http://www.w3.org/2000/svg', tagName)
-      for (let key in attrs) {
-        let val = attrs[key]
-        node.setAttribute(key, val)
-      }
-      for (let child of children) {
-        if (typeof child == 'string') {
-          child = document.createTextNode(child)
-        } else {
-          child = document.createElementNode(child)
-        }
-        node.appendChild(child)
-      }
-      return node
     }
-  </script>
+    if (eraser.checked) {
+      window.addEventListener('mousemove', erase)
+      window.addEventListener('mouseup', function(e) {
+          window.removeEventListener('mousemove', erase)
+      })
+    }
+    if (roundRect.checked) {
+      window.addEventListener('mousemove', drawRoundRect)
+      window.addEventListener('mouseup', function(e) {
+          window.removeEventListener('mousemove', drawRoundRect)
+      })
+    }
+    // if (polygon.checked) {
+    //   if (clickCount == 0) {
+    //     initialX = e.pageX - dx
+    //     initialY = e.pageY - dy
+    //     window.addEventListener('mousemove', drawLine)
+    //     window.addEventListener('mouseup', function(e) {
+    //       window.removeEventListener('mousemove', drawLine)
+    //     })
+    //     clickCount++
+    //   }
+    //   else if (clickCount == 1) {
+    //     line = document.querySelector('svg path')
+    //     let extraLine = document.querySelector('svg path:last-child')
+    //     svg.removeChild(extraLine)
+    //     window.addEventListener('mousedown', drawPolygon)
+
+    //     function drawPolygon(e) {
+    //       let diffX = e.pageX - dx - initialX
+    //       let diffY = e.pageY - dy - initialY
+    //       let path = line.getAttribute('d')
+    //       debugger;
+    //       path += `L ${e.pageX - dx} ${e.pageY - dy}`
+    //       if (diffX < 10 && diffY < 10) {
+    //         path += ` Z`
+    //         line.setAttribute('d', path)
+    //         window.removeEventListener('mousedown', drawPolygon)
+    //         initialX = 0
+    //         initialY = 0
+    //         clickCount = 0
+    //       }
+    //       line.setAttribute('d', path)
+    //       console.log(diffX, diffY)
+    //     }
+
+    //   }
+    // }
+
+
+    svg.appendChild(line)
+  })
+
+  function drawDot(e) {
+    let path = line.getAttribute('d')
+    path += `L ${e.pageX - dx} ${e.pageY - dy}`
+    line.setAttribute('d', path)
+    line.setAttribute('fill', 'none')
+  }
+
+  function drawLine(e) {
+    endX = e.pageX - dx
+    endY = e.pageY - dy
+    let path = `M ${lastX} ${lastY} L ${e.pageX - dx} ${e.pageY - dy}`
+    line.setAttribute('d', path)
+  }
+
+  function drawRect(e) {
+    let path
+
+    if (!e.shiftKey) {
+      path = `M ${lastX} ${lastY} H ${e.pageX - dx} V ${e.pageY - dy} H ${lastX} V ${lastY}`
+    } else { // 正方形 计算边长时需要考虑起点和终点横纵坐标的大小比较问题
+      if ((e.pageX - dx - lastX) * (e.pageY - dy - lastY) < 0) {
+        path = `M ${lastX} ${lastY} H ${e.pageX - dx} V ${lastY - (e.pageX - dx - lastX)} H ${lastX} V ${lastY}`
+      } else {
+        path = `M ${lastX} ${lastY} H ${e.pageX - dx} V ${lastY + (e.pageX - dx - lastX)} H ${lastX} V ${lastY}`
+      }
+    }
+    line.setAttribute('d', path)
+  }
+
+  function drawRoundRect(e) {
+    line.setAttribute('stroke-linejoin', 'round')
+    line.setAttribute('stroke-linecap', 'round')
+    drawRect(e)
+  }
+
+  function drawEllipse(e) {
+    let rx = (e.pageX - dx-lastX)/2
+    let ry = (e.pageY - dx-lastY)/2
+    if (e.shiftKey) {
+      ry = rx
+    }
+    let path = `M ${lastX} ${lastY}
+            A ${rx} ${ry} 0 1 0 ${e.pageX - dx} ${e.pageY - dy}
+            A ${rx} ${ry} 0 0 0 ${lastX} ${lastY}`
+    line.setAttribute('d', path)
+  }
+
+  function drawQuadraticCurve(e) {
+    controlX = e.pageX - dx
+    controlY = e.pageY - dy
+    let path = `M ${lastX} ${lastY} Q ${e.pageX - dx} ${e.pageY - dy} ${endX} ${endY}`
+    line.setAttribute('d', path)
+  }
+
+  function drawCubeCurve(e) {
+    let path = `M ${lastX} ${lastY} Q ${controlX} ${controlY} ${e.pageX - dx} ${e.pageY - dy} T ${ endX} ${endY}`
+    line.setAttribute('d', path)
+  }
+
+  // window.addEventListener('mousemove',eraseFollow)
+
+  // function eraseFollow(e) {
+  //   if (eraser.checked) {
+  //     if (e.clientY > dy) {
+  //       let borderWidth = strokeWidthSel.value
+  //       eraserBlock.style.display = 'block';
+  //       eraserBlock.style.left = e.clientX - borderWidth / 2 + 'px',
+  //       eraserBlock.style.top = e.clientY - borderWidth / 2 + 'px',
+  //       eraserBlock.style.width = borderWidth + 'px'
+  //       eraserBlock.style.height = borderWidth + 'px'
+  //     } else {
+  //       eraserBlock.style.display = 'none';
+  //     }
+  //   }
+  //   svg.addEventListener('mouseup', e => {
+  //     svg.addEventListener('mousemove',eraseFollow)
+  //   })
+  // }
+
+  function erase(e) {
+    let path = line.getAttribute('d')
+    path += `L ${e.pageX - dx} ${e.pageY - dy}`
+    line.setAttribute('d', path)
+    line.setAttribute('fill', 'none')
+    line.setAttribute('stroke', 'white')
+  }
+
+
+  function elt(tagName, attrs={}, ...children) {
+    let node = document.createElementNS('http://www.w3.org/2000/svg', tagName)
+    for (let key in attrs) {
+      let val = attrs[key]
+      node.setAttribute(key, val)
+    }
+    for (let child of children) {
+      if (typeof child == 'string') {
+        child = document.createTextNode(child)
+      } else {
+        child = document.createElementNode(child)
+      }
+      node.appendChild(child)
+    }
+    return node
+  }
+
+
+
+</script>
 </body>
 </html>
