@@ -53,7 +53,6 @@
   </div>
   <div class="text">
     <p id="moveP"> 使用 <kbd>↑</kbd> <kbd>↓</kbd> <kbd>←</kbd> <kbd>→</kbd> 或 <kbd>W</kbd> <kbd>S</kbd> <kbd>A</kbd> <kbd>D</kbd> 移动   使用 <kbd>shift</kbd> 加速</p>
-    <p id="dragP">点住鼠标左键可以拖拽</p>
   </div>
 </body>
 
@@ -148,30 +147,4 @@
   })
 </script>
 
-<!-- 物体拖拽脚本 -->
-<script>
-
-  let leftMouseDown = false
-  window.addEventListener('mousedown', function(e) {
-    if (e.which) {
-      e.which== 1 ? leftMouseDown = true : leftMouseDown = false
-    } else {
-      e.buttons == 1 ? leftMouseDown = true : leftMouseDown = false
-    }
-    e.preventDefault()
-  })
-
-  window.addEventListener('mouseup', function(e){
-    leftMouseDown = false
-  })
-
-  window.addEventListener('mousemove', function(e) {
-    if (leftMouseDown) {
-      moveBlock.style.top = e.pageY - 5 + 'px'
-      moveBlock.style.left = e.pageX - 5 + 'px'
-    }
-    e.preventDefault()
-  })
-
-</script>
 </html>
