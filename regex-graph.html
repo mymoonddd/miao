@@ -67,12 +67,12 @@
     <span id='info'></span>
   </div>
   <div class="userInput">
-    <label><input type="text" id="regInput" placeholder="请输入正则表达式 例如“^[a-zA-Z0-9]{4,16}$”" value=""></label>
+    <label><input type="text" id="regInput" placeholder="请输入正则表达式 例如“^[a-zA-Z0-9]{4,16}$”" value="^(p|d|(ccc|ddd|eee|fff))(hufa|(a{2,4}b*c?)*([^aeiou]*)*(cd|ef|((f+o*)+[odv]+)+dd)+c[def]|def|abc)$"></label>
     <button id="regInputButton">绘制铁路图</button>
     <button id="downloadButton">下载SVG图片</button>
   </div>
   <div class="resultPre">
-    <svg></svg>
+    <svg version="1.1" baseProfile="full" xmlns="http://www.w3.org/2000/svg"></svg>
   </div>
 </body>
   <script>
@@ -109,7 +109,6 @@
       try {
         let regNode = parseRegularExpression(input)
         let graph = createRegularExpressionGraph(regNode)
-        console.log(info)
         svg.setAttribute('width', graph.width)
         svg.setAttribute('height', graph.height)
         info.innerHTML=''
@@ -924,7 +923,7 @@
               max: part.max,
               element: repeatChar,
             }
-          } else if (prev.type == 'CharacterClass') {
+          } else {
             part = {
               type:'Quantifier',
               start: prev.start,
