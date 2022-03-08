@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>Paint Board</title>
   <style>
     x* {
       background-color: rgba(0,0,0,0.08);
@@ -76,11 +76,12 @@
 
     .shapes .penShape td {
       font-size: 0.78em;
+      background-color: #fff;
     }
 
     .shapes .penShape td span {
       display: inline-block;
-      width: 70px;
+      width: 30px;
       border: 1px solid rgba(128, 128, 128, 0.233);
     }
 
@@ -208,14 +209,34 @@
       <table class="penShape">
         <tbody>
           <tr>
-            <td><label><input type="radio" name="penShape" hidden class='penShapeSel' id="shapeDot"checked ><span>点</span></label></td>
-            <td><label><input type="radio" name="penShape" hidden class='penShapeSel' id="shapeLine" ><span>直线</span></label></td>
-            <td><label><input type="radio" name="penShape" hidden class='penShapeSel' id="shapeCurve"><span>曲线</span></label></td>
+            <td><label><input type="radio" name="penShape" hidden class='penShapeSel' id="shapeDot" checked><span title="点"> · </span></label></td>
+            <td><label><input type="radio" name="penShape" hidden class='penShapeSel' id="shapeLine" ><span title="直线">╱</span></label></td>
+            <td><label><input type="radio" name="penShape" hidden class='penShapeSel' id="shapeCurve"><span title="曲线">~</span></label></td>
+            <td><label><input type="radio" name="penShape" hidden class='penShapeSel' id="shapeRect"><span title="矩形">▭</span></label></td>
           </tr>
           <tr>
-            <td><label><input type="radio" name="penShape" hidden class='penShapeSel' id="shapeRect"><span>矩形</span></label></td>
-            <td><label><input type="radio" name="penShape" hidden class='penShapeSel' id="shapeEllipse"><span>椭圆</span></label></td>
-            <td> <label><input type="radio" name="penShape" hidden class='penShapeSel' id="roundRect" ><span>圆角矩形</span></label></td>
+            <td><label><input type="radio" name="penShape" hidden class='penShapeSel' id="shapeEllipse"><span title="椭圆">O</span></label></td>
+            <td> <label><input type="radio" name="penShape" hidden class='penShapeSel' id="roundRect" ><span title="圆角矩形">▢</span></label></td>
+            <td><label><input type="radio" name="penShape" hidden class='penShapeSel' id="shapeTri"><span title="三角形">∆</span></label></td>
+            <td><label><input type="radio" name="penShape" hidden class='penShapeSel' id="shapeRt"><span title="直角三角形">⊿</span></label></td>
+          </tr>
+          <tr>
+            <td> <label><input type="radio" name="penShape" hidden class='penShapeSel' id="shapeDiamond" ><span title="菱形">⬨</span></label></td>
+            <td> <label><input type="radio" name="penShape" hidden class='penShapeSel' id="pentagon" ><span title="五边形">⬠</span></label></td>
+            <td> <label><input type="radio" name="penShape" hidden class='penShapeSel' id="hexagon" ><span title="六边形">⬡</span></label></td>
+            <td> <label><input type="radio" name="penShape" hidden class='penShapeSel' id="arrowRight" ><span title="左右箭头">⇨</span></label></td>
+          </tr>
+          <tr>
+            <td> <label><input type="radio" name="penShape" hidden class='penShapeSel' id="arrowUp" ><span title="上下箭头">⇧</span></label></td>
+            <td> <label><input type="radio" name="penShape" hidden class='penShapeSel' id="FourAngleStar" ><span title="四角星">✧</span></label></td>
+            <td> <label><input type="radio" name="penShape" hidden class='penShapeSel' id="Pentagram" ><span title="五角星">✰</span></label></td>
+            <td> <label><input type="radio" name="penShape" hidden class='penShapeSel' id="Hexagram" ><span title="六角星">✡</span></label></td>
+          </tr>
+          <tr>
+            <td> <label><input type="radio" name="penShape" hidden class='penShapeSel' id="Heart" ><span title="心形">🤍</span></label></td>
+            <td> <label><input type="radio" name="penShape" hidden class='penShapeSel' id="MessageRect" ><span title="方角对话框">🗨️</span></label></td>
+            <td> <label><input type="radio" name="penShape" hidden class='penShapeSel' id="MessageRound" ><span title="圆角对话框">🗨︎</span></label></td>
+            <td> <label><input type="radio" name="penShape" hidden class='penShapeSel' id="MessageShape" ><span title="锯齿对话框">🗯️</span></label></td>
           </tr>
         </tbody>
       </table>
@@ -405,23 +426,29 @@
 
   // 备注信息显示
   window.addEventListener('mousemove', e=> {
+    let n
     if (e.target.matches('#shapeRect + span') || e.target.matches('#roundRect + span')) {
-      note.innerHTML = '配合 <kbd>shift<\/kbd> 可以画正方形'
+      n = '配合 <kbd>shift<\/kbd> 可以画正方形'
     } else if (e.target.matches('#shapeEllipse + span')) {
-      note.innerHTML = '配合 <kbd>shift<\/kbd> 可以画圆'
+      n = '配合 <kbd>shift<\/kbd> 可以画圆'
     } else if (e.target.matches('#shapeCurve + span')) {
-      note.innerHTML = '画线确定初始点和结束点，画点确定控制点, <br>再画点确定三次贝塞尔曲线中点。'
+      n = '画线确定初始点和结束点，画点确定控制点, <br>再画点确定三次贝塞尔曲线中点。'
+    } else if (e.target == saveButton) {
+      n = '<kbd>ctrl</kbd> + <kbd>s</kbd>'
+    } else if (e.target == undoButton) {
+      n = '<kbd>ctrl</kbd> + <kbd>z</kbd>'
     } else if (e.target == clearButton) {
-      note.innerHTML = '清空操作不可撤销!'
+      n = '<kbd>ctrl</kbd> + <kbd>l</kbd> 清空操作不可撤销!'
     } else if (shapeRect.checked || roundRect.checked) {
-      note.innerHTML = '配合 <kbd>shift<\/kbd> 可以画正方形'
+      n = '配合 <kbd>shift<\/kbd> 可以画正方形'
     } else if (shapeEllipse.checked) {
-      note.innerHTML = '配合 <kbd>shift<\/kbd> 可以画圆'
+      n = '配合 <kbd>shift<\/kbd> 可以画圆'
     } else if (shapeCurve.checked) {
-      note.innerHTML = '画线确定初始点和结束点，画点确定控制点, <br>再画点确定三次贝塞尔曲线中点。'
+      n = '画线确定初始点和结束点，画点确定控制点, <br>再画点确定三次贝塞尔曲线中点。'
     } else {
-      note.innerHTML = ''
+      n = ''
     }
+    note.innerHTML = n
   })
 
   // 禁止文本选中
@@ -467,68 +494,121 @@
     })
 
 
-
     if (shapeDot.checked) {
-      window.addEventListener('mousemove', drawDot)
-      svg.addEventListener('mouseup', function(e) {
-        window.removeEventListener('mousemove', drawDot)
-      })
+      func = drawDot
     }
     if (shapeLine.checked) {
-      window.addEventListener('mousemove', drawLine)
-      window.addEventListener('mouseup', function(e) {
-      window.removeEventListener('mousemove', drawLine)
-      })
+      func = drawLine
     }
     if (shapeRect.checked) {
-      window.addEventListener('mousemove', drawRect)
-      window.addEventListener('mouseup', function(e) {
-        window.removeEventListener('mousemove', drawRect)
-      })
+      func = drawRect
     }
     if (shapeEllipse.checked) {
-      window.addEventListener('mousemove', drawEllipse)
-      window.addEventListener('mouseup', function(e) {
-        window.removeEventListener('mousemove', drawEllipse)
-      })
+      func = drawEllipse
+    }
+    if (eraser.checked) {
+      func = erase
+    }
+    if (roundRect.checked) {
+      func = drawRoundRect
+    }
+    if (shapeTri.checked) {
+      func = drawShapeTri
+    }
+    if (shapeRt.checked) {
+      func = drawShapeRt
+    }
+    if (shapeDiamond.checked) {
+      func = drawShapeDiamond
+    }
+    if (pentagon.checked) {
+      func = drawPentagon
+    }
+    if (hexagon.checked) {
+      func = drawHexagon
+    }
+    if (arrowRight.checked) {
+      func = drawArrowRight
+    }
+    if (arrowUp.checked) {
+      func = drawArrowUp
+    }
+    if (FourAngleStar.checked) {
+      func = drawFourAngleStar
+    }
+    if (Pentagram.checked) {
+      func = drawPentagram
+    }
+    if (Hexagram.checked) {
+      func = drawHexagram
+    }
+    if (Heart.checked) {
+      func = drawHeart
+    }
+    if (MessageRect.checked) {
+      func = drawMessageRect
+    }
+    if (MessageRound.checked) {
+      func = drawMessageRound
+    }
+    if (MessageShape.checked) {
+      func = drawMessageShape
     }
     if (shapeCurve.checked) {
       if (clickCount == 0) {
-        window.addEventListener('mousemove', drawLine)
-        window.addEventListener('mouseup', function(e) {
-          window.removeEventListener('mousemove', drawLine)
-        })
+        func = drawLine
         clickCount++
       } else if (clickCount == 1) {
         let ex = document.querySelector('svg path:last-child')
         svg.removeChild(ex)
-        window.addEventListener('mousemove', drawQuadraticCurve)
-        window.addEventListener('mouseup', function(e) {
-          window.removeEventListener('mousemove', drawQuadraticCurve)
-        })
+        func = drawQuadraticCurve
         clickCount++
       } else if (clickCount == 2) {
         let ex = document.querySelector('svg path:last-child')
         svg.removeChild(ex)
-        window.addEventListener('mousemove', drawCubeCurve)
-        window.addEventListener('mouseup', function(e) {
-          window.removeEventListener('mousemove', drawCubeCurve)
-        })
+        func = drawCubeCurve
         clickCount = 0
       }
     }
-    if (eraser.checked) {
-      window.addEventListener('mousemove', erase)
-      window.addEventListener('mouseup', function(e) {
-          window.removeEventListener('mousemove', erase)
-      })
+
+    window.addEventListener('mousemove', func)
+    window.addEventListener('mouseup', function(e) {
+      window.removeEventListener('mousemove', func)
+    })
+
+    function drawHeart(e) {
+      let diffV = (e.pageY - dy - lastY) / 5
+      let diffH = (e.pageX - dx - lastX) / 2
+      let path = `
+        M ${lastX + diffH} ${lastY + diffV*1.8}
+        Q ${lastX + diffH*2} ${lastY} ${lastX + diffH*2 - 10} ${lastY + diffV*2}
+        T ${lastX + diffH} ${lastY + diffV*5}
+        M ${lastX + diffH} ${lastY + diffV*1.8}
+        Q ${lastX} ${lastY} ${lastX + 10} ${lastY + diffV*2}
+        T ${lastX + diffH} ${lastY + diffV*5}
+      `
+      line.setAttribute('d', path)
     }
-    if (roundRect.checked) {
-      window.addEventListener('mousemove', drawRoundRect)
-      window.addEventListener('mouseup', function(e) {
-          window.removeEventListener('mousemove', drawRoundRect)
-      })
+
+    function drawMessageRect(e) {
+      let diffH = (e.pageX - dx - lastX) / 6
+      let diffV = (e.pageY - dy - lastY) / 7
+      let path = `
+        M ${lastX} ${lastY + diffV}
+        Q ${lastX} ${lastY} ${lastX + diffH} ${lastY}
+        H ${lastX + diffH*5}
+        Q ${lastX + diffH*6} ${lastY} ${lastX + diffH*6} ${lastY + diffV}
+        V ${lastY + diffV*5}
+        Q ${lastX + diffH*6} ${lastY + diffV*6} ${lastX + diffH*5} ${lastY + diffV*6}
+        L ${lastX + diffH*4.5} ${lastY + diffV*6.8}
+        L ${lastX + diffH*4} ${lastY + diffV*6}
+        H ${lastX + diffH}
+        Q ${lastX} ${lastY + diffV*6} ${lastX} ${lastY + diffV*5}
+        Z
+      `
+      line.setAttribute('d', path)
     }
+
     // if (polygon.checked) {
     //   if (clickCount == 0) {
     //     initialX = e.pageX - dx
@@ -566,7 +646,6 @@
     //   }
     // }
 
-
     svg.appendChild(line)
   })
 
@@ -586,7 +665,6 @@
 
   function drawRect(e) {
     let path
-
     if (!e.shiftKey) {
       path = `M ${lastX} ${lastY} H ${e.pageX - dx} V ${e.pageY - dy} H ${lastX} V ${lastY}`
     } else { // 正方形 计算边长时需要考虑起点和终点横纵坐标的大小比较问题
@@ -599,10 +677,41 @@
     line.setAttribute('d', path)
   }
 
+//   window.addEventListener('beforeunload', function (e) {
+//     e.returnValue = ''
+// });
+
   function drawRoundRect(e) {
-    line.setAttribute('stroke-linejoin', 'round')
+    let r = 5
+    let path = `
+      M ${lastX} ${lastY +r}
+      Q ${lastX} ${lastY} ${lastX +r} ${lastY}
+      H ${e.pageX -dx -r}
+      Q ${e.pageX -dx} ${lastY} ${e.pageX -dx} ${lastY +r}
+      V ${e.pageY -dy -r}
+      Q ${e.pageX -dx} ${e.pageY -dy} ${e.pageX -dx -r} ${e.pageY -dy}
+      H ${lastX + r}
+      Q ${lastX} ${e.pageY -dy} ${lastX} ${e.pageY -dy -r}
+      Z
+    `
+
     line.setAttribute('stroke-linecap', 'round')
+    line.setAttribute('stroke-linejoin', 'round')
     drawRect(e)
+
+    // svg.removeChild(line)
+    // line = elt('rect', {
+    //   x: e.pageX - dx,
+    //   y: e.pageY - dy,
+    //   width: Math.abs(e.pageX - dx - lastX),
+    //   height: Math.abs(e.pageY - dy - lastY),
+    //   fill: fillBlock.value,
+    //   stroke: strokeBlock.value,
+    //   'stroke-width': strokeWidthSel.value,
+    //   rx: 10,
+    //   ry: 10,
+    // })
+    // svg.appendChild(line)
   }
 
   function drawEllipse(e) {
@@ -626,6 +735,154 @@
 
   function drawCubeCurve(e) {
     let path = `M ${lastX} ${lastY} Q ${controlX} ${controlY} ${e.pageX - dx} ${e.pageY - dy} T ${ endX} ${endY}`
+    line.setAttribute('d', path)
+  }
+  function drawShapeTri(e) {
+    let path
+    path = `
+      M ${(e.pageX - dx - lastX)/2 + lastX} ${lastY}
+      L ${lastX} ${e.pageY - dy}
+      L ${e.pageX - dx} ${e.pageY - dy}
+      Z`
+    line.setAttribute('d', path)
+  }
+  function drawShapeRt(e) {
+    let path
+    path = `
+      M ${lastX} ${lastY}
+      L ${lastX} ${e.pageY - dy}
+      L ${e.pageX - dx} ${e.pageY - dy}
+      Z`
+    line.setAttribute('d', path)
+  }
+  function drawShapeDiamond(e) {
+    let path
+    path = `
+      M ${lastX} ${(e.pageY - dy - lastY) / 2 + lastY}
+      L ${(e.pageX - dx - lastX) / 2 + lastX} ${lastY}
+      L ${e.pageX - dx} ${(e.pageY - dy - lastY) / 2 + lastY}
+      L ${(e.pageX - dx - lastX) / 2 + lastX} ${e.pageY - dy}
+      Z
+      `
+      line.setAttribute('d', path)
+    }
+  function drawPentagon(e) {
+    let path
+    let topX = (e.pageX - dx - lastX) / 2 + lastX
+    let edgeY = (e.pageY - dy - lastY) / 3 + lastY
+    let midXL = (topX - lastX) / 3 + lastX
+    let midXR = e.pageX - (topX - lastX) / 3
+    path = `
+      M ${topX} ${lastY}
+      L ${e.pageX - dx} ${edgeY}
+      L ${midXR} ${e.pageY - dy}
+      L ${midXL} ${e.pageY - dy}
+      L ${lastX} ${edgeY}
+      Z
+    `
+    line.setAttribute('d', path)
+  }
+  function drawHexagon(e) {
+    let path
+    let diffH = (e.pageX - dx - lastX) / 2
+    let diffV = (e.pageY - dy - lastY) / 4
+    path = `
+      M ${lastX + diffH} ${lastY}
+      L ${e.pageX - dx} ${lastY + diffV}
+      L ${e.pageX - dx} ${lastY + 3*diffV}
+      L ${lastX + diffH} ${e.pageY - dy}
+      L ${lastX} ${lastY + 3*diffV}
+      L ${lastX} ${lastY + diffV}
+      Z
+    `
+    line.setAttribute('d', path)
+  }
+  function drawFourAngleStar(e) {
+      let diffH = (e.pageX - dx - lastX) / 6
+      let diffV = (e.pageY - dy - lastY) / 6
+      let path = `
+        M ${lastX + diffH*3} ${lastY}
+        L ${lastX + diffH*4} ${lastY + diffV*2}
+        L ${e.pageX - dx} ${lastY + diffV*3}
+        L ${lastX + diffH*4} ${lastY + diffV*4}
+        L ${lastX + diffH*3} ${e.pageY - dy}
+        L ${lastX + diffH*2} ${lastY + diffV*4}
+        L ${lastX} ${lastY + diffV*3}
+        L ${lastX + diffH*2} ${lastY + diffV*2}
+        Z
+      `
+      line.setAttribute('d', path)
+    }
+
+  function drawPentagram(e) {
+    let diffH = (e.pageX - dx - lastX) / 10
+    let diffV = (e.pageY - dy - lastY) / 11
+    let path = `
+      M ${lastX + diffH*5} ${lastY}
+      L ${lastX + diffH*6.5} ${lastY + diffV*4}
+      L ${lastX + diffH*10} ${lastY + diffV*4 + 1}
+      L ${lastX + diffH*7} ${lastY + diffV*7}
+      L ${lastX + diffH*8} ${lastY + diffV*11}
+      L ${lastX + diffH*5} ${lastY + diffV*9}
+      L ${lastX + diffH*2} ${lastY + diffV*11}
+      L ${lastX + diffH*3} ${lastY + diffV*7}
+      L ${lastX} ${lastY + diffV*4 + 1}
+      L ${lastX + diffH*3.5} ${lastY + diffV*4}
+      Z
+    `
+    line.setAttribute('d', path)
+  }
+
+  function drawHexagram(e) {
+    let diffH = (e.pageX - dx - lastX) / 6
+    let diffV = (e.pageY - dy - lastY) / 4
+    let path = `
+      M ${lastX + diffH*3} ${lastY}
+      L ${lastX + diffH*4} ${lastY + diffV}
+      L ${lastX + diffH*6} ${lastY + diffV + 0.5}
+      L ${lastX + diffH*5} ${lastY + diffV*2}
+      L ${lastX + diffH*6} ${lastY + diffV*3}
+      L ${lastX + diffH*4} ${lastY + diffV*3 + 0.5}
+      L ${lastX + diffH*3} ${lastY + diffV*4}
+      L ${lastX + diffH*2} ${lastY + diffV*3 + 0.5}
+      L ${lastX} ${lastY + diffV*3}
+      L ${lastX + diffH} ${lastY + diffV*2}
+      L ${lastX} ${lastY + diffV + 0.5}
+      L ${lastX + diffH*2} ${lastY + diffV}
+      Z
+    `
+    line.setAttribute('d', path)
+  }
+
+  function drawArrowRight(e) {
+    let diffH = (e.pageX - dx - lastX) / 2
+    let diffV = (e.pageY - dy - lastY) / 4
+    let path = `
+      M ${lastX} ${lastY + diffV}
+      L ${lastX + diffH} ${lastY + diffV}
+      L ${lastX + diffH} ${lastY}
+      L ${e.pageX - dx} ${lastY + 2*diffV}
+      L ${lastX + diffH} ${e.pageY - dy}
+      L ${lastX + diffH} ${lastY + 3*diffV}
+      L ${lastX} ${lastY + 3*diffV}
+      Z
+    `
+    line.setAttribute('d', path)
+  }
+
+  function drawArrowUp(e) {
+    let diffH = (e.pageX - dx - lastX) / 4
+    let diffV = (e.pageY - dy - lastY) / 2
+    let path = `
+      M ${lastX + 2*diffH} ${lastY}
+      L ${e.pageX - dx} ${lastY + diffV}
+      L ${e.pageX - diffH} ${lastY + diffV}
+      L ${e.pageX - diffH} ${e.pageY - dy}
+      L ${lastX + diffH} ${e.pageY - dy}
+      L ${lastX + diffH} ${lastY + diffV}
+      L ${lastX} ${lastY + diffV}
+      Z
+    `
     line.setAttribute('d', path)
   }
 
@@ -657,7 +914,6 @@
     line.setAttribute('stroke', 'white')
   }
 
-
   function elt(tagName, attrs={}, ...children) {
     let node = document.createElementNS('http://www.w3.org/2000/svg', tagName)
     for (let key in attrs) {
@@ -674,8 +930,6 @@
     }
     return node
   }
-
-
 
 </script>
 </body>
