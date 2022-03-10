@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Conway’s Game of Life</title>
+  <style>
+
+    body {
+      margin: 0;
+      text-align: middle;
+    }
+
+    .toolbar {
+      margin: auto;
+      background-color: rgba(7, 122, 167, 0.986);
+      height: 50px;
+      vertical-align: middle;
+      line-height: 230%;
+      text-align: center;
+      color: white;
+      position: sticky;
+      top: 0;
+      left: 0;
+      right: 0;
+    }
+
+    #grid {
+      margin: auto;
+      background-color: rgb(207, 228, 236);
+      text-align: center;
+    }
+
+    #grid input {
+      margin: 2px;
+    }
+    #grid div {
+      height: 16px;
+    }
+
+    #creatures {
+      position: sticky;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 80px;
+      background-color: rgba(7, 122, 167, 0.986);
+      display: flex;
+      padding: 0 10px;
+      justify-content: center;
+    }
+
+    #creatures img {
+      height: 70%;
+      align-self: center;
+      margin-left: 10px;
+    }
+
+
+  </style>
+</head>
+<body>
+  <div class="toolbar">
+    <button id="clear">清空</button>
+    <button id="next">迭代</button>
+    <button id="random">随机</button>
+    <label><input id="autoplay" type="checkbox">自动迭代</label>
+    <select id="selection">
+      <option value="200">200毫秒</option>
+      <option value="500">500毫秒</option>
+      <option value="1000">1000毫秒</option>
+    </select>
+    <input type="range" min="2" max="60" id="rowRange"><span></span>
+    <input type="range" min="2" max="60" id="colRange"><span></span>
+    <label><input id="noBoundry"type="checkbox">无边界</label>
+  </div>
+  <div id="grid"></div>
+  <div id="creatures">
+    <img src="./ConwayCreatures/120px-Game_of_life_block.svg.png" title="石头" value="block" alt="">
+    <img src="./ConwayCreatures/120px-Game_of_life_loaf.svg.png" title="面包" value="loaf" alt="">
+    <img src="./ConwayCreatures/120px-Game_of_life_beehive.svg.png" title="蜂巢" value="beehive" alt="">
+    <img src="./ConwayCreatures/120px-Game_of_life_5x5_ship.svg.png" title="大船" value="ship" alt="">
+    <img src="./ConwayCreatures/120px-Game_of_life_boat.svg.png" title="小船" value="boat" alt="">
+    <img src="./ConwayCreatures/Game_of_life_flower.svg.png" title="花朵" value="flower" alt="">
+    <img src="./ConwayCreatures/120px-Game_of_life_6x6_pond.svg.png" title="池塘" value="pond" alt="">
+    <img src="./ConwayCreatures/Conways_game_of_life_snake.png" title="蛇" value="snake" alt="">
+    <img src="./ConwayCreatures/Conways_game_of_life_aircraft_carrier.png" title="" value="aircraft_carrier" alt="">
+    <img src="./ConwayCreatures/Conways_game_of_life_canoe.png" title="独木舟" value="canoe" alt="">
+    <img src="./ConwayCreatures/Conways_game_of_life_mango.png" title="芒果" value="mango" alt="">
+    <img src="./ConwayCreatures/Conways_game_of_life_duck.png" title="鸭" value="duck" alt="">
+
+  </div>
+
+  <script>
+    // Your code here.
+
+    // 制作一个表
+    let m
+    let n
+    let table
+    let cells
+    grid.style.minHeight = `${window.innerHeight - creatures.clientHeight}px`
+    changeSize()
+
+    rowRange.addEventListener('change', changeSize)
+    colRange.addEventListener('change', changeSize)
+
+    function changeSize() {
+      m = parseInt(rowRange.value) // m是行 row
+      n = parseInt(colRange.value) // n是列 column
+      let rowRangeText = document.querySelector('#rowRange + span')
+      let colRangeText = document.querySelector('#colRange + span')
+      rowRangeText.textContent = '行: ' + rowRange.value
+      colRangeText.textContent = '列: ' + colRange.value
+      table = createTable(m, n)
+      drawCheckbox()
+      drawTable()
+    }
+
+    function createTable(m, n) {
+      let t = []
+      for (let i = 0; i < m; i++) {
+        t.push(Array(n).fill(0).map(it => Math.floor(Math.random()+0.5)))
+      }
+      return t
+    }
+
+    // 画出表对应的checkbox图
+    function drawCheckbox() {
+      grid.innerHTML = ''
+      for (let i = 0; i < m; i++) {
+        let row = document.createElement('div')
+        for (let j = 0; j < n; j++) {
+          let checkbox = document.createElement('input')
+          checkbox.type = 'checkbox'
+          checkbox.setAttribute('data-x', `${j}`)
+          checkbox.setAttribute('data-y', `${i}`)
+          checkbox.classList = 'pixel'
+          row.append(checkbox)
+        }
+        grid.append(row)
+      }
+    }
+
+
+    // 同步表和cb图的值
+    next.addEventListener('click', renewTable)
+
+    function renewTable() {
+      renewTablefromUser()
+      renewTablefromEvolve()
+      drawTable()
+    }
+
+    function drawTable() {
+      for (let y = 0; y < m; y++) {
+        for (let x = 0; x < n; x++) {
+          let checkbox = document.querySelector(`[data-x="${x}"][data-y="${y}"]`)
+          if (table[y][x]) {
+            checkbox.checked = true
+          } else {
+            checkbox.checked = false
+          }
+        }
+      }
+    }
+
+    /*
+    根据邻居情况更新表格
+    Any live cell with fewer than two or more than three live neighborsdies.
+    Any live cell with two or three live neighbors lives on to the nextgeneration.
+    Any dead cell with exactly three live neighbors becomes a live cell.
+    */
+
+    function renewTablefromEvolve() {
+      cells = document.querySelectorAll('.pixel')
+      let oldTable = table.map(it => it.slice())
+      let nbStates = []
+      for (let y = 0; y < m; y++) {
+        for (let x = 0; x < n; x++) {
+          let N = findNeighbors(oldTable, y, x)
+          let cell = table[y][x]
+          if (!cell)
+            table[y][x] = (N == 3) ? 1 : 0
+          else
+            table[y][x] = (N>=2 && N<=3) ? 1 : 0
+        }
+      }
+    }
+
+    function findNeighbors(t, y, x) {
+      let count = 0
+      if (y > 0) {
+        count += t[y-1][x]
+        if (x > 0)
+          count += t[y-1][x-1]
+        if (x < n-1)
+          count += t[y-1][x+1]
+      }
+      if (y < m-1) {
+        count += t[y+1][x]
+        if (x > 0)
+          count += t[y+1][x-1]
+        if (x < n-1)
+          count += t[y+1][x+1]
+      }
+      if (x > 0)
+        count += t[y][x-1]
+      if (x < n-1)
+        count += t[y][x+1]
+
+      if (noBoundry.checked) {
+        if (x == 0) {
+          count += t[y][n-1]
+          if (y > 0) {
+            count += t[y-1][n-1]
+          }
+          if (y < m-1) {
+            count += t[y+1][n-1]
+          }
+          if (y == 0) {
+            count += t[m-1][n-1]
+          }
+          if (y == m-1) {
+            count += t[0][n-1]
+          }
+        }
+        if (x == n-1) {
+          count += t[y][0]
+          if (y > 0) {
+            count += t[y-1][0]
+          }
+          if (y < m-1) {
+            count += t[y+1][0]
+          }
+          if (y == 0) {
+            count += t[m-1][0]
+          }
+          if (y == m-1) {
+            count += t[0][0]
+          }
+        }
+        if (y == 0) {
+          count += t[m-1][x]
+          if (x > 0) {
+            count += t[m-1][x-1]
+          }
+          if (x < n-1) {
+            count += t[m-1][x+1]
+          }
+        }
+        if (y == n-1) {
+          count += t[0][x]
+          if (x > 0) {
+            count += t[0][x-1]
+          }
+          if (x < n-1) {
+            count += t[0][x+1]
+          }
+        }
+      }
+      return count
+    }
+
+    // 根据check状态更新表格
+    // grid.addEventListener('click', renewTablefromUser)
+
+    function renewTablefromUser() {
+      cells = document.querySelectorAll('.pixel')
+      for (let cell of cells) {
+        let x = cell.dataset.x
+        let y = cell.dataset.y
+        table[y][x] = cell.checked ? 1 : 0
+      }
+    }
+
+    // 随机功能
+    random.addEventListener('click', e => {
+      table = createTable(m, n)
+      drawTable()
+    })
+
+    // 清空功能
+    clear.addEventListener('click', e => {
+      cells = document.querySelectorAll('.pixel')
+      cells.forEach(it => {
+        it.checked = false
+      })
+    })
+
+
+    //自动演化
+    let intervalID
+    let time =  selection.value
+
+    autoplay.addEventListener('click', auto)
+
+    function auto() {
+      if (autoplay.checked) {
+        intervalID = setInterval(renewTable, time)
+        console.log(intervalID + 'auto' + time)
+      } else {
+        if (intervalID) {
+          clearInterval(intervalID)
+        }
+      }
+    }
+
+
+
+  </script>
+</body>
+</html>
