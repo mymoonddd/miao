@@ -243,7 +243,7 @@ var mymoonddd = function() {
   }
 
   function flatten(array) {
-      return flattenDepth(array)
+      return flattenDepth(array, 1)
   }
 
   function flattenDeep(array) {
@@ -602,10 +602,10 @@ var mymoonddd = function() {
 
   function differenceBy(array, ...args) {
     let iteratee
-    if (typeof args[args.length-1] == 'function') {
-      iteratee = Iteratee(args.pop())
-    } else {
+    if (typeof args[args.length-1] == 'array') {
       iteratee = identity
+    } else {
+      iteratee = Iteratee(args.pop())
     }
     let values = flatten(args).map(iteratee)
     let result = []
