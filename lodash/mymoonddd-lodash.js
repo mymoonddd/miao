@@ -347,6 +347,24 @@ var mymoonddd = function() {
     return res
   }
 
+  function takeRightWhile(array, predicate=identity) {
+    predicate = Iteratee(predicate)
+    for (let i = array.length -1; i >= 0; i--) {
+      if (!predicate(array[i])) {
+        return slice(array,i+1)
+      }
+    }
+  }
+
+  function takeWhile(array, predicate=identity) {
+    predicate = Iteratee(predicate)
+    for (let i = 0; i < array.length; i++) {
+      if (!predicate(array[i])) {
+        return slice(array,0,i)
+      }
+    }
+  }
+
   function tail(array) {
     let res = []
     for (let i = 1; i < array.length; i++) {
@@ -413,6 +431,27 @@ var mymoonddd = function() {
       }
     }
     return result
+  }
+
+  function uniqWith(array, comparator) {
+    let res = []
+    for (let a of array) {
+      let hasA = false
+      if (res.length > 0) {
+        for (let b of res) {
+          if (comparator(a, b)) {
+            hasA = true
+            break
+          }
+        }
+        if (!hasA) {
+          res.push(a)
+        }
+      } else {
+        res.push(a)
+      }
+    }
+    return res
   }
 
   function without(array, ...values) {
@@ -1310,6 +1349,30 @@ var mymoonddd = function() {
     return res
   }
 
+  function unionWith(...args) {
+    let comparator
+    if (isArray(args[args.length -1])) {
+      comparator = identity
+    } else {
+      comparator = Iteratee(args.pop())
+    }
+    let array = args.shift()
+    let others = flatten(args)
+    for (let a of others) {
+      let hasA = false
+      for (let b of array) {
+        if (comparator(a, b)) {
+          hasA = true
+          break
+        }
+      }
+      if (!hasA) {
+        array.push(a)
+      }
+    }
+    return array
+  }
+
   function assign(object, ...sources) {
     for (let source of sources) {
       for (let key in source) {
@@ -1656,6 +1719,7 @@ var mymoonddd = function() {
     reverse,
     uniq,
     uniqBy,
+    uniqWith,
     without,
     zip,
     unzip,
@@ -1686,6 +1750,8 @@ var mymoonddd = function() {
     tail,
     take,
     takeRight,
+    takeRightWhile,
+    takeWhile,
     mapValues,
     isArray,
     isArrayLike,
@@ -1710,6 +1776,7 @@ var mymoonddd = function() {
     sortedUniqBy,
     union,
     unionBy,
+    unionWith,
     sample,
     round,
     assign,
