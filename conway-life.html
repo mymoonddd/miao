@@ -292,14 +292,12 @@
 
     //自动演化
     let intervalID
-    let time =  selection.value
 
     autoplay.addEventListener('click', auto)
 
     function auto() {
       if (autoplay.checked) {
-        intervalID = setInterval(renewTable, time)
-        console.log(intervalID + 'auto' + time)
+        intervalID = setInterval(renewTable,  selection.value)
       } else {
         if (intervalID) {
           clearInterval(intervalID)
