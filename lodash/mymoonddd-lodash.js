@@ -111,8 +111,11 @@ var mymoonddd = function() {
     function parsePart() {
       let str = ''
       for (let i = 0; i < value.length; i++) {
-        if (value[i] == '.' || value[i] == '[' || value[i] == ']') {
+        if (value[i] == '.' || value[i] == '[' ) {
           if (str != '') path.push(str)
+          str = ''
+        } else if (value[i] == ']') {
+          if (str != '') path.push(+str)
           str = ''
         } else {
           str += value[i]
@@ -465,14 +468,65 @@ var mymoonddd = function() {
     return result
   }
 
-  function zip(...args) {
+  function zip(...arrays) {
     let res = []
-    for (let i in args[0]) {
+    for (let i in arrays[0]) {
       inner = []
-      for (let j in args) {
-        inner[j] = args[j][i]
+      for (let j in arrays) {
+        inner[j] = arrays[j][i]
       }
       res.push(inner)
+    }
+    return res
+  }
+
+  function zipObject(props=[], values=[]) {
+    let obj = {}
+    for (let key in props) {
+      let prop = props[key]
+      let val = values[key]
+      obj[prop] = val
+    }
+    return obj
+  }
+
+  function zipObjectDeep(props=[], values=[]) {
+    let obj = {}
+    props = map(props, toPath)
+    for (let key in props) {
+      let prop = props[key]
+      let val = values[key]
+      if (isArray(prop)) {
+        let inside = obj
+        let len = prop.length-1
+        for (let i = 0; i < len; i++) {
+          let p = prop[i]
+          if (!inside[p]) {
+            if (prop[i+1] !== undefined && isNumber(prop[i+1])) {
+              inside[p] = []
+            } else {
+              inside[p] = {}
+            }
+          }
+          inside = inside[p]
+        }
+        inside[prop[len]] = val
+      } else {
+        obj[prop] = val
+      }
+    }
+    return obj
+  }
+
+  function zipWith(...args) {
+    if (isArray(args[args.length])) {
+      iteratee = identity
+    } else {
+      iteratee = Iteratee(args.pop())
+    }
+    let res = zip(args)
+    for (let i in res) {
+      res[i] = iteratee(...res[i])
     }
     return res
   }
@@ -485,6 +539,15 @@ var mymoonddd = function() {
         inner[j] = array[j][i]
       }
       res.push(inner)
+    }
+    return res
+  }
+
+  function unzipWith(array, iteratee=identity) {
+    iteratee = Iteratee(iteratee)
+    let res = unzip(array)
+    for (let i in res) {
+      res[i] = iteratee(...res[i])
     }
     return res
   }
@@ -853,13 +916,6 @@ var mymoonddd = function() {
     }
     array = removed
     return array
-
-    function swap(array, i, j) {
-      let t = array[i]
-      array[i] = array[j]
-      array[j] = t
-      return array
-    }
   }
 
   function mapValues(obj, mapper) {
@@ -1122,22 +1178,84 @@ var mymoonddd = function() {
     return augend + addend
   }
 
+  function xor(...arrays) {
+    let res = []
+    let ary = flatten(arrays)
+    for (let i = 0; i < ary.length; i++) {
+      let hasIt = false
+      for (let j = i+1; j < ary.length; j++) {
+        if (ary[i] == ary[j]) {
+          hasIt = true
+          ary.splice(j,1)
+          j--
+        }
+      }
+      if (hasIt) {
+        ary.splice(i,1)
+        i--
+      } else {
+        res.push(ary[i])
+      }
+    }
+    return res
+  }
 
-  // function xor(...arrays) {
+  function xorBy(...args) {
+    if (isArray(args[args.length-1])) {
+      iteratee = identity
+    } else {
+      iteratee = Iteratee(args.pop())
+    }
+    let res = []
+    let ary = flatten(args.map(it => uniqBy(it, iteratee)))
+    for (let i = 0; i < ary.length; i++) {
+      let hasIt = false
+      for (let j = i+1; j < ary.length; j++) {
+        let a = iteratee(ary[i])
+        let b =  iteratee(ary[j])
+        if (a == b) {
+          hasIt = true
+          ary.splice(j,1)
+          j--
+        }
+      }
+      if (hasIt) {
+        ary.splice(i,1)
+        i--
+      } else {
+        res.push(ary[i])
+      }
+    }
+    return res
+  }
 
-  //   let result = []
-  //   let ary = arrays[0]
-  //   let others = flatten(tail(arrays))
-  //   let intersect = intersection(ary,others)
+  function xorWith(...args) {
+    if (isArray(args[args.length-1])) {
+      iteratee = identity
+    } else {
+      comparator = args.pop()
+    }
+    let res = []
+    let ary = flatten(args.map(it => uniqWith(it, comparator)))
+    for (let i = 0; i < ary.length; i++) {
+      let hasIt = false
+      for (let j = i+1; j < ary.length; j++) {
+        if (comparator(ary[i],ary[j])) {
+          hasIt = true
+          ary.splice(j,1)
+          j--
+        }
+      }
+      if (hasIt) {
+        ary.splice(i,1)
+        i--
+      } else {
+        res.push(ary[i])
+      }
+    }
+    return res
+  }
 
-  //   arrays = flatten(arrays) 
-  //   for (let i of arrays) {
-  //     if (!intersect.includes(i)) {
-  //       result.push(i)
-  //     }
-  //   }
-  //   return result
-  // } 
 
   function isArray(value) {
     return Object.prototype.toString.call(value) == '[object Array]'
@@ -1678,7 +1796,9 @@ var mymoonddd = function() {
     split,
     Iteratee,
     filter,
-    // xor,
+    xor,
+    xorBy,
+    xorWith,
     add,
     dropRightWhile,
     dropWhile,
@@ -1722,7 +1842,11 @@ var mymoonddd = function() {
     uniqWith,
     without,
     zip,
+    zipObject,
+    zipObjectDeep,
+    zipWith,
     unzip,
+    unzipWith,
     size,
     isBoolean,
     ceil,
