@@ -524,7 +524,7 @@ var mymoonddd = function() {
     } else {
       iteratee = Iteratee(args.pop())
     }
-    let res = zip(args)
+    let res = zip(...args)
     for (let i in res) {
       res[i] = iteratee(...res[i])
     }
