@@ -590,19 +590,46 @@ var mymoonddd = function() {
 
   function difference(array, ...values) {
     let result = []
+    values = flatten(values)
     for (let i = 0; i < array.length; i++) {
       let exist = false
-      for (let j = 0; j < values.length; j++) {
-        if (values[j].includes(array[i])) {
-          exist = true
-          break
-        } 
-      }
-      if (!exist) {
+      if (!values.includes(array[i])) {
         result.push(array[i])
       }
     }
     return result
+  }
+
+  function differenceBy(array, ...args) {
+    let iteratee = Iteratee(args.pop())
+    let values = flatten(args).map(iteratee)
+    let result = []
+    for (let i = 0; i < array.length; i++) {
+      let val = iteratee(array[i])
+      if (!values.includes(val)) {
+        result.push(array[i])
+      }
+    }
+    return result
+  }
+
+  function differenceWith(array, ...args) {
+    let comparator = args.pop()
+    let values = flatten(args)
+    let result = []
+    for (let i = 0; i < array.length; i++) {
+      let same = false
+      for (let j = 0; j < values.length; j++) {
+        if (comparator(array[i], values[j])) {
+          same = true 
+          break
+        }
+      }
+      if (!same) {
+        result.push(array[i])
+      }
+    }
+    return result    
   }
 
   function concat(array, ...values) {
@@ -664,6 +691,54 @@ var mymoonddd = function() {
     return result
   }
 
+  function intersectionBy(...args) {
+    let iteratee = Iteratee(args.pop())
+    let result = []
+    let comp = args.shift()
+    args = args.map(it => it.map(iteratee))
+    for (let i = 0; i < comp.length; i++) {
+      let hasItem = true
+      for (let j = 0; j < args.length; j++) {
+        let a = iteratee(comp[i])
+        if (!args[j].includes(a)) {
+          hasItem = false
+          break
+        }
+      }
+      if (hasItem == true) {
+        result.push(comp[i])
+      }
+    }
+    return result 
+  }
+
+  function intersectionWith(...args) {
+    let comparator = args.pop()
+    let result = []
+    let comp = args.shift()
+    for (let i = 0; i < comp.length; i++) {
+      let allHasItem = false
+      for (let j = 0; j < args.length; j++) {
+        let hasItem = false
+        for (let a of args[j]) {
+          if (comparator(comp[i], a)) {
+            hasItem = true
+            break
+          }
+        }
+        allHasItem = hasItem ? true : false
+        if (!hasItem) {
+          break
+        }
+      }
+      if (allHasItem) {
+        result.push(comp[i])
+      }
+    }
+    return result 
+  }
+
+
   function pull(array, ...values) {
       let len =  array.length
       for (let i = len - 1; i >= 0; i--) {
@@ -684,15 +759,45 @@ var mymoonddd = function() {
       }
     }
     return array
-
-    function swap(array, i, j) {
-      let t = array[i]
-      array[i] = array[j]
-      array[j] = t
-      return array
-    }
   }
 
+  function pullAllBy(array, values, iteratee=identity) {
+    iteratee = Iteratee(iteratee)
+    let len = array.length
+    for (let i = len -1; i >= 0; i--) {
+      for (let j = 0; j < values.length; j++) {
+        let a = iteratee(array[i])
+        let b = iteratee(values[j])
+        if (a == b) {
+          swap(array, i, array.length - 1)
+          array.pop()
+          break
+        }
+      }
+    }
+    return array
+  }
+
+  function pullAllWith(array, values, comparator) {
+    let len = array.length
+    for (let i = len -1; i >= 0; i--) {
+      for (let j = 0; j < values.length; j++) {
+        if (comparator(array[i], values[j])) {
+          swap(array, i, array.length - 1)
+          array.pop()
+          break
+        }
+      }
+    }
+    return array
+  }
+
+  function swap(array, i, j) {
+    let t = array[i]
+    array[i] = array[j]
+    array[j] = t
+  }
+  
   function remove(array, predicate=identity) {
     let removed = []
     let len =  array.length
@@ -1486,12 +1591,18 @@ var mymoonddd = function() {
     repeat,
     range,
     difference,
+    differenceBy,
+    differenceWith,
     concat,
     toArray,
     nth,
     intersection,
+    intersectionBy,
+    intersectionWith,
     pull,
     pullAll,
+    pullAllBy,
+    pullAllWith,
     remove,
     tail,
     take,
