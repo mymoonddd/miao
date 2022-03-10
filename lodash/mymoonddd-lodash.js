@@ -1050,6 +1050,27 @@ var mymoonddd = function() {
     }
   }
 
+  function findLast(collection, predicate=identity, fromIndex=0) {
+    if (collection.length) {   //数组
+      let len = collection.length
+      if (fromIndex < 0) {
+        fromIndex = len + fromIndex
+      }
+      for (let i = len - 1; i >= fromIndex; i--) {
+        let item = collection[i]
+        if (predicate(item, i, collection)) {
+          return item
+        }
+      }
+    }
+    for (let key in collection) { //对象
+      if (predicate(collection[key], key, collection)) {
+        return collection[key]
+      }
+    }
+  }
+
+
   function findKey (object, predicate=identity)  {
     predicate = Iteratee(predicate)
     for (let key in object) { //对象
@@ -1811,6 +1832,7 @@ var mymoonddd = function() {
     shuffle,
     every,
     find,
+    findLast,
     findKey,
     map,
     partition,
