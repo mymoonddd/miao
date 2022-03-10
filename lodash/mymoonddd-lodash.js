@@ -1204,6 +1204,80 @@ var mymoonddd = function() {
     }
   }
 
+  function sortedIndexBy(array, value, iteratee=identity) {
+    iteratee=Iteratee(iteratee)
+    array = array.map(iteratee)
+    value = iteratee(value)
+    return sortedIndex(array, value) 
+  }
+
+  function sortedIndexOf(array, value, idx=0) {
+    if (array[0] > value) {
+      return -1
+    }
+    if (array[array.length - 1] < value) {
+      return -1
+    }
+    return sortedIndex(array, value)
+  }
+
+  function sortedLastIndex(array, value, idx=0) {
+    if (array[0] > value) {
+      return 0 + idx
+    }
+    if (array[array.length - 1] <= value) {
+      return array.length + idx
+    }
+    let mid = array.length >> 1 
+    if (array[mid] > value) {
+      return sortedLastIndex(array.slice(0, mid), value, idx)
+    } else {
+      return sortedLastIndex(array.slice(mid, array.length),value, idx+mid)
+    }
+  }
+
+  function sortedLastIndexBy(array, value, iteratee=identity) {
+    iteratee = Iteratee(iteratee)
+    array = array.map(iteratee)
+    value = iteratee(value)
+    return sortedLastIndex(array, value)
+  }
+
+  function sortedLastIndexOf(array, value) {
+    if (array[0] > value) {
+      return -1
+    }
+    if (array[array.length - 1] < value) {
+      return -1
+    }
+    return sortedLastIndex(array, value) - 1
+  }
+
+  function sortedUniq(array) {
+    let res = []
+    for (let it of array) {
+      let len = res.length - 1
+      if (len < 0 || it != res[len]) {
+        res.push(it)
+      }
+    }
+    return res
+  }
+
+  function sortedUniqBy(array, iteratee) {
+    iteratee = Iteratee(iteratee)
+    let res = []
+    for (let it of array) {
+      let len = res.length - 1
+      let a = iteratee(it) 
+      let b = iteratee(res[len])
+      if (len < 0 || a != b) {
+        res.push(it)
+      }
+    }
+    return res
+  }
+
   function union(...arrays) {
     let res = []
     let map = {}
@@ -1627,6 +1701,13 @@ var mymoonddd = function() {
     slice,
     gt,
     sortedIndex,
+    sortedIndexBy,
+    sortedIndexOf,
+    sortedLastIndex,
+    sortedLastIndexBy,
+    sortedLastIndexOf,
+    sortedUniq,
+    sortedUniqBy,
     union,
     unionBy,
     sample,
