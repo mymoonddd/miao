@@ -602,7 +602,7 @@ var mymoonddd = function() {
 
   function differenceBy(array, ...args) {
     let iteratee
-    if (typeof args[args.length-1] == 'array') {
+    if (isArray(args[args.length-1])) {
       iteratee = identity
     } else {
       iteratee = Iteratee(args.pop())
