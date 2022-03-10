@@ -562,8 +562,10 @@
         let repeatNum = ''                // 显示重复次数
         if (node.min  == node.max) {
           repeatNum = `repeat: ${node.min}`
+        } else if (node.min > 2) {
+          repeatNum += `min: ${node.min - 1} max: ${node.max - 1}`
         } else {
-          repeatNum += `min: ${node.min} max: ${node.max}`
+          repeatNum += `max: ${node.max - 1}`
         }
         let repeatText = elt('text', {
           y: height + 3*gp,
@@ -897,7 +899,7 @@
         node.wordStart = true
         i++
       }
-      while (true) {
+      while (str[i]) {
         let part = parsePart()
         if (part.type == 'Quantifier') {
           let prev = node.elements.pop()
@@ -909,10 +911,12 @@
               raw: str[prev.end - 1],
               value: str[prev.end - 1],
             }
-            prev.end = prev.end - 1
-            prev.raw = prev.raw.slice(0, -1)
-            prev.value = prev.raw
-            node.elements.push(prev)
+            if (prev.raw.length > 1) {
+              prev.end = prev.end - 1
+              prev.raw = prev.raw.slice(0, -1)
+              prev.value = prev.raw
+              node.elements.push(prev)
+            }
             part = {
               type:'Quantifier',
               start: repeatChar.start,
