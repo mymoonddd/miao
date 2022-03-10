@@ -601,7 +601,12 @@ var mymoonddd = function() {
   }
 
   function differenceBy(array, ...args) {
-    let iteratee = Iteratee(args.pop())
+    let iteratee
+    if (typeof args[args.length-1] == 'function') {
+      iteratee = Iteratee(args.pop())
+    } else {
+      iteratee = identity
+    }
     let values = flatten(args).map(iteratee)
     let result = []
     for (let i = 0; i < array.length; i++) {
