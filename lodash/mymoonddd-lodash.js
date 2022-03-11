@@ -1838,6 +1838,9 @@ var mymoonddd = function() {
   }
 
 
+
+
+
   
   // function set(object, path, value) {
   //   let paths = toPath(path)
@@ -1988,7 +1991,7 @@ var mymoonddd = function() {
     invert,
     includes,
     
-
+    // orderBy,
     // bind : bind,
     // _
     // parseInt: parseInt,
