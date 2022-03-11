@@ -56,7 +56,20 @@
       align-self: center;
       margin-left: 10px;
     }
+    .info {
+      margin: auto;
+      display: flex;
+      justify-content: center;
+      column-gap: 15px;
+      font-size: 16px;
+      position: sticky;
+      top: 50px;
+      background-color: #fff;
+    }
 
+    .info span {
+      flex: 0 1 120px
+    }
 
   </style>
 </head>
@@ -75,6 +88,8 @@
     <input type="range" min="2" max="60" id="colRange"><span></span>
     <label><input id="noBoundry"type="checkbox">无边界</label>
   </div>
+  <div class="info">
+  </div>
   <div id="grid"></div>
   <div id="creatures">
     <img src="./ConwayCreatures/120px-Game_of_life_block.svg.png" title="石头" value="block" alt="">
@@ -92,14 +107,117 @@
 
   </div>
 
+
   <script>
-    // Your code here.
+
+    class ConwayLife {
+      constructor(m=2, n=2) {
+        this.m = m
+        this.n = n
+        this.table
+        this.cellStatus = {
+          'mount': this.m * this.n,
+          'alive': 0,
+          'dead': 0,
+          'vanish': 0,
+          'reborn': 0,
+          'static': 0,
+        }
+      }
+
+    createTable(m=this.m, n=this.n) {
+      this.table = []
+      for (let i = 0; i < m; i++) {
+        this.table.push(Array(n).fill(0).map(it => Math.floor(Math.random()+0.5)))
+      }
+      this.m = m
+      this.n = n
+      return this.table
+    }
+
+    renewTablefromEvolve() {
+      let table = this.table
+      this.cellStatus = {
+        'mount': this.m * this.n,
+        'alive': 0,
+        'dead': 0,
+        'vanish': 0,
+        'reborn': 0,
+        'static': 0,
+      }
+      let cellStatus = this.cellStatus
+      let oldTable = table.map(it => it.slice())
+      let nbStates = []
+      for (let y = 0; y < this.m; y++) {
+        for (let x = 0; x < this.n; x++) {
+          let N = findNeighbors(oldTable, y, x, !noBoundry.checked)
+          let cell = table[y][x]
+          if (!cell) {
+            if (N == 3) {
+              table[y][x] = 1
+              cellStatus.reborn++
+              cellStatus.alive++
+            } else {
+              cellStatus.static++
+              cellStatus.dead++
+            }
+          } else {
+            if (N>=2 && N<=3) {
+              cellStatus.static++
+              cellStatus.alive++
+            } else {
+              table[y][x] = 0
+              cellStatus.vanish++
+              cellStatus.dead++
+            }
+          }
+        }
+      }
+      return table
+      function findNeighbors(table, y, x, hasBorder=true) {
+        let count = 0
+        for (let row = y-1; row <= y+1; row++) {
+          for (let col = x-1; col <= x+1; col++) {
+            if (hasBorder) {
+              count += table[row]?.[col] || 0
+            } else {
+              count += table.at(row % m).at(col % n)
+            }
+          }
+        }
+        count -= table[y][x]
+        return count
+      }
+    }
+
+    renewTablefromUser() {
+      let table = this.table
+      world.cellStatus = {
+        'mount': this.cellStatus.mount,
+        'alive': '-',
+        'dead': '-',
+        'vanish': '-',
+        'reborn': '-',
+        'static': '-',
+      }
+      cells = document.querySelectorAll('.pixel')
+      for (let cell of cells) {
+        let x = cell.dataset.x
+        let y = cell.dataset.y
+        table[y][x] = cell.checked ? 1 : 0
+      }
+    }
+
+    random() {
+      this.table = this.createTable(this.m, this.n)
+      return this.table
+    }
+  }
+
+    let world = new ConwayLife()
+    let cells
 
     // 制作一个表
-    let m
-    let n
-    let table
-    let cells
     grid.style.minHeight = `${window.innerHeight - creatures.clientHeight}px`
     changeSize()
 
@@ -113,18 +231,20 @@
       let colRangeText = document.querySelector('#colRange + span')
       rowRangeText.textContent = '行: ' + rowRange.value
       colRangeText.textContent = '列: ' + colRange.value
-      table = createTable(m, n)
+      world.createTable(m, n)
       drawCheckbox()
       drawTable()
+      world.cellStatus = {
+        'mount': m * n,
+        'alive': '-',
+        'dead': '-',
+        'vanish': '-',
+        'reborn': '-',
+        'static': '-',
+      }
+      evolveInfo()
     }
 
-    function createTable(m, n) {
-      let t = []
-      for (let i = 0; i < m; i++) {
-        t.push(Array(n).fill(0).map(it => Math.floor(Math.random()+0.5)))
-      }
-      return t
-    }
 
     // 画出表对应的checkbox图
     function drawCheckbox() {
@@ -143,17 +263,17 @@
       }
     }
 
-
     // 同步表和cb图的值
     next.addEventListener('click', renewTable)
-
     function renewTable() {
-      renewTablefromUser()
-      renewTablefromEvolve()
+      world.renewTablefromUser()
+      world.renewTablefromEvolve()
       drawTable()
+      evolveInfo()
     }
 
     function drawTable() {
+      table = world.table
       for (let y = 0; y < m; y++) {
         for (let x = 0; x < n; x++) {
           let checkbox = document.querySelector(`[data-x="${x}"][data-y="${y}"]`)
@@ -166,119 +286,12 @@
       }
     }
 
-    /*
-    根据邻居情况更新表格
-    Any live cell with fewer than two or more than three live neighborsdies.
-    Any live cell with two or three live neighbors lives on to the nextgeneration.
-    Any dead cell with exactly three live neighbors becomes a live cell.
-    */
-
-    function renewTablefromEvolve() {
-      cells = document.querySelectorAll('.pixel')
-      let oldTable = table.map(it => it.slice())
-      let nbStates = []
-      for (let y = 0; y < m; y++) {
-        for (let x = 0; x < n; x++) {
-          let N = findNeighbors(oldTable, y, x)
-          let cell = table[y][x]
-          if (!cell)
-            table[y][x] = (N == 3) ? 1 : 0
-          else
-            table[y][x] = (N>=2 && N<=3) ? 1 : 0
-        }
-      }
-    }
-
-    function findNeighbors(t, y, x) {
-      let count = 0
-      if (y > 0) {
-        count += t[y-1][x]
-        if (x > 0)
-          count += t[y-1][x-1]
-        if (x < n-1)
-          count += t[y-1][x+1]
-      }
-      if (y < m-1) {
-        count += t[y+1][x]
-        if (x > 0)
-          count += t[y+1][x-1]
-        if (x < n-1)
-          count += t[y+1][x+1]
-      }
-      if (x > 0)
-        count += t[y][x-1]
-      if (x < n-1)
-        count += t[y][x+1]
-
-      if (noBoundry.checked) {
-        if (x == 0) {
-          count += t[y][n-1]
-          if (y > 0) {
-            count += t[y-1][n-1]
-          }
-          if (y < m-1) {
-            count += t[y+1][n-1]
-          }
-          if (y == 0) {
-            count += t[m-1][n-1]
-          }
-          if (y == m-1) {
-            count += t[0][n-1]
-          }
-        }
-        if (x == n-1) {
-          count += t[y][0]
-          if (y > 0) {
-            count += t[y-1][0]
-          }
-          if (y < m-1) {
-            count += t[y+1][0]
-          }
-          if (y == 0) {
-            count += t[m-1][0]
-          }
-          if (y == m-1) {
-            count += t[0][0]
-          }
-        }
-        if (y == 0) {
-          count += t[m-1][x]
-          if (x > 0) {
-            count += t[m-1][x-1]
-          }
-          if (x < n-1) {
-            count += t[m-1][x+1]
-          }
-        }
-        if (y == n-1) {
-          count += t[0][x]
-          if (x > 0) {
-            count += t[0][x-1]
-          }
-          if (x < n-1) {
-            count += t[0][x+1]
-          }
-        }
-      }
-      return count
-    }
-
-    // 根据check状态更新表格
-    // grid.addEventListener('click', renewTablefromUser)
-
-    function renewTablefromUser() {
-      cells = document.querySelectorAll('.pixel')
-      for (let cell of cells) {
-        let x = cell.dataset.x
-        let y = cell.dataset.y
-        table[y][x] = cell.checked ? 1 : 0
-      }
-    }
-
     // 随机功能
     random.addEventListener('click', e => {
-      table = createTable(m, n)
+      world.createTable(m, n)
       drawTable()
+      world.renewTablefromUser()
+      evolveInfo()
     })
 
     // 清空功能
@@ -287,14 +300,12 @@
       cells.forEach(it => {
         it.checked = false
       })
+      renewTable()
     })
-
 
     //自动演化
     let intervalID
-
     autoplay.addEventListener('click', auto)
-
     function auto() {
       if (autoplay.checked) {
         intervalID = setInterval(renewTable,  selection.value)
@@ -305,8 +316,21 @@
       }
     }
 
-
+    // 进化信息
+    function evolveInfo() {
+      let text = `
+      <span> 细胞总量: ${world.cellStatus.mount} </span>
+      <span> 存活总数: ${world.cellStatus.alive} </span>
+      <span> 消亡总数：${world.cellStatus.dead} </span>
+      <span> 本轮稳定：${world.cellStatus.static} </span>
+      <span> 本轮消亡：${world.cellStatus.vanish} </span>
+      <span> 本轮复生：${world.cellStatus.reborn} </span>
+      `
+      let info = document.querySelector('.info')
+      info.innerHTML = text
+    }
 
   </script>
+
 </body>
 </html>
