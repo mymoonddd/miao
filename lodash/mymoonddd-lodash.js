@@ -461,7 +461,7 @@ var mymoonddd = function() {
     let result = []
     for (let i = 0; i < array.length; i++) {
       let p = array[i]
-      if (!values.includes(p)) {
+      if (!includes(values,p)) {
         result.push(p)
       }
     }
@@ -694,8 +694,7 @@ var mymoonddd = function() {
     let result = []
     values = flatten(values)
     for (let i = 0; i < array.length; i++) {
-      let exist = false
-      if (!values.includes(array[i])) {
+      if (!includes(values, array[i])) {
         result.push(array[i])
       }
     }
@@ -713,7 +712,7 @@ var mymoonddd = function() {
     let result = []
     for (let i = 0; i < array.length; i++) {
       let val = iteratee(array[i])
-      if (!values.includes(val)) {
+      if (!includes(values, val)) {
         result.push(array[i])
       }
     }
@@ -780,13 +779,12 @@ var mymoonddd = function() {
   }
 
   function intersection(...arrays) {
-
     let result = []
     let comp = arrays[0]
     for (let i = 0; i < comp.length; i++) {
       let hasItem = true
       for (let j = 1; j < arrays.length; j++) {
-        if (!arrays[j].includes(comp[i])) {
+        if (!includes(arrays[i], comp[i])) {
           hasItem = false
           break
         }
@@ -807,7 +805,7 @@ var mymoonddd = function() {
       let hasItem = true
       for (let j = 0; j < args.length; j++) {
         let a = iteratee(comp[i])
-        if (!args[j].includes(a)) {
+        if (!includes(args[j],a)) {
           hasItem = false
           break
         }
@@ -849,7 +847,7 @@ var mymoonddd = function() {
   function pull(array, ...values) {
       let len =  array.length
       for (let i = len - 1; i >= 0; i--) {
-        if (values.includes(array[i])) {
+        if (includes(values, array[i])) {
           swap(array, i, array.length - 1)
           array.pop()
         }
@@ -860,7 +858,7 @@ var mymoonddd = function() {
   function pullAll(array, values) {
     let len =  array.length
     for (let i = len - 1; i >= 0; i--) {
-      if (values.includes(array[i])) {
+      if (includes(values, array[i])) {
         swap(array, i, array.length - 1)
         array.pop()
       }
@@ -1117,7 +1115,12 @@ var mymoonddd = function() {
     for (let key in collection) {
       iteratee(collection[key], key, collection)
     }
-    return collection
+  }
+
+  function forEachRight(collection, iteratee=identity) {
+    for (let i = collection.length; i >= 0; i--) {
+      iteratee(collection[i])
+    }
   }
 
   function shuffle(collection) {
@@ -1640,6 +1643,28 @@ var mymoonddd = function() {
     return object[method](...args)
   }
 
+  function invokeMap() {
+    let collection = arguments[0]
+    let path
+    let args
+    if (arguments.length > 1) {
+      path = arguments[1]
+    }
+    if (arguments.length > 2) {
+      args = slice(arguments, 2)
+    }
+    if (typeof path !== 'function') {
+      path = Array.prototype[path]
+    }
+    return collection.map(it => {
+      if (args !== undefined) {
+        return path.apply(it, args)
+      } else {
+        return path.apply(it)
+      }
+    })
+  }
+
   function keys(object) {
     let keys = []
     for (let key in object) {
@@ -1786,6 +1811,32 @@ var mymoonddd = function() {
     return str
   }
 
+  function includes(collection, value, fromIndex=0) {
+    let len = collection.length
+    let i = 0
+    if (fromIndex < 0) {
+      fromIndex += len
+    }
+    for(let key in collection) {
+      if (i >= fromIndex) {
+        let val = collection[key]
+        let j = 0
+        if (val == value) {
+          return true
+        } 
+        while (collection[i] && collection[i] == value[j]) {
+          i++
+          j++
+          if (value[j] === undefined) {
+            return true
+          }
+        }
+      }
+      i++
+    }
+    return false
+  }
+
 
   
   // function set(object, path, value) {
@@ -1829,6 +1880,7 @@ var mymoonddd = function() {
     findIndex,
     findLastIndex,
     forEach,
+    forEachRight,
     shuffle,
     every,
     find,
@@ -1934,6 +1986,8 @@ var mymoonddd = function() {
     reduce,
     reduceRight,
     invert,
+    includes,
+    
 
     // bind : bind,
     // _
@@ -1956,6 +2010,7 @@ var mymoonddd = function() {
 
     invertBy,
     invoke,
+    invokeMap,
     keys,
     mapKeys,
     // merge,
