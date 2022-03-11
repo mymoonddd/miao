@@ -592,50 +592,64 @@ var mymoonddd = function() {
     return (number - remain) + x
   }
 
+  function floor(number, precision=0) {
+    let x = 10 ** ( -precision )
+    let remain = number % x
+    if (!remain) {
+      return number
+    }
+    return number - remain
+  }
+
   function round(number, precision=0) {
     let x = 10 ** ( -precision )
     let remain = number % x
     if (!remain) {
       return number
     } else if (remain / x < 0.5) {
-      return (number - remain)
+      return number - remain
     } else {
       return (number - remain) + x
     }
   }
 
   function max(array) {
+    return maxBy(array)
+  }
+
+  function maxBy(array, iteratee=identity) {
+    iteratee = Iteratee(iteratee)
     let max = array[0]
     for (let i = 1; i < array.length; i++) {
-      if (array[i] > max) {
+      if (iteratee(array[i])> iteratee(max)) {
         max = array[i]
       }
     }
     return max
   }
 
-  function maxBy(array, iteratee=identity) {
-    iteratee = Iteratee(iteratee)
-    let max = iteratee(array[0])
-    let maxItem = array[0]
-    for (let i = 1; i < array.length; i++) {
-      let it = iteratee(array[i], i, array)
-      if (it > max) {
-        max = array[i]
-        maxItem = array[i]
-      }
-    }
-    return maxItem
+  function min(array) {
+    return minBy(array)
   }
 
-  function min(array) {
+  function minBy(array, iteratee=identity) {
+    iteratee = Iteratee(iteratee)
     let min = array[0]
     for (let i = 1; i < array.length; i++) {
-      if (array[i] < min) {
+      if (iteratee(array[i]) < iteratee(min)) {
         min = array[i]
       }
     }
     return min
+  }
+
+  function mean(array) {
+    return meanBy(array)
+  }
+
+  function meanBy(array, iteratee=identity) {
+    iteratee = Iteratee(iteratee)
+    return reduce(map(array, iteratee), (a,b) => a+b) / array.length
   }
 
   function sum(array) {
@@ -654,6 +668,34 @@ var mymoonddd = function() {
       sum += it
     }
     return sum
+  }
+
+  function add(augend, addend) {
+    let res = augend
+    for (let i = 0; i < addend; i++) {
+      res ++
+    }
+    return res
+  }
+
+  function subtract(minuend, subtrahend) {
+    let res = minuend
+    for (let i = 0; i < subtrahend; i++) {
+      res --
+    }
+    return res
+  }
+
+  function divide(dividend, divisor) {
+    return dividend / divisor
+  }
+
+  function multiply(multiplier, multiplicand) {
+    let res = 0
+    for (let i = 0; i < multiplicand; i++) {
+      res = add(res, multiplier)
+    }
+    return res
   }
 
   function repeat(string='', n=1) {
@@ -1200,9 +1242,7 @@ var mymoonddd = function() {
     }
   }
 
-  function add(augend, addend) {
-    return augend + addend
-  }
+
 
   function xor(...arrays) {
     let res = []
@@ -1385,6 +1425,14 @@ var mymoonddd = function() {
 
   function gte(value, other) {
     return gt(value,other) || eq(value, other)
+  }
+
+  function lt(value, other) {
+    return value < other
+  }
+
+  function lte(value, other) {
+    return lt(value,other) || eq(value, other)
   }
 
   function sortedIndex(array, value, idx=0) {
@@ -1965,11 +2013,18 @@ var mymoonddd = function() {
     size,
     isBoolean,
     ceil,
+    floor,
     min,
+    minBy,
     max,
     maxBy,
     sum,
     sumBy,
+    subtract,
+    divide,
+    multiply,
+    mean,
+    meanBy,
     repeat,
     range,
     difference,
@@ -2007,6 +2062,8 @@ var mymoonddd = function() {
     eq,
     gt,
     gte,
+    lt,
+    lte,
     sortedIndex,
     sortedIndexBy,
     sortedIndexOf,
