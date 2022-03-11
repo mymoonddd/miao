@@ -1115,12 +1115,14 @@ var mymoonddd = function() {
     for (let key in collection) {
       iteratee(collection[key], key, collection)
     }
+    return collection
   }
 
   function forEachRight(collection, iteratee=identity) {
     for (let i = collection.length; i >= 0; i--) {
       iteratee(collection[i])
     }
+    return collection
   }
 
   function shuffle(collection) {
@@ -1365,8 +1367,24 @@ var mymoonddd = function() {
     return res
   }
 
+  function eq(value, other) {
+    if (typeof value !== typeof other) {
+      return false 
+    }
+    if (typeof value == 'number') {
+      if (value.toString() == 'NaN' && other.toString() == 'NaN') {
+        return true
+      }
+    }
+    return value == other
+  }
+
   function gt(value, other) {
     return value > other
+  }
+
+  function gte(value, other) {
+    return gt(value,other) || eq(value, other)
   }
 
   function sortedIndex(array, value, idx=0) {
@@ -1837,8 +1855,28 @@ var mymoonddd = function() {
     return false
   }
 
+  function castArray(value) {
+    if (arguments.length == 0) {
+      return []
+    }
+    if (!isArray(value)) {
+      return [value]
+    }
+    return value
+  }
 
+  function conforms(source) {
+    return function(obj) {
+      return conformsTo(obj, source)
+    }
+  }
 
+  function conformsTo(object, source) {
+    for (let key in source) {
+      let predicate = source[key]
+      return predicate(object[key])
+    }
+  }
 
 
   
@@ -1966,7 +2004,9 @@ var mymoonddd = function() {
     isObjectLike,
     isString,
     slice,
+    eq,
     gt,
+    gte,
     sortedIndex,
     sortedIndexBy,
     sortedIndexOf,
@@ -1990,7 +2030,7 @@ var mymoonddd = function() {
     reduceRight,
     invert,
     includes,
-    
+
     // orderBy,
     // bind : bind,
     // _
@@ -2042,8 +2082,12 @@ var mymoonddd = function() {
     // propertyOf,
 
     // sortBy,
-    // defer,
+    defer,
     // delay,
+    castArray,
+    conforms,
+    conformsTo,
+    isEqual,
     // random,
     // forin,
     // forinRight,
