@@ -77,7 +77,13 @@
   <div class="toolbar">
     <button id="clear">清空</button>
     <button id="next">迭代</button>
-    <button id="random">随机</button>
+    <select id="random" >开局
+      <option value="fewer">极疏开局</option>
+      <option value="few">稀疏开局</option>
+      <option value="banlance" selected>均衡开局</option>
+      <option value="dense">稠密开局</option>
+      <option value="denser">极密开局</option>
+    </select>
     <label><input id="autoplay" type="checkbox">自动迭代</label>
     <select id="selection">
       <option value="200">200毫秒</option>
@@ -125,17 +131,40 @@
         }
       }
 
-    createTable(m=this.m, n=this.n) {
+    createTable(m=this.m, n=this.n, state='balance') {
+      let arg = 0.5
+      if (state == 'fewer') {
+        arg = 0.05
+      }
+      if (state == 'few') {
+        arg = 0.2
+      }
+      if (state == 'dense') {
+        arg = 0.6
+      }
+      if (state == 'denser') {
+        arg = 0.85
+      }
       this.table = []
+      this.cellStatus.dead = 0
+      this.cellStatus.alive = 0
       for (let i = 0; i < m; i++) {
-        this.table.push(Array(n).fill(0).map(it => Math.floor(Math.random()+0.5)))
+        this.table.push(Array(n).fill(0).map(it => {
+          let res = Math.floor(Math.random()+arg)
+          if (res) {
+            this.cellStatus.alive++
+          } else {
+            this.cellStatus.dead++
+          }
+          return res
+        }))
       }
       this.m = m
       this.n = n
       return this.table
     }
 
-    renewTablefromEvolve() {
+    renewTablefromEvolve(hasBorder=true) {
       let table = this.table
       this.cellStatus = {
         'mount': this.m * this.n,
@@ -150,7 +179,7 @@
       let nbStates = []
       for (let y = 0; y < this.m; y++) {
         for (let x = 0; x < this.n; x++) {
-          let N = findNeighbors(oldTable, y, x, !noBoundry.checked)
+          let N = findNeighbors(oldTable, y, x, hasBorder)
           let cell = table[y][x]
           if (!cell) {
             if (N == 3) {
@@ -190,26 +219,8 @@
       }
     }
 
-    renewTablefromUser() {
-      let table = this.table
-      world.cellStatus = {
-        'mount': this.cellStatus.mount,
-        'alive': '-',
-        'dead': '-',
-        'vanish': '-',
-        'reborn': '-',
-        'static': '-',
-      }
-      cells = document.querySelectorAll('.pixel')
-      for (let cell of cells) {
-        let x = cell.dataset.x
-        let y = cell.dataset.y
-        table[y][x] = cell.checked ? 1 : 0
-      }
-    }
-
     random() {
-      this.table = this.createTable(this.m, this.n)
+      this.table = this.createTable(this.m, this.n, 'balance')
       return this.table
     }
   }
@@ -217,36 +228,118 @@
     let world = new ConwayLife()
     let cells
 
-    // 制作一个表
+    // 世界最小高度
     grid.style.minHeight = `${window.innerHeight - creatures.clientHeight}px`
-    changeSize()
 
+    // 确定世界大小
+    changeSize()
     rowRange.addEventListener('change', changeSize)
     colRange.addEventListener('change', changeSize)
 
-    function changeSize() {
-      m = parseInt(rowRange.value) // m是行 row
-      n = parseInt(colRange.value) // n是列 column
-      let rowRangeText = document.querySelector('#rowRange + span')
-      let colRangeText = document.querySelector('#colRange + span')
-      rowRangeText.textContent = '行: ' + rowRange.value
-      colRangeText.textContent = '列: ' + colRange.value
-      world.createTable(m, n)
-      drawCheckbox()
-      drawTable()
+    // 同步表和cb图的值
+    next.addEventListener('click', e => {
+      world.renewTablefromEvolve()
+      presentation()
+    })
+
+    // 随机功能
+    random.addEventListener('change', e => {
+      world.createTable(m, n, random.value)
+      presentation()
+    })
+
+    // 清空功能
+    clear.addEventListener('click', e => {
       world.cellStatus = {
-        'mount': m * n,
-        'alive': '-',
-        'dead': '-',
+        'mount': m*n,
+        'alive': 0,
+        'dead': m*n,
         'vanish': '-',
         'reborn': '-',
         'static': '-',
       }
+      world.table = world.table.map(it => it.map(it => 0))
+      presentation()
+    })
+
+    //自动演化
+    let intervalID
+    autoplay.addEventListener('click', auto)
+    function auto() {
+      if (autoplay.checked) {
+        intervalID = setInterval(()=>{
+          world.renewTablefromEvolve()
+          presentation()
+        },  selection.value)
+      } else {
+        if (intervalID) {
+          clearInterval(intervalID)
+        }
+      }
+    }
+
+    // 玩家勾选
+    grid.addEventListener('click', e => {
+      if (e.target.matches('input')) {
+        renewTablefromUser(e)
+        presentation()
+      }
+    })
+
+    function presentation() {
+      drawFromTable()
       evolveInfo()
     }
 
+    function drawFromTable() {
+      table = world.table
+      for (let y = 0; y < m; y++) {
+        for (let x = 0; x < n; x++) {
+          let checkbox = document.querySelector(`[data-x="${x}"][data-y="${y}"]`)
+          checkbox.checked = table[y][x]
+        }
+      }
+    }
 
-    // 画出表对应的checkbox图
+    function renewTablefromUser(e) {
+      let cell = e.target
+      let x = cell.dataset.x
+      let y = cell.dataset.y
+      let t = world.table
+      let cs = world.cellStatus
+      cs.static = cs.mount - 1
+      cs.reborn= 0
+      cs.vanish= 0
+      if (cell.checked) {
+        if (!t[y][x]) {
+          cs.reborn++
+        }
+        t[y][x] = 1
+      }
+      if (!cell.checked) {
+        if (t[y][x]) {
+          cs.vanish++
+        }
+        t[y][x] = 0
+      }
+      return t
+    }
+
+    // 进化信息
+    function evolveInfo() {
+      let text = `
+      <span> 细胞总量: ${world.cellStatus.mount} </span>
+      <span> 存活总数: ${world.cellStatus.alive} </span>
+      <span> 消亡总数：${world.cellStatus.dead} </span>
+      <span> 本轮稳定：${world.cellStatus.static} </span>
+      <span> 本轮消亡：${world.cellStatus.vanish} </span>
+      <span> 本轮复生：${world.cellStatus.reborn} </span>
+      `
+      let info = document.querySelector('.info')
+      info.innerHTML = text
+    }
+
+    // 画表对应的checkbox图
     function drawCheckbox() {
       grid.innerHTML = ''
       for (let i = 0; i < m; i++) {
@@ -263,71 +356,19 @@
       }
     }
 
-    // 同步表和cb图的值
-    next.addEventListener('click', renewTable)
-    function renewTable() {
-      world.renewTablefromUser()
-      world.renewTablefromEvolve()
-      drawTable()
+    // 改变世界大小
+    function changeSize() {
+      m = parseInt(rowRange.value) // m是行 row
+      n = parseInt(colRange.value) // n是列 column
+      let rowRangeText = document.querySelector('#rowRange + span')
+      let colRangeText = document.querySelector('#colRange + span')
+      rowRangeText.textContent = '行: ' + rowRange.value
+      colRangeText.textContent = '列: ' + colRange.value
+      world.cellStatus.mount = m * n,
+      world.createTable(m, n, noBoundry.checked)
+      drawCheckbox()
+      drawFromTable()
       evolveInfo()
-    }
-
-    function drawTable() {
-      table = world.table
-      for (let y = 0; y < m; y++) {
-        for (let x = 0; x < n; x++) {
-          let checkbox = document.querySelector(`[data-x="${x}"][data-y="${y}"]`)
-          if (table[y][x]) {
-            checkbox.checked = true
-          } else {
-            checkbox.checked = false
-          }
-        }
-      }
-    }
-
-    // 随机功能
-    random.addEventListener('click', e => {
-      world.createTable(m, n)
-      drawTable()
-      world.renewTablefromUser()
-      evolveInfo()
-    })
-
-    // 清空功能
-    clear.addEventListener('click', e => {
-      cells = document.querySelectorAll('.pixel')
-      cells.forEach(it => {
-        it.checked = false
-      })
-      renewTable()
-    })
-
-    //自动演化
-    let intervalID
-    autoplay.addEventListener('click', auto)
-    function auto() {
-      if (autoplay.checked) {
-        intervalID = setInterval(renewTable,  selection.value)
-      } else {
-        if (intervalID) {
-          clearInterval(intervalID)
-        }
-      }
-    }
-
-    // 进化信息
-    function evolveInfo() {
-      let text = `
-      <span> 细胞总量: ${world.cellStatus.mount} </span>
-      <span> 存活总数: ${world.cellStatus.alive} </span>
-      <span> 消亡总数：${world.cellStatus.dead} </span>
-      <span> 本轮稳定：${world.cellStatus.static} </span>
-      <span> 本轮消亡：${world.cellStatus.vanish} </span>
-      <span> 本轮复生：${world.cellStatus.reborn} </span>
-      `
-      let info = document.querySelector('.info')
-      info.innerHTML = text
     }
 
   </script>
