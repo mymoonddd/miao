@@ -2139,7 +2139,7 @@ var mymoonddd = function() {
     // propertyOf,
 
     // sortBy,
-    defer,
+    // defer,
     // delay,
     castArray,
     conforms,
