@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>印象便签</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+  <style>
+
+    /* * {
+      background-color: rgba(0,0,0,0.08);
+      box-shadow: inset 0 0 1px red;
+    } */
+
+    html {
+      height: 100%;
+    }
+
+    body {
+      margin: 0;
+      height: 100%;
+    }
+
+    main {
+      display: flex;
+      height: 100%;
+      width: 100%;
+    }
+
+    .tools {
+      flex: 0 1 auto;
+      width: 200px;
+      height: 100%;
+      background-color: rgb(105, 105, 105);
+      display: flex;
+      flex-flow: column;
+      overflow: auto;
+    }
+
+    .notesText {
+      flex: 1 1 auto;
+      height: 100%;
+      background-color: rgba(219, 219, 219, 0.904);
+      position: relative;
+    }
+
+  </style>
+</head>
+<body>
+  <main>
+    <section class="tools">
+      <button class="newNotesFolder">+ 新建文件夹</button>
+    </section>
+    <section class="notesText"></section>
+  </main>
+
+  <script>
+    let noteID = 0
+    let maxZIndex = 0
+    let folderID = 0
+
+
+  window.addEventListener('storage', e=>{
+    notes = JSON.parse(localStorage.notes ?? '{}')
+    // storeAndRead()
+  })
+    // 从LS中读取数据
+  notes = JSON.parse(localStorage.notes ?? '{}')
+
+  $(window).ready(readFromData)
+
+
+  function readFromData() {
+    for (let folderid in notes) {
+      let noteFolder = notes[folderid]
+      folderID = +folderid
+
+      // 读取文件夹
+      let folder = document.createElement('div')
+      folderStyle(folder, folderid)
+      $('.tools').append(folder)
+
+      for (let id in noteFolder) {
+        noteID = id
+        let noteSet = noteFolder[id]
+        maxZIndex = Math.max(maxZIndex, noteSet.zIndex) + 1
+
+        // 读取题目
+        let notesList = $(folder).children('.notesList')
+        let title = document.createElement('input')
+        titleStyle(title, id)
+        title.value = noteSet.title
+        $(notesList).append(title)
+
+        // 读取内容
+        let text = document.createElement('div')
+        let coordX = noteSet.coordX
+        let coordY = noteSet.coordY
+        let width = noteSet.width
+        let height = noteSet.height
+        let zIndex = noteSet.zIndex
+        textStyle(text, id, coordX, coordY, width, height, zIndex)
+        draggable(text)
+        $(text).children('.text')[0].textContent = noteSet.text
+        $(text).children('.drag')[0].textContent = noteSet.title
+        $('.notesText').append(text)
+     }
+    }
+  }
+
+  // 存储数据
+  function storeNotes() {
+    let id = this.dataset.id
+    let list = $(`input[data-id=${id}]`)
+    let note = $(`div[data-id=${id}]`)
+    let title = list[0].value
+    let text = note.children('.text')[0]?.textContent || ''
+    let coordX = note[0].style.left
+    let coordY = note[0].style.top
+    let zIndex = note[0].style.zIndex
+    let width = note[0].style.width
+    let height = note[0].style.height
+    let folder = $(list).parent()[0].dataset.folderid
+    notes[folder] = notes[folder] || {}
+    notes[folder][id] =
+    {
+      title,
+      text,
+      coordX,
+      coordY,
+      width,
+      height,
+      zIndex,
+    }
+    saveToLS()
+  }
+
+  function saveToLS() {
+    localStorage.setItem('notes', JSON.stringify(notes))
+  }
+
+  // 新建功能
+  $('.newNote').click(newNote)
+
+  function newNote(e) {
+    noteID++
+    let folder = e.target.dataset.folderid
+    let notesList = $(`div.notesList[data-folderid=${folder}]`)[0]
+    let title = document.createElement('input')
+    titleStyle(title, noteID)
+    $(notesList).append(title)
+    title.focus()
+
+    let text = document.createElement('div')
+    let coordX = 0
+    let coordY = 0
+    textStyle(text, noteID, coordX, coordY, '200px', '200px', maxZIndex++)
+    draggable(text)
+    $('.notesText').append(text)
+  }
+
+  // 数据格式-题目
+
+  function titleStyle(title, id) {
+    createContentForTitle(title)
+    $(title)
+    .attr('data-id', id)
+    .attr('maxLength', '20')
+    .attr('placeholder', '请输入标题(20字以内)')
+    .addClass('.noteTitle')
+    .css({
+      display: 'block',
+      margin: 'none',
+      backgroundColor: 'white',
+      outline: 'none',
+      border: '1px solid grey',
+      height: '10px',
+      padding: '8px 10px',
+      color: 'black',
+      fontSize: '15px',
+      position:'relative',
+    })
+    .mousedown(putNoteAhead)
+    .focus(putNoteAhead)
+    .focus(storeNotes)
+
+    function putNoteAhead(){
+      let id = this.dataset.id
+      $(`div[data-id=${id}]`)[0].style.zIndex = maxZIndex++
+    }
+
+    title.addEventListener('input', storeNotes)
+    title.addEventListener('input', syncTitle)
+  }
+
+  function syncTitle() {
+    let id = this.dataset.id
+    $(`div[data-id=${id}]`).children('.drag')[0].textContent = this.value
+  }
+
+  function createContentForTitle(title) {
+    let close = document.createElement('span')
+    $(close).addClass('close')
+    .css({
+      position:"absolute",
+      left: '0',
+      backgroundColor: "red",
+    }).html('X')
+    title.appendChild(close)
+  }
+
+
+  // 数据格式 - 文本
+  function textStyle(text, id, coordX, coordY, width, height, zIndex) {
+    createInnerContent(text)
+    $(text)
+    .attr('data-id', id)
+    .addClass('noteText')
+    .css({                  // 基本样式
+      width,
+      height,
+      boxShadow: "0 0 3px grey",
+      left: coordX,
+      top: coordY,
+      position: "absolute",
+      display: "grid",
+      gridTemplateRows: "max-content",
+      gridTemplateColumns: "8fr 1fr",
+      zIndex: zIndex,
+    })
+    .mousedown(function() {
+      this.style.zIndex =  maxZIndex++
+    })
+    .mousedown(storeNotes)
+    .dblclick(maxNote)
+    .children()
+    .attr('data-id', id)
+
+
+    // 背景颜色
+    if (id % 5 == 0) {
+      text.style.backgroundColor = 'hsl(10, 90%, 90%)'
+    }
+    if (id % 5 == 1) {
+      text.style.backgroundColor = 'hsl(30, 90%, 90%)'
+    }
+    if (id % 5 == 2) {
+      text.style.backgroundColor = 'hsl(50, 90%, 90%)'
+    }
+    if (id % 5 == 3) {
+      text.style.backgroundColor = 'hsl(70, 90%, 90%)'
+    }
+    if (id % 5 == 4) {
+      text.style.backgroundColor = 'hsl(90, 90%, 90%)'
+    }
+    if (id % 5 == 0) {
+      text.style.backgroundColor = 'hsl(1, 90%, 90%)'
+    }
+
+    // 文本区内部子元素
+    function createInnerContent(wrap) {
+
+      let drag = document.createElement('span')
+      let text = document.createElement('span')
+      let close = document.createElement('span')
+      let resize = document.createElement('span')
+
+      $(drag)
+      .addClass('drag')
+      .css({
+        backgroundColor: "white",
+        color: 'grey',
+        overflow: 'hidden',
+        alignSelf: 'center',
+        padding: '5px 10px',
+        fontSize: '15px',
+        minHeight: '19px'
+      })
+      .html('标题')
+      .hover(function(e) {
+        this.style.cursor = 'grab'
+      })
+      .mousemove(storeNotes)
+
+
+      $(text)
+      .addClass('text')
+      .css({
+        backgroundColor: 'transparent',
+        padding: '20px 10px',
+        overflow: 'auto',
+        gridColumnStart: 'span 2',
+        outline: "none",
+      })
+      .attr('contenteditable', 'true')
+
+      text.addEventListener('input', storeNotes)
+      text.addEventListener('keydown', e=> {
+        if (e.code == 'Enter' && !e.shiftKey) {
+          e.preventDefault()
+        }
+      })
+
+      $(close)
+      .addClass('close')
+      .css({
+        paddingRight: '10px',
+        backgroundColor: 'white',
+        textAlign: 'end',
+        padding: '5px 10px',
+        alignSelf: 'center',
+        fontSize: '15px',
+      })
+      .html('X')
+      .hover(function(){
+        $(this)
+        .css({
+          cursor: 'pointer',
+          color: 'gold'
+        })
+      })
+      .mouseleave(function(){
+        $(this)
+        .css({
+          color: 'black'
+        })
+      })
+      .click(deleteNote)
+
+      $(resize)
+      .addClass('resize')
+      .css({
+        display: 'block',
+        position: 'absolute',
+        bottom: '0',
+        right: '0',
+        width: '10px',
+        height: '10px',
+      })
+      .hover(function(){
+        $(this).css({
+          cursor: 'nwse-resize'
+        })
+      })
+      .mousedown(resizeable)
+
+      wrap.append(drag, close, text, resize)
+    }
+
+  }
+
+
+  // 双击最大化
+
+  let oldHeight
+  let oldWidth
+  let OLDTOP
+  let OLDLEFT
+  let dblclick = false
+
+  function maxNote(e) {
+    if (!dblclick) {
+      dblclick = true
+      oldHeight = this.style.height
+      oldWidth = this.style.width
+      OLDTOP = this.style.top
+      OLDLEFT = this.style.left
+      $(this).css({
+        width: $('.notesText')[0].clientWidth + 'px',
+        height: $('.notesText')[0].clientHeight + 'px',
+        top: 0,
+        left: 0,
+      })
+    } else {
+      dblclick = false
+      $(this).css({
+        width: oldWidth,
+        height: oldHeight,
+        top: OLDTOP,
+        left: OLDLEFT,
+      })
+    }
+  }
+
+  function storeAndRead() {
+    saveToLS()
+    $('.notesFolder').remove()
+    $('.notesText').empty()
+    readFromData()
+  }
+
+  // 改变大小功能
+  let lastWidth
+  let lastHeight
+  let oldNote
+
+  function resizeable(e) {
+    lastX = e.clientX
+    lastY = e.clientY
+    lastWidth = $(this).parent()[0].clientWidth
+    lastHeight = $(this).parent()[0].clientHeight
+    oldNote =  $(this).parent()[0]
+
+    window.addEventListener('mousemove', dragNote)
+    window.addEventListener('mouseup', ()=>{
+      window.removeEventListener('mousemove', dragNote)
+    })
+
+    function dragNote(e) {
+      let dx = e.clientX - lastX
+      let dy = e.clientY - lastY
+      let width = lastWidth + dx > 200 ? lastWidth + dx : 200
+      let height =  lastHeight + dy > 200 ? lastHeight + dy : 200
+
+      oldNote.style.width = width + 'px'
+      oldNote.style.height = height + 'px'
+    }
+  }
+
+  // 删除功能
+  function deleteNote() {
+    let id = this.dataset.id
+    let folder = $(`input[data-id=${id}]`).parent()[0].dataset.folderid
+    delete notes[folder][id]
+    if ($.isEmptyObject(notes[folder])) {
+      delete notes[folder]
+    }
+    storeAndRead()
+  }
+
+  // 拖拽功能
+  let lastX
+  let lastY
+  let oldThis
+  let oldTop
+  let oldLeft
+  let topEdge = 20
+  let leftEdge = 20
+
+  function draggable(note) {
+    $(note)
+    .mousedown(function(e) {                       // 拖拽功能
+      if (e.target.matches('.drag')) {
+        lastX = e.clientX
+        lastY = e.clientY
+        oldLeft = parseInt(this.style.left)
+        oldTop = parseInt(this.style.top)
+        oldThis = this
+        window.addEventListener('mousemove', dragNote)
+      }
+    })
+
+    $('*').mouseup(function(e) {
+      window.removeEventListener('mousemove', dragNote)
+    })
+
+    function dragNote(e) {
+      e.preventDefault()
+      let left = oldLeft + e.clientX - lastX
+      let top = oldTop + e.clientY - lastY
+
+      let rightEdge = $(oldThis).parent()[0].clientWidth - leftEdge - oldThis.clientWidth
+      let bottomEdge = $(oldThis).parent()[0].clientHeight - topEdge - oldThis.clientHeight
+      if (left > leftEdge && left < rightEdge) {
+        oldThis.style.left = left + 'px'
+      } else if (left <= leftEdge) {
+        oldThis.style.left = 0
+      } else {
+        oldThis.style.left = rightEdge + leftEdge + 'px'
+      }
+
+      if (top > topEdge && top < bottomEdge) {
+        oldThis.style.top = top + 'px'
+      } else if (top <= topEdge) {
+        oldThis.style.top = 0
+      } else {
+        oldThis.style.top = bottomEdge + topEdge +  'px'
+      }
+    }
+
+  }
+
+
+
+  // 文件夹
+
+ $('.newNotesFolder').click(newNotesFolder)
+
+ function newNotesFolder() {
+  folderID++
+  let folder = document.createElement('div')
+  folderStyle(folder, folderID)
+  $('.tools').append(folder)
+ }
+
+
+ function folderStyle(folder, folderID) {
+  createContentForFolder(folder)
+  $(folder).addClass('notesFolder')
+  .css({
+    display: 'grid',
+    gridTemplateColumns: '9fr 1fr',
+    overflow: 'auto'
+  })
+  .attr('data-folderid', folderID)
+  .children()
+  .attr('data-folderid', folderID)
+
+
+  function createContentForFolder(folder) {
+    let folderName = document.createElement('span')
+    let newNoteButton = document.createElement('button')
+    let notesList = document.createElement('div')
+
+    $(folderName).addClass('folderName')
+    .css({
+      color: 'white',
+      padding: '3px 10px',
+    })
+    .click(function(){
+      $(this).siblings('.notesList').slideToggle('normal')
+    })
+    .html(`便签集`)
+
+    $(newNoteButton).addClass('newNote')
+    .css({
+      backgroundColor: 'transparent',
+      border: 'none',
+      color: 'white',
+    })
+    .html('+')
+    .click(newNote)
+
+    $(notesList).addClass('notesList')
+    .css({
+      display: 'flex',
+      flexFlow: 'column',
+      gridColumnStart: 'span 2',
+      overflowY: 'auto',
+      flexGrow: '1',
+    })
+
+    $(folder).append(folderName, newNoteButton, notesList)
+  }
+ }
+
+
+
+  </script>
+
+ </body>
+</html>
