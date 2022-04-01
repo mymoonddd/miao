@@ -6,7 +6,7 @@ var mymoonddd = function() {
         return values[0]
     }
 
-    function isEqual(value, other) {
+    function isEqualWith(value, other, customizer=undefined) {
         /**
          * This method supports comparing:
          * 
@@ -23,48 +23,88 @@ var mymoonddd = function() {
         if (typeValue !== typeOther) {
             return false
         }
-        if (typeValue == '[object Object]') {
-            return isEqualObject(value, other)
+        let type = /\b\w+(?=\]$)/.exec(typeValue)[0]
+        if (type == 'Object') {
+            return isEqualObject(value, other, customizer)
         }
-        if (typeValue == '[object Array]') {
-            return isEqualArray(value, other)
+        if (type == 'Array') {
+            return isEqualArray(value, other, customizer)
         }
-        return value == other
+        return isEqualBase(value, other, customizer)
+    }
 
-        function isEqualObject(value, other) {
-            for (let key in value) {
-                if (!isEqual(value[key], other[key])) {
-                    return false
-                }
-            }
-            for (let key in other) {
-                if (!isEqual(value[key], other[key])) {
-                    return false
-                }
-            }
-            return true
-        }
+    function isEqual(value, other) {
+        return isEqualWith(value, other)
+    }
 
-        function isEqualArray(value, other) {
-            if (value.length != other.length) {
+    function isEqualBase(value, other, customizer) {
+        if (customizer) {
+            let res = customizer(value, other)
+            if (res === undefined) {
+                res = value === other
+            }
+            return res
+        }
+        return value === other
+    }
+
+    function isEqualObject(value, other, customizer) {
+        if (Object.keys(value).length !== Object.keys(other).length) {
+            return false
+        }
+        for (let key in value) {
+            let res 
+            if (customizer) {
+                res = customizer(value[key], other[key], key, value, other)
+            }
+            if (res === undefined) {
+                res = isEqual(value[key], other[key])
+            }
+            if (!res) {
                 return false
             }
-            for (let i in value) {
-                if (!isEqual(value[i], other[i])) {
-                    return false
-                }
-            }
-            return true
         }
+        return true
+    }
+
+    function isEqualArray(value, other, customizer) {
+        if (value.length != other.length) {
+            return false
+        }
+
+        for (let i in value) {
+            let res
+            if (customizer) {
+                res = customizer(value[i], other[i], i, value, other)
+            }
+            if (res === undefined) {
+                res = isEqual(value[i], other[i])
+            }
+            if (!res) {
+                return false
+            }
+        }
+        return true
     }
 
     function isMatch(object, source) {
+        return isMatchWith(object, source)
+    }
+
+    function isMatchWith(object, source, customizer=undefined) {
         if (typeof(source) !== 'object') {
             return false
         }
         let len = 0
         for (let key in source) {
-            if (!isEqual(object[key], source[key])) {
+            let res 
+            if (customizer) {
+                res = customizer(object[key], source[key])
+            }
+            if (res === undefined) {
+                res = isEqual(object[key], source[key])
+            }
+            if (!res) {
                 return false
             }
         }
@@ -98,8 +138,19 @@ var mymoonddd = function() {
         }
     }
 
+    function propertyOf(object) {
+        return function(path) {
+            let val = cloneDeep(object)
+            paths = toPath(path)
+            for (let path of paths) {
+                val = val[path]
+            }
+            return val
+        }
+    }
+
     function toPath(value) {
-        if (Array.isArray(value)) {
+        if (isArray(value)) {
             return value
         }
         let path = []
@@ -115,7 +166,7 @@ var mymoonddd = function() {
                     if (str != '') path.push(str)
                     str = ''
                 } else if (value[i] == ']') {
-                    if (str != '') path.push(+str)
+                    if (str != '') path.push(str)
                     str = ''
                 } else {
                     str += value[i]
@@ -125,12 +176,20 @@ var mymoonddd = function() {
         }
     }
 
+
     function split(string = '', separator, limit = Infinity) {
+        let reg = new RegExp(separator, 'g')
+        let match
+        let sepIdx = []
+        while (match = reg.exec(string)) {
+            sepIdx.push(match.index)
+        }
+
         let res = []
         let str = ''
         for (let i = 0; i < string.length; i++) {
-            if (string[i] == separator) {
-                if (str != '') res.push(str)
+            if (includes(sepIdx, i)) {
+                res.push(str)
                 str = ''
             } else {
                 str += string[i]
@@ -139,6 +198,7 @@ var mymoonddd = function() {
                 break
             }
         }
+
         if (res.length < limit && str !== '') {
             res.push(str)
         }
@@ -175,7 +235,6 @@ var mymoonddd = function() {
         }
         return value
     }
-
 
 
     //实用型函数
@@ -732,6 +791,24 @@ var mymoonddd = function() {
         return result
     }
 
+    function rangeRight(start=0, end, step=1) {
+        start = arguments[0]
+        if (arguments.length == 1) {
+            end = start 
+            start = 0 
+            step = start < end ? 1 : -1
+        } else {
+            step = arguments[2] === undefined ? 1 : arguments[2]
+        }
+
+        let res = []
+        let len = step ? Math.abs((end - start) / step) : Math.abs(end - start)
+        for (let i = start, count = 0; count < len; i+=step, count++) {
+            res.unshift(i)
+        }
+        return res
+    }
+
     function difference(array, ...values) {
         let result = []
         values = flatten(values)
@@ -939,6 +1016,17 @@ var mymoonddd = function() {
         return array
     }
 
+    function pullAt(array, indexes) {
+        let res = []
+        let count = 0
+        for (let i in indexes) {
+            let idx = indexes[i]
+            res.push(...array.splice(idx-count, 1))
+            count++
+        }
+        return res
+    }
+
     function swap(array, i, j) {
         let t = array[i]
         array[i] = array[j]
@@ -1011,12 +1099,12 @@ var mymoonddd = function() {
     function reduce(collection, iteratee = identity, accumulator) {
         iteratee = Iteratee(iteratee)
         if (arguments.length < 3) {
-          accumulator = collection[0]
+            accumulator = collection[0]
         } else {
-          accumulator = iteratee(accumulator, collection[0], 0, collection)
+            accumulator = iteratee(accumulator, collection[0], 0, collection)
         }
         for (let i = 1; i < collection.length; i++) {
-          accumulator = iteratee(accumulator, collection[i], i, collection)
+            accumulator = iteratee(accumulator, collection[i], i, collection)
         }
         return accumulator
     }
@@ -1024,17 +1112,17 @@ var mymoonddd = function() {
     function reduceRight(collection, iteratee = identity, accumulator) {
         // 仅考虑了collection为数组的情况
         if (collection.length) {
-          iteratee = Iteratee(iteratee)
-          let idx = collection.length-1
-          if (arguments.length < 3) {
-            accumulator = collection[idx]
-          } else {
-            accumulator = iteratee(accumulator, collection[idx], idx, collection)
-          }
-          for (let i = idx - 1; i >= 0; i--) {
-            accumulator = iteratee(accumulator, collection[i], i, collection)
-          }
-          return accumulator
+            iteratee = Iteratee(iteratee)
+            let idx = collection.length - 1
+            if (arguments.length < 3) {
+                accumulator = collection[idx]
+            } else {
+                accumulator = iteratee(accumulator, collection[idx], idx, collection)
+            }
+            for (let i = idx - 1; i >= 0; i--) {
+                accumulator = iteratee(accumulator, collection[i], i, collection)
+            }
+            return accumulator
         }
     }
 
@@ -1060,12 +1148,6 @@ var mymoonddd = function() {
         }
         return false
     }
-
-    // function negate(f) {
-    //   return function(...args){
-    //     return !f(...args)
-    //   }
-    // }
 
     function every(collection, predicate = identity) {
         predicate = Iteratee(predicate)
@@ -1128,7 +1210,7 @@ var mymoonddd = function() {
         }
     }
 
-    function findLastKey(object, predicate=identity) {
+    function findLastKey(object, predicate = identity) {
         predicate = Iteratee(predicate)
         let res = {}
         for (let key in object) { //对象
@@ -1342,6 +1424,9 @@ var mymoonddd = function() {
         return res
     }
 
+    function isArguments(value) {
+        return Object.prototype.toString.call(value) == '[object Arguments]'
+    }
 
     function isArray(value) {
         return Object.prototype.toString.call(value) == '[object Array]'
@@ -1366,45 +1451,169 @@ var mymoonddd = function() {
         return Object.prototype.toString.call(value) == '[object Date]'
     }
 
+    function isEmpty(value) {
+        if (value === null || typeof value !== 'object') {
+            return true
+        }
+        if (isArray(value) || isArrayLike(value) || isArrayLikeObject(value)) {
+            return value.length == 0
+        }
+        if (isObject(value) || isObjectLike(value)) {
+            return Object.keys(value).length == 0
+        }
+        if (isMap(value) || isSet(value)) {
+            return value.size == 0
+        }
+    }
+
+    function isElement(value) {
+        return value instanceof HTMLElement
+    }
+
+    function isError(value) {
+        return value instanceof Error 
+    }
+
     function isFunction(value) {
         return Object.prototype.toString.call(value) == '[object Function]'
+    }
+
+    function isFinite(value) {
+       return isNumber(value) && value > -Infinity && value < Infinity 
+    }
+
+    function toFinite(value) {
+        value = toNumber(value)
+        if (isFinite(value)) {
+            return value
+        } else {
+            if (value == Infinity) {
+                return Number.MAX_VALUE
+            }
+            if (value == -Infinity) {
+                return -Number.MAX_VALUE
+            }    
+        }
     }
 
     function isInteger(value) {
         if (value == Infinity || value == -Infinity) {
             return false
         }
-        if (Object.prototype.toString.call(value) == '[object Number]') {
+        if (isNumber(value)) {
             return value == Math.floor(value)
         }
         return false
     }
 
+    function toInteger(value) {
+        value = toFinite(value)
+        return floor(value)
+    }
+
+    function isLength(value) {
+        return isInteger(value) && value >= 0 && value < 2**32 -1
+    }
+
+    function toLength(value) {
+        value = toInteger(value)
+        if (value < 0) {
+            return 0
+        }
+        if (value > 2**32 -1) {
+            return 2**32 -1
+        }
+        return value 
+    }
+
+    function isMap(value) {
+        return Object.prototype.toString.call(value) == '[object Map]'
+    }
+
+    function isNaN(value) {
+        if (isObject(value)) {
+            return value.valueOf() !== value.valueOf()
+        }
+        return isNumber(value) && value !== value
+    }
+
+    function isNil(value) {
+        return isNull(value) || isUndefined(value)
+    }
+
+    function isNull(value) {
+        return value === null
+    }
+
     function isNumber(value) {
-        return Object.prototype.toString.call(value) == '[object Number]'
+        return typeof value == 'number' || value instanceof Number
+    }
+
+    function toNumber(value) {
+        if (typeof value == Number) {
+            return value 
+        }
+        return Number(value)
     }
 
     function isObject(value) {
-        while (value) {
-            if (typeof(value) == 'object') {
-                return true
-            }
-            value = value.prototype
+        if (isNil(value) ||
+            isBoolean(value) ||
+            isString(value) ||
+            isNumber(value) ||
+            isSymbol(value)) {
+            return false
+        } else {
+            return true
+        }
+    }
+
+    function isObjectLike(value) {
+        return !isNull(value) && typeof value == 'object'
+    }
+
+    function isPlainObject(value) {
+        if (Object.getPrototypeOf(value) === null) {
+            return true
+        }
+        if (Object.getPrototypeOf(value).constructor === Object) {
+            return true
         }
         return false
     }
 
-    function isObjectLike(value) {
-        if (value) {
-            if (typeof(value) == 'object') {
-                return true
-            }
-        }
-        return false
+    function isRegExp(value) {
+        return Object.prototype.toString.call(value) == '[object RegExp]'
+    }
+
+    function isSet(value) {
+        return Object.prototype.toString.call(value) == '[object Set]'
     }
 
     function isString(value) {
         return Object.prototype.toString.call(value) == '[object String]'
+    }
+
+    function isSymbol(value) {
+        return Object.prototype.toString.call(value) == '[object Symbol]'
+    }
+
+    function isTypedArray(value) {
+        let reg = /^\[object Uint\d+Array\]$/
+        let type = Object.prototype.toString.call(value)
+        return reg.test(type)
+    }
+
+    function isUndefined(value) {
+        return value === undefined
+    }
+
+    function isWeakMap(value) {
+        return Object.prototype.toString.call(value) == '[object WeakMap]'
+    }
+
+    function isWeakSet(value) {
+        return Object.prototype.toString.call(value) == '[object WeakSet]'
     }
 
     function filter(collection, predicate = identity) {
@@ -1420,11 +1629,26 @@ var mymoonddd = function() {
     }
 
     function slice(array, start = 0, end = array.length) {
-        let res = []
-        for (let i = start; i < end; i++) {
-            res.push(array[i])
+        if (isArray(array)) {
+            let res = []
+            if (end < 0) {
+                end = array.length + end
+            }
+            for (let i = start; i < end; i++) {
+                res.push(array[i])
+            }
+            return res
         }
-        return res
+        if (isString(array)) {
+            let res = ''
+            if (end < 0) {
+                end = array.length + end
+            }
+            for (let i = start; i < end; i++) {
+                res += array[i]
+            }
+            return res
+        }
     }
 
     function eq(value, other) {
@@ -1621,6 +1845,40 @@ var mymoonddd = function() {
         return object
     }
 
+    function merge(object, ...sources) {
+        for (let source of sources) {
+            for (let key in source) {
+              if (typeof source[key] == 'object' && typeof object[key] == 'object') {
+                merge(object[key], source[key])
+              } else if (source[key] !== undefined) {
+                  object[key] = source[key]
+              }
+            }
+        }
+        return object
+    }
+
+    function mergeWith(object, ...sources) {
+        let customizer = sources.pop()
+        for (let source of sources) {
+            for (let key in source) {
+              let objValue = object[key]
+              let srcValue = source[key]
+              object[key] = customizer(objValue, srcValue, key, object, source)
+              if (object[key] === undefined) {
+                if (typeof objValue == 'object' && typeof srcValue == 'object') {
+                  mergeWith(objValue, srcValue, customizer)
+                } else  {
+                    if (srcValue !== undefined) {
+                      object[key] = srcValue
+                    }
+                }
+              }
+            }
+        }
+        return object
+    }
+
     function defaults(object, ...sources) {
         for (let source of sources) {
             for (let key in source) {
@@ -1639,11 +1897,19 @@ var mymoonddd = function() {
                     object[key] = source[key]
                 }
                 if (typeof object[key] == 'object') {
-                  defaultsDeep(object[key], source[key])
+                    defaultsDeep(object[key], source[key])
                 }
             }
         }
         return object
+    }
+
+    function defaultTo(value, defaultValue) {
+        if (isNaN(value) || isNil(value)) {
+            return  defaultValue   
+        } else {
+            return value
+        }
     }
 
     function has(object, path) {
@@ -1761,7 +2027,6 @@ var mymoonddd = function() {
         let keys = []
         for (let key in object) {
             keys.push(key)
-
         }
         return keys
     }
@@ -1786,6 +2051,14 @@ var mymoonddd = function() {
             if (object.hasOwnProperty(prop)) {
                 res.push(object[prop])
             }
+        }
+        return res
+    }
+
+    function valuesIn(object) {
+        let res = []
+        for (let prop in object) {
+            res.push(object[prop])
         }
         return res
     }
@@ -1902,6 +2175,19 @@ var mymoonddd = function() {
         return str
     }
 
+    function escapeRegExp(string='') {
+        let escapes = ["^", "$", "", ".", "*", "+", "?", "(", ")", "[", "]", "{", "}", "|"]
+        let res = ''
+        for (let char of string) {
+            if (includes(escapes, char)) {
+                res += '\\' + char
+            } else {
+                res += char
+            }
+        }
+        return res
+    }
+
     function includes(collection, value, fromIndex = 0) {
         let len = collection.length
         let i = 0
@@ -1951,150 +2237,823 @@ var mymoonddd = function() {
         }
     }
 
-    function clamp(number, lower, upper) {
-      if (arguments.length == 0) {
-        return NaN
-      }
-      if (arguments.length < 3) {
-        return arguments[0]
-      }
-      return arguments[1]
-    }
+
 
 
     function inRange(number, start, end) {
-      if (arguments.length == 2) {
-        end = arguments[1]
-        start = 0
-      }
-      if (start > end) {
-        let t = start 
-        start = end 
-        end = t
-      } 
-      return number > start && number < end
+        if (arguments.length == 2) {
+            end = arguments[1]
+            start = 0
+        }
+        if (start > end) {
+            let t = start
+            start = end
+            end = t
+        }
+        return number > start && number < end
     }
 
     function at(object, paths) {
-      return map(map(paths, toPath), path => {
-        let obj = object
-        for (let p of path) {
-          obj = obj[p]
-        }
-        return obj
-      })
+        return map(map(paths, toPath), path => {
+            let obj = object
+            for (let p of path) {
+                obj = obj[p]
+            }
+            return obj
+        })
     }
 
-    function forIn(object, iteratee=identity) {
-      iteratee = Iteratee(iteratee)
-      for (let key in object) {
-        iteratee(object[key], key, object)
-      }
-      return object
+    function forIn(object, iteratee = identity) {
+        iteratee = Iteratee(iteratee)
+        for (let key in object) {
+            iteratee(object[key], key, object)
+        }
+        return object
     }
 
     function NodeList(val, next) {
-      this.val = val
-      this.next = next ?? null
-      return this
+        this.val = val
+        this.next = next ?? null
+        return this
     }
 
-    function forInRight(object, iteratee=identity) {
-      iteratee = Iteratee(iteratee)
-      let stack = new NodeList()
-      for (let key in object) {
-        let prop = {}
-        prop[key] = object[key]
-        let node = new NodeList(prop, stack)
-        stack = node
-      }
-
-      while (stack.val) {
-        for (let key in stack.val) {
-          let val =  stack.val[key]
-          iteratee(val, key, object)
+    function forInRight(object, iteratee = identity) {
+        iteratee = Iteratee(iteratee)
+        let stack = new NodeList()
+        for (let key in object) {
+            let prop = {}
+            prop[key] = object[key]
+            let node = new NodeList(prop, stack)
+            stack = node
         }
-        stack = stack.next
-      }
 
-      return object
+        while (stack.val) {
+            for (let key in stack.val) {
+                let val = stack.val[key]
+                iteratee(val, key, object)
+            }
+            stack = stack.next
+        }
+
+        return object
     }
 
-    function forOwn(object, iteratee=identity) {
-      iteratee = Iteratee(iteratee)
-      for (let key in object) {
-        if (object.hasOwnProperty(key)) {
-          iteratee(object[key], key, object)
+    function forOwn(object, iteratee = identity) {
+        iteratee = Iteratee(iteratee)
+        for (let key in object) {
+            if (object.hasOwnProperty(key)) {
+                iteratee(object[key], key, object)
+            }
         }
-      }
-      return object
+        return object
     }
 
-    function forOwnRight(object, iteratee=identity) {
-            iteratee = Iteratee(iteratee)
-      let stack = new NodeList()
-      for (let key in object) {
-        let prop = {}
-        prop[key] = object[key]
-        let node = new NodeList(prop, stack)
-        stack = node
-      }
-
-      while (stack.val) {
-        for (let key in stack.val) {
-          if (object.hasOwnProperty(key)) {
-            let val =  stack.val[key]
-            iteratee(val, key, object)
-          }
+    function forOwnRight(object, iteratee = identity) {
+        iteratee = Iteratee(iteratee)
+        let stack = new NodeList()
+        for (let key in object) {
+            let prop = {}
+            prop[key] = object[key]
+            let node = new NodeList(prop, stack)
+            stack = node
         }
-        stack = stack.next
-      }
 
-      return object
+        while (stack.val) {
+            for (let key in stack.val) {
+                if (object.hasOwnProperty(key)) {
+                    let val = stack.val[key]
+                    iteratee(val, key, object)
+                }
+            }
+            stack = stack.next
+        }
+
+        return object
     }
 
     function functions(object) {
-      let res = []
-      for (let key in object) {
-        if (object.hasOwnProperty(key) && typeof object[key] == 'function') {
-          res.push(key)
+        let res = []
+        for (let key in object) {
+            if (object.hasOwnProperty(key) && typeof object[key] == 'function') {
+                res.push(key)
+            }
         }
-      }
-      return res
+        return res
     }
 
     function functionsIn(object) {
-      let res = []
-      for (let key in object) {
-        if (typeof object[key] == 'function') {
-          res.push(key)
+        let res = []
+        for (let key in object) {
+            if (typeof object[key] == 'function') {
+                res.push(key)
+            }
         }
-      }
-      return res
+        return res
+    }
+
+    function toPairs(object) {
+        if (isArray(object)) {
+            return object
+        }
+        if (isMap(object) || isSet(object)) {
+            return array.from(object)
+        }
+        let res = []
+        for (let key in object) {
+            let val = object[key]
+            if (object.hasOwnProperty(key)) {
+                res.push([key, val])
+            }
+        }
+        return res
+    }
+
+    function fromPairs(pairs) {
+        let obj = {}
+        forEach(pairs, pair => {
+            let key = pair[0]
+            let val = pair[1]
+            obj[key] = val
+        })
+        return obj
+    }
+
+    function toPairsIn(object) {
+        if (isArray(object)) {
+            return object
+        }
+        if (isMap(object) || isSet(object)) {
+            return array.from(object)
+        }
+        let res = []
+        for (let key in object) {
+            let val = object[key]
+            res.push([key, val])
+        }
+        return res
+    }
+
+    // function transform(object, iteratee=identity, accumulator) {
+    //     let collection = toPairs(object)
+    //     return reduce(collection, iteratee, accumulator)
+    // }
+
+    function setWith(object, path, value, customizer=undefined) {
+        let paths = toPath(path)
+        let len = paths.length 
+        let obj = object
+        for (let i = 0; i < len; i++) {
+            let path = paths[i]
+            if (i == len - 1) {
+                obj[path] = value
+                return object
+            }
+            if (obj[path] === undefined) {
+                if (customizer) {
+                    obj[path] = new customizer
+                } else {
+                    if (path >= 0 && path <= 9) {
+                        obj[path] = []
+                    } else {
+                        obj[path] = {}
+                    }
+                }
+            }
+            obj = obj[path]
+        }
+    }
+
+    function set(object, path, value) {
+        return setWith(object, path, value)
+    }
+
+    function unset(object, path) {
+        let paths = toPath(path)
+        let len = paths.length
+        let obj = object
+        for (let i = 0; i < len; i++) {
+            let path = paths[i]
+            if (i == len - 1) {
+                return delete obj[path]   
+            }
+            obj = obj[path]
+        }
+        return false
+    }
+
+    function updateWith(object, path, updater, customizer=undefined) {
+        let paths = toPath(path)
+        let len = paths.length 
+        let obj = object
+        for (let i = 0; i < len; i++) {
+            let path = paths[i]
+            if (i == len - 1) {
+                obj[path] = updater(obj[path])
+                return object
+            }
+            if (obj[path] === undefined) {
+                if (customizer) {
+                    obj[path] = new customizer
+                } else {
+                    if (path >= 0 && path <= 9) {
+                        obj[path] = []
+                    } else {
+                        obj[path] = {}
+                    }
+                }
+            }
+            obj = obj[path]
+        }
+    }
+
+    function update(object, path, updater) {
+        return updateWith(object, path, updater)
+    }
+
+    function camelCase(string='') {
+        let arr = lowerCase(string).split(' ')
+        let res = toLower(arr[0])
+        for (let i = 1; i < arr.length; i++) {
+            let word = arr[i]
+            res += capitalize(word) 
+        }
+        return res
+    }
+
+    function kebabCase(string='') {
+        return replace(lowerCase(string), ' ', '-')
+    }
+
+    function snakeCase(string='') {
+         return replace(lowerCase(string), ' ', '_')
+    }
+
+    function startCase(string='') {
+        string = parseName(string)
+        return map(split(string, ' '), word => {
+            if (/[a-z]/.test(word)) {
+                return capitalize(word)
+            } else {
+                return word
+            }
+        }).join(' ')
+    }
+
+    function capitalize(string='') {
+        let res = ''
+        res += toUpper(string[0])
+        for (let i = 1; i < string.length; i++) {
+            res += toLower(string[i])
+        }
+        return res
+    }
+
+    function lowerFirst(string='') {
+        return toLower(string[0]) + string.slice(1)
+    }
+
+    function upperFirst(string='') {
+         return toUpper(string[0]) + string.slice(1)
+    }
+
+    function endsWith(string='', target, position=string.length) {
+        return string[position-1] == target
+    }
+
+    function startsWith(string='', target, position=0) {
+        return string[position] == target
+    }
+
+    function toLower(string='') {
+        let res = ''
+        for (let char of string) {
+            let code = char.charCodeAt()
+            if (code >= 65 && code <= 90) {
+                char = String.fromCharCode(code + 32)
+            }
+            res += char
+        }
+        return res
+    }
+
+    function toUpper(string='') {
+        let res = ''
+        for (let char of string) {
+            let code = char.charCodeAt()
+            if (code >= 97 && code <= 122) {
+                char = String.fromCharCode(code - 32)
+            }
+            res += char
+        }
+        return res
+    }
+
+    function lowerCase(string='') {
+        return toLower(words(string).join(' '))
+    }
+
+    function upperCase(string='') {
+        return toUpper(words(string).join(' '))
+    }
+
+    function words(string='', pattern) {
+        if (!pattern) {
+            let str = trim(string, /[^a-zA-Z0-9]/)
+            let i = 0
+            let res = []
+            while (i < str.length) {
+                if (isLowerCase(str[i])) {
+                    let tmp = ''
+                    while (isLowerCase(str[i])) {
+                        tmp += str[i]
+                        i++
+                    }
+                    res.push(tmp)
+                }
+                if (isNumStr(str[i])) {
+                    let tmp = ''
+                    while (isNumStr(str[i])) {
+                        tmp += str[i]
+                        i++
+                    }
+                    res.push(tmp)
+                }
+                if (isUpperCase(str[i])) {
+                    let tmp = str[i]
+                    let tmpIdx = i
+                    let hasLowerCase = false
+                    i++
+                    while (isLowerCase(str[i])) {
+                        tmp += str[i]
+                        i++
+                        hasLowerCase = true
+                    }
+                    while (!hasLowerCase && isUpperCase(str[i])) {
+                        tmp += str[i]
+                        i++
+                    }
+                    if (hasLowerCase) {
+                        res.push(tmp)
+                    } else {
+                        if (isLowerCase(str[i])) {
+                            i = tmpIdx
+                            res.push(str[i])
+                        } else {
+                            res.push(tmp)
+                        }
+                    }
+                }
+                i++
+            }
+            return res
+        } else {
+            pattern = new RegExp(pattern)
+            if (pattern.global) {
+                let res = []
+                let tmp = ''
+                for (let char of string) {
+                    pattern.lastIndex = 0
+                    if (pattern.test(char)) {
+                        tmp += char
+                    } else {
+                        if (tmp !== '') {
+                            res.push(tmp)
+                            tmp = ''
+                        }
+                    }
+                }
+                if (tmp !== '') {
+                    res.push(tmp)
+                }
+                return res
+            } else {
+                return pattern.exec(string)
+            }
+        }
     }
 
 
-    // function set(object, path, value) {
-    //   let paths = toPath(path)
+    function isLowerCase(string='') {
+        return string >= 'a' && string <= 'z'
+    }
 
-    //   for (let path of paths) {
-    //   }
-    //   return object
+    function isUpperCase(string='') {
+        return string >= 'A' && string <= 'Z'
+    }
+
+    function isNumStr(string='') {
+        return string >= '0' && string <= '9'
+    }
+
+    function trim() {
+        let string = arguments[0]
+        let chars = arguments.length == 2 ? arguments[1] : ' '
+        return trimEnd(trimStart(string, chars), chars)
+    }
+
+    function trimStart() {
+        let string = arguments[0]
+        let chars = arguments.length == 2 ? arguments[1] : ' '
+        chars = string.match(new RegExp(chars, 'g'))
+        let res = ''
+        let len = string.length
+        let hasChar = true
+        for (let i = 0; i < len; i++) {
+            let char = string[i]
+            if (!hasChar || !includes(chars, char)) {
+                res += char
+                hasChar = false
+            }
+        }
+        return res
+    }
+
+    function trimEnd() {
+        let string = arguments[0]
+        let chars = arguments.length == 2 ? arguments[1] : ' '
+        chars = string.match(new RegExp(chars, 'g'))
+        let res = ''
+        let len = string.length
+        let hasChar = true
+        for (let i = len-1; i >= 0; i--) {
+            let char = string[i]
+            if (!hasChar || !includes(chars, char)) {
+                res = char + res
+                hasChar = false
+            }
+        }
+        return res
+    }
+
+    function parseInt() {
+        let len = arguments.length
+        let string = arguments[0]
+        let radix = len == 2 ? arguments[1] : 10
+        let numStr = ''
+        for (let char of string) {
+            if (char >= '0' && char < radix) {
+                numStr += char
+            } else {
+                break
+            }
+        }
+        let len2 = numStr.length
+        let res = len2 == 0 ? NaN : 0
+        for (let i = 0, j = len2-1; i < len2; i++, j--) {
+            let digit = numStr[j] * radix ** i
+            res += digit
+        }
+        return res
+    }
+
+
+    function replace(string='', pattern, replacement) {
+        if (isRegExp(pattern)) {
+            pattern = pattern.exec(string)[0]
+        }
+        let res = ''
+        let matched = false
+        for (let i = 0; i < string.length; i++) {
+            if (!matched && string[i] == pattern[0]) {
+                matched = true
+                let j
+                for (j = 1; j < pattern.length; j++) {
+                    if (string[i+j] !== pattern[j]) {
+                        matched = false
+                        break
+                    }
+                }
+                if (matched) {
+                    res += replacement 
+                    i += j - 1
+                } else {
+                    res += string[i]
+                }
+            } else {
+                res += string[i]
+            }
+        }
+        return res 
+    }
+
+    function clone(value) {
+        if (!isCloneable(value)) {
+            return {}
+        } else if (isObject(value)) {
+            if (value === null) {
+                return value
+            }
+            let res = {}
+            for (let key in value) {
+                let val = value[key]
+                res[key] = val
+            }
+            return res
+        } else if (isArrayLike(value)) {
+            let res = []
+            for (let val of value) {
+                res.push(val)
+            }
+            return res
+        } else {
+            return value
+        }
+    }
+
+    function cloneDeep(value) {
+        if (!isCloneable(value)) {
+            return {}
+        }  else if (isObject(value)) {
+            if (value === null) {
+                return value
+            }
+            let res = {}
+            for (let key in value) {
+                let val = value[key]
+                res[key] = cloneDeep(val)
+            }
+            return res
+        } else if (isArrayLike(value)) {
+            let res = []
+            for (let val of value) {
+                res.push(cloneDeep(val))
+            }
+            return res
+        } else {
+            return value
+        }
+    }
+
+    function isCloneable(value) {
+        if (isError(value) || isFunction(value) || isWeakMap(value)) {
+            return false
+        } else {
+            return true
+        }
+    }
+
+    function ary(func, n=func.length) {
+        return function() {
+            arguments.length = n
+            return func.apply(this, arguments)
+        }
+    }
+
+    function unary(func) {
+        return ary(func, 1)
+    }
+
+    function negate(predicate) {
+        return function() {
+            return !predicate.apply(this, arguments)
+        }
+    }
+
+    function once(func) {
+        let invoked = false 
+        let res
+        return function() {
+            if (!invoked) {
+                res = func.apply(this, arguments)
+                invoked = true
+            } 
+            return res
+        }
+    }
+
+    // function memoize(func, resolver) {
+    //     let val 
+    //     let key
+    //     let data = {}
+    //     return function(key) {
+    //         val = func.apply(this, arguments)
+    //         key = resolver === undefined ? arguments[0] : resolver(arguments[0])
+    //         Object.defineProperty(this, 'cache', Fn)
+    //         function Fn(val, key) {
+    //             this.data = data
+    //             this.data[key] = val
+    //             this.set = function(key, val) {
+    //                 this.data[obj] = val
+    //             }
+    //         }
+    //         return data[key]
+    //     }
     // }
 
-    // function pick(object, paths) {
-    //   paths = paths.map(toPath)
-    //   let prop = {}
-    //   for (let path of paths) {
-    //       prop[path[0]] = pick(object[path[0]], path.slice(1))
-    //   }
-    //   return prop
-    // }
+    function flip(func) {
+        return function() {
+            return func.apply(this, reverse(arguments))
+        }
+    }
+
+    function flow(funcs) {
+        let res
+        return function() {
+            res = arguments
+            for (let func of funcs) {
+                if (isArrayLike(res)) {
+                    res = func.apply(this, res) 
+                } else {
+                    res = func.call(this, res)
+                }
+            }
+            return res
+        }
+    }
+
+    function flowRight(funcs) {
+        return flow(reverse(funcs))
+    }
+
+    function method(path, args) {
+        let paths = toPath(path)
+        return function(object) {
+            let res = object
+            for (let path of paths) {
+                res = res[path]
+            } 
+            return res.apply(this, args) 
+        }
+    }
+
+    function methodOf(object, args) {
+        return function(path) {
+            let paths = toPath(path)
+            let res = object
+            for (let path of paths) {
+                res = res[path]
+            } 
+            return res.apply(this, args) 
+        } 
+    }
+
+    function nthArg(n=0) {
+        return function() {
+            args = toArray(arguments)
+            return args.at(n)
+        }
+    }
+
+    function parseJson(string='') {
+        let i = 0
+        if (string[0] == '[') {
+            return parseJsonArray()
+        } 
+        if (string[0] == '{') {
+            return parseJsonObject()
+        } 
+        return parseJsonCharacter()
+
+        function parsePart() {
+            if (string[i] == '[') {
+                return parseJsonArray()
+            }
+            if (string[i] == '{') {
+                return parseJsonObject()
+            }
+            return parseJsonCharacter()
+        }
+
+
+        function parseJsonCharacter() {
+            if (string[i] == '\"') {
+                return parseJsonString()
+            }
+            if (isNumStr(string[i])) {
+                return parseJsonNumber()
+            }
+            if (string[i] == 't') {
+                i+=4
+                return true
+            }
+            if (string[i] == 'f') {
+                i+=5
+                return false
+            }
+            if (string[i] == 'u') {
+                i+=9
+                return undefined
+            }
+            if (string[i] == 'N') {
+                i+=3
+                return NaN
+            }
+            if (string[i] == 'n') {
+                i+=4
+                return null
+            }
+        }
+
+        function parseJsonString() {
+            i++ 
+            let res = ''
+            while(string[i] && string[i] !== '\"') {
+                res += string[i]
+                i++
+            }
+            i++
+            return res
+        }
+
+        function parseJsonNumber() {
+            let res = ''
+            while(string[i] && string[i] !== ',' || string[i] !== ']' || string[i] !== '}') {
+                res += string[i]
+                i++
+            }
+            return toNumber(res)
+        }
+
+        function parseJsonArray() {
+            i++
+            let res = []
+            while (string[i] && string[i] !== ']') {
+                if (string[i] !== ',') {
+                    res.push(parsePart())
+                } 
+                if (string[i] == ',') {
+                    i++
+                }
+            }
+            i++
+            return res
+        }
+
+        function parseJsonObject() {
+            i++
+            let res = {}
+            let key, val
+            while(string[i] && string[i] !== '}') {
+                if (string[i] !== ',') {
+                    if (string[i] !== ':') {
+                        key = parsePart()
+                    }
+                    i++
+                    val = parsePart()
+                }
+                if (string[i] == ',') {
+                     i++
+                }
+                res[key] = val
+            }
+            i++
+            return res
+        }
+    }
+
+
+    function stringifyJson(value) {
+        let res = ''
+        stringifyPart(value)
+        return res
+
+        function stringifyPart(value) {
+            if (isArray(value)) {
+                stringifyArray(value)
+            } else if (isObject(value)) {
+                stringifyObject(value)
+            } else {
+                stringifyCharacter(value)
+            }
+        }
+
+        function stringifyCharacter(value) {
+            if (isString(value)) {
+                res += '"' + value + '"'
+            } else {
+                res += value.toString()
+            }
+        }
+
+        function stringifyArray(value) {
+            res += '['
+            for (let val of value) {
+                stringifyPart(val)
+                res += ','
+            }
+             res = slice(res, 0, -1) + ']'
+        }
+
+        function stringifyObject(value) {
+            res += '{'
+            for (let key in value) {
+                let val = value[key]
+                stringifyCharacter(key)
+                res += ':'
+                stringifyPart(val)
+                res += ','
+            }
+            res = slice(res, 0, -1) + '}'
+        }
+    }
+
+
 
     return {
         identity,
         isEqual,
         isMatch,
+        property,
         property,
         matches,
         matchesProperty,
@@ -2112,7 +3071,6 @@ var mymoonddd = function() {
         countBy,
         groupBy,
         keyBy,
-
         forEach,
         forEachRight,
         shuffle,
@@ -2122,7 +3080,7 @@ var mymoonddd = function() {
         findKey,
         findLastKey,
         findIndex,
-        findLastIndex,        
+        findLastIndex,
         map,
         partition,
         reduce,
@@ -2175,6 +3133,7 @@ var mymoonddd = function() {
         meanBy,
         repeat,
         range,
+        rangeRight,      
         difference,
         differenceBy,
         differenceWith,
@@ -2195,24 +3154,12 @@ var mymoonddd = function() {
         takeRightWhile,
         takeWhile,
         mapValues,
-        isArray,
-        isArrayLike,
-        isArrayLikeObject,
-        isBoolean,
-        isDate,
-        isFunction,
-        isInteger,
-        isNumber,
-        isObject,
-        isObjectLike,
-        isString,
         slice,
         eq,
         gt,
         gte,
         lt,
         lte,
-        clamp,
         sortedIndex,
         sortedIndexBy,
         sortedIndexOf,
@@ -2228,8 +3175,11 @@ var mymoonddd = function() {
         round,
         assign,
         assignIn,
+        merge,
+        mergeWith,
         defaults,
         defaultsDeep,
+        defaultTo,
         has,
         hasIn,
         create,
@@ -2237,76 +3187,141 @@ var mymoonddd = function() {
         includes,
         inRange,
         at,
-
-
-        // orderBy,
-        // bind : bind,
-        // _
-        // parseInt: parseInt,
-        // negate: negate,
-        // spread: spread,
-        // flip: flip,
-        // reverse: reverse,
-        // before: before,
-        // after: after,
-        // memorize: memorize,
-        // shuffle用递归试试看: shuffle用递归试试看,
-        // curry: curry,
-        // value: value,
-        // chunk: chunk,
-        // chain: chain,
-        // take: take,
-        // isRegExp: isRegExp,
-        // wrap,  
-
         invertBy,
         invoke,
         invokeMap,
         keys,
         keysIn,
         mapKeys,
-        // merge,
-        // omit,
-        // pick,
-        // result,
-        // set,
-        // toPairs,
         values,
+        valuesIn,
         escape,
         unescape,
+        escapeRegExp,
         pad,
         padEnd,
         padStart,
-        // bindAll,
-        // mixin,
         times,
-        // uniqueId,
-        // cloneDeep,
-        // negate,
-        // once,
-        // spread,
-        // curry,
-        // memoize,
         constant,
-        // propertyOf,
-
-        // sortBy,
-        // defer,
-        // delay,
         castArray,
         conforms,
         conformsTo,
         isEqual,
-        // random,
         forIn,
         forInRight,
         forOwn,
         forOwnRight,
         functions,
         functionsIn,
+        isArguments, 
+        isArray,
+        isArrayLike,
+        isArrayLikeObject,
+        isBoolean,
+        isDate,
+        isElement,
+        isEmpty,
+        isEqual,
+        isEqualWith,
+        isFunction,
+        isInteger,
+        isNumber,
+        isObject,
+        isObjectLike,
+        isString,
+        isError,
+        isFinite,
+        isLength,
+        isMap,
+        isMatch,
+        isMatchWith,
+        isNaN,
+        isNil,
+        isNull,
+        isNumber,
+        isObject,
+        isObjectLike,
+        isPlainObject,
+        isRegExp,
+        isSet,
+        isString,
+        isSymbol,
+        isTypedArray,
+        isUndefined,
+        isWeakMap,
+        isWeakSet,
+        toFinite,    
+        toInteger,   
+        toLength,    
+        toNumber,
+        camelCase,   
+        capitalize,  
+        endsWith,    
+        lowerFirst,  
+        kebabCase,  
+        lowerCase,   
+        parseInt,
+        replace, 
+        snakeCase,
+        startCase,   
+        startsWith,  
+        toLower, 
+        toUpper, 
+        trim,    
+        trimEnd, 
+        trimStart,   
+        truncate,
+        upperCase,   
+        upperFirst,  
+        words,   
+        defaultTo,
+        clone,     
+        cloneDeep,
+        pullAt,
+        ary,     
+        unary,   
+        negate,  
+        once,    
+        flip,
+        flow,    
+        flowRight,
+        method,  
+        methodOf,        
+        nthArg,  
+        parseJson,       
+        stringifyJson,
 
+
+        // bind : bind,
+        // bindAll, 
+        // spread,  
+        // curry,   
+        // memoize, 
+        // mixin,
+        // uniqueId,   
+        // deburr,  
+        // isSafeInteger,
+        // isNative,
+        // clamp,
+        // orderBy,
+        // _
+        // before: before,
+        // after: after,
+        // shuffle用递归试试看
+        // chain: chain,
+        // wrap,  
+        // sortBy,
+        // defer,
+        // delay,
+        // random,
         // result,
-
+        // omit,
+        // omitBy,
+        // pick,
+        // pickBy,
+        // result,
+        // transform,,
+        // isArrayBuffer,
 
     }
 }()
