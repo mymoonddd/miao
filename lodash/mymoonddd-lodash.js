@@ -9,12 +9,12 @@ var mymoonddd = function() {
     function isEqualWith(value, other, customizer=undefined) {
         /**
          * This method supports comparing:
-         * 
-         * arrays, array buffers, booleans, 
-         * date objects, error objects, maps, 
-         * numbers, Object objects, regexes, 
+         *
+         * arrays, array buffers, booleans,
+         * date objects, error objects, maps,
+         * numbers, Object objects, regexes,
          * sets, strings, symbols, and typed arrays.
-         * 
+         *
          * 仅实现了:
          * arrays, booleans, objects. strings, numbers
          */
@@ -53,7 +53,7 @@ var mymoonddd = function() {
             return false
         }
         for (let key in value) {
-            let res 
+            let res
             if (customizer) {
                 res = customizer(value[key], other[key], key, value, other)
             }
@@ -97,7 +97,7 @@ var mymoonddd = function() {
         }
         let len = 0
         for (let key in source) {
-            let res 
+            let res
             if (customizer) {
                 res = customizer(object[key], source[key])
             }
@@ -794,8 +794,8 @@ var mymoonddd = function() {
     function rangeRight(start=0, end, step=1) {
         start = arguments[0]
         if (arguments.length == 1) {
-            end = start 
-            start = 0 
+            end = start
+            start = 0
             step = start < end ? 1 : -1
         } else {
             step = arguments[2] === undefined ? 1 : arguments[2]
@@ -1471,7 +1471,7 @@ var mymoonddd = function() {
     }
 
     function isError(value) {
-        return value instanceof Error 
+        return value instanceof Error
     }
 
     function isFunction(value) {
@@ -1479,7 +1479,7 @@ var mymoonddd = function() {
     }
 
     function isFinite(value) {
-       return isNumber(value) && value > -Infinity && value < Infinity 
+       return isNumber(value) && value > -Infinity && value < Infinity
     }
 
     function toFinite(value) {
@@ -1492,7 +1492,7 @@ var mymoonddd = function() {
             }
             if (value == -Infinity) {
                 return -Number.MAX_VALUE
-            }    
+            }
         }
     }
 
@@ -1523,7 +1523,7 @@ var mymoonddd = function() {
         if (value > 2**32 -1) {
             return 2**32 -1
         }
-        return value 
+        return value
     }
 
     function isMap(value) {
@@ -1551,7 +1551,7 @@ var mymoonddd = function() {
 
     function toNumber(value) {
         if (typeof value == Number) {
-            return value 
+            return value
         }
         return Number(value)
     }
@@ -1906,7 +1906,7 @@ var mymoonddd = function() {
 
     function defaultTo(value, defaultValue) {
         if (isNaN(value) || isNil(value)) {
-            return  defaultValue   
+            return  defaultValue
         } else {
             return value
         }
@@ -2400,7 +2400,7 @@ var mymoonddd = function() {
 
     function setWith(object, path, value, customizer=undefined) {
         let paths = toPath(path)
-        let len = paths.length 
+        let len = paths.length
         let obj = object
         for (let i = 0; i < len; i++) {
             let path = paths[i]
@@ -2434,7 +2434,7 @@ var mymoonddd = function() {
         for (let i = 0; i < len; i++) {
             let path = paths[i]
             if (i == len - 1) {
-                return delete obj[path]   
+                return delete obj[path]
             }
             obj = obj[path]
         }
@@ -2443,7 +2443,7 @@ var mymoonddd = function() {
 
     function updateWith(object, path, updater, customizer=undefined) {
         let paths = toPath(path)
-        let len = paths.length 
+        let len = paths.length
         let obj = object
         for (let i = 0; i < len; i++) {
             let path = paths[i]
@@ -2475,7 +2475,7 @@ var mymoonddd = function() {
         let res = toLower(arr[0])
         for (let i = 1; i < arr.length; i++) {
             let word = arr[i]
-            res += capitalize(word) 
+            res += capitalize(word)
         }
         return res
     }
@@ -2724,7 +2724,7 @@ var mymoonddd = function() {
                     }
                 }
                 if (matched) {
-                    res += replacement 
+                    res += replacement
                     i += j - 1
                 } else {
                     res += string[i]
@@ -2733,7 +2733,7 @@ var mymoonddd = function() {
                 res += string[i]
             }
         }
-        return res 
+        return res
     }
 
     function clone(value) {
@@ -2810,19 +2810,19 @@ var mymoonddd = function() {
     }
 
     function once(func) {
-        let invoked = false 
+        let invoked = false
         let res
         return function() {
             if (!invoked) {
                 res = func.apply(this, arguments)
                 invoked = true
-            } 
+            }
             return res
         }
     }
 
     // function memoize(func, resolver) {
-    //     let val 
+    //     let val
     //     let key
     //     let data = {}
     //     return function(key) {
@@ -2852,7 +2852,7 @@ var mymoonddd = function() {
             res = arguments
             for (let func of funcs) {
                 if (isArrayLike(res)) {
-                    res = func.apply(this, res) 
+                    res = func.apply(this, res)
                 } else {
                     res = func.call(this, res)
                 }
@@ -2871,8 +2871,8 @@ var mymoonddd = function() {
             let res = object
             for (let path of paths) {
                 res = res[path]
-            } 
-            return res.apply(this, args) 
+            }
+            return res.apply(this, args)
         }
     }
 
@@ -2882,9 +2882,9 @@ var mymoonddd = function() {
             let res = object
             for (let path of paths) {
                 res = res[path]
-            } 
-            return res.apply(this, args) 
-        } 
+            }
+            return res.apply(this, args)
+        }
     }
 
     function nthArg(n=0) {
@@ -2898,10 +2898,10 @@ var mymoonddd = function() {
         let i = 0
         if (string[0] == '[') {
             return parseJsonArray()
-        } 
+        }
         if (string[0] == '{') {
             return parseJsonObject()
-        } 
+        }
         return parseJsonCharacter()
 
         function parsePart() {
@@ -2945,7 +2945,7 @@ var mymoonddd = function() {
         }
 
         function parseJsonString() {
-            i++ 
+            i++
             let res = ''
             while(string[i] && string[i] !== '\"') {
                 res += string[i]
@@ -2970,7 +2970,7 @@ var mymoonddd = function() {
             while (string[i] && string[i] !== ']') {
                 if (string[i] !== ',') {
                     res.push(parsePart())
-                } 
+                }
                 if (string[i] == ',') {
                     i++
                 }
@@ -3133,7 +3133,7 @@ var mymoonddd = function() {
         meanBy,
         repeat,
         range,
-        rangeRight,      
+        rangeRight,
         difference,
         differenceBy,
         differenceWith,
@@ -3213,7 +3213,7 @@ var mymoonddd = function() {
         forOwnRight,
         functions,
         functionsIn,
-        isArguments, 
+        isArguments,
         isArray,
         isArrayLike,
         isArrayLikeObject,
@@ -3250,56 +3250,56 @@ var mymoonddd = function() {
         isUndefined,
         isWeakMap,
         isWeakSet,
-        toFinite,    
-        toInteger,   
-        toLength,    
+        toFinite,
+        toInteger,
+        toLength,
         toNumber,
-        camelCase,   
-        capitalize,  
-        endsWith,    
-        lowerFirst,  
-        kebabCase,  
-        lowerCase,   
+        camelCase,
+        capitalize,
+        endsWith,
+        lowerFirst,
+        kebabCase,
+        lowerCase,
         parseInt,
-        replace, 
+        replace,
         snakeCase,
-        startCase,   
-        startsWith,  
-        toLower, 
-        toUpper, 
-        trim,    
-        trimEnd, 
-        trimStart,   
-        truncate,
-        upperCase,   
-        upperFirst,  
-        words,   
+        startCase,
+        startsWith,
+        toLower,
+        toUpper,
+        trim,
+        trimEnd,
+        trimStart,
+        // truncate,
+        upperCase,
+        upperFirst,
+        words,
         defaultTo,
-        clone,     
+        clone,
         cloneDeep,
         pullAt,
-        ary,     
-        unary,   
-        negate,  
-        once,    
+        ary,
+        unary,
+        negate,
+        once,
         flip,
-        flow,    
+        flow,
         flowRight,
-        method,  
-        methodOf,        
-        nthArg,  
-        parseJson,       
+        method,
+        methodOf,
+        nthArg,
+        parseJson,
         stringifyJson,
 
 
         // bind : bind,
-        // bindAll, 
-        // spread,  
-        // curry,   
-        // memoize, 
+        // bindAll,
+        // spread,
+        // curry,
+        // memoize,
         // mixin,
-        // uniqueId,   
-        // deburr,  
+        // uniqueId,
+        // deburr,
         // isSafeInteger,
         // isNative,
         // clamp,
@@ -3309,7 +3309,7 @@ var mymoonddd = function() {
         // after: after,
         // shuffle用递归试试看
         // chain: chain,
-        // wrap,  
+        // wrap,
         // sortBy,
         // defer,
         // delay,
