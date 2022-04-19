@@ -2760,6 +2760,10 @@ var mymoonddd = function() {
         }
     }
 
+    // function cloneDeepWith(value, customizer) {
+
+    // }
+
     function cloneDeep(value) {
         if (!isCloneable(value)) {
             return {}
@@ -3047,6 +3051,33 @@ var mymoonddd = function() {
         }
     }
 
+    function truncate(string='', options={}) {
+        let len = options.length ?? string.length
+        let omi = options.omission ?? '...'
+        let sep = options.separator
+        let res = ''
+        let lenNeed = len - omi.length
+        if (sep === undefined) {
+            for (let char of string) {
+                if (res.length + char.length < lenNeed) {
+                    res += char
+                }
+            }
+
+        } else {
+            sep = new RegExp(sep, 'g')
+            let match
+            let lastIndex = 0
+            while(match = sep.exec(string)) {
+                if (match.index >= lenNeed) {
+                    break
+                } 
+                res += string.slice(lastIndex, match.index)
+                lastIndex = match.index
+            }
+        }
+        return res+omi
+    }
 
 
     return {
@@ -3270,13 +3301,13 @@ var mymoonddd = function() {
         trim,    
         trimEnd, 
         trimStart,   
-        // truncate,
         upperCase,   
         upperFirst,  
         words,   
         defaultTo,
         clone,     
         cloneDeep,
+        // cloneDeepWith,
         pullAt,
         ary,     
         unary,   
@@ -3290,9 +3321,13 @@ var mymoonddd = function() {
         nthArg,  
         parseJson,       
         stringifyJson,
-
-
- 
-
+        truncate,
+        toPairs,
+        toPairsIn,
+        set,
+        setWith,
+        unset,
+        update,
+        updateWith,
     }
 }()
