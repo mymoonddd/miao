@@ -2557,7 +2557,7 @@ var mymoonddd = function() {
 
     function upperCase(string='') {
         return toUpper(words(string).join(' '))
-    }
+    }x
 
     function words(string='', pattern) {
         if (!pattern) {
@@ -2647,10 +2647,10 @@ var mymoonddd = function() {
         return string >= '0' && string <= '9'
     }
 
-    function trim() {
-        let string = arguments[0]
-        let chars = arguments.length == 2 ? arguments[1] : ' '
-        return trimEnd(trimStart(string, chars), chars)
+    function trim(string='', chars=' ') {
+        let res = trimStart(string, chars)
+        res = trimEnd(res, chars)
+        return res 
     }
 
     function trimStart(string='', chars=' ') {
@@ -2671,12 +2671,8 @@ var mymoonddd = function() {
         return string
     }
 
-
-    function parseInt() {
+    function parseInt(string, radix=10) {
         let len = arguments.length
-        let string = arguments[0]
-        let radix = len == 2 ? arguments[1] : 10
-        let numStr = ''
         for (let char of string) {
             if (char >= '0' && char < radix) {
                 numStr += char
@@ -2692,7 +2688,6 @@ var mymoonddd = function() {
         }
         return res
     }
-
 
     function replace(string='', pattern, replacement) {
         if (isRegExp(pattern)) {
