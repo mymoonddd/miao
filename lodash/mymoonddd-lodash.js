@@ -2730,13 +2730,15 @@ var mymoonddd = function() {
     function cloneDeep(value) {
         if (!isCloneable(value)) {
             return {}
+        } else if (isRegExp || isNil) {
+            return value
         } else if (isArrayLike(value)) {
             let res = []
             for (let val of value) {
                 res.push(cloneDeep(val))
             }
             return res
-        }  else if (isObject(value)) {
+        } else if (isObjectLike(value)) {
             if (value === null) {
                 return value
             }
