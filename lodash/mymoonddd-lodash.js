@@ -178,6 +178,19 @@ var mymoonddd = function() {
 
 
     function split(string = '', separator, limit = Infinity) {
+        if (typeof string !== 'string') {
+            string = String(string)
+        }
+        if (separator === undefined) {
+            return [string]
+        }
+        let res = []
+        if (!separator.length) {
+            for (let char of string) {
+                res.push(char)
+            }
+            return res
+        }
         let reg = new RegExp(separator, 'g')
         let match
         let sepIdx = []
@@ -185,7 +198,6 @@ var mymoonddd = function() {
             sepIdx.push(match.index)
         }
 
-        let res = []
         let str = ''
         for (let i = 0; i < string.length; i++) {
             if (includes(sepIdx, i)) {
@@ -561,7 +573,7 @@ var mymoonddd = function() {
                 for (let i = 0; i < len; i++) {
                     let p = prop[i]
                     if (!inside[p]) {
-                        if (prop[i + 1] !== undefined && isNumber(prop[i + 1])) {
+                        if ('0' <= prop?.[i + 1][0] && prop?.[i + 1][0] <= '9') {
                             inside[p] = []
                         } else {
                             inside[p] = {}
@@ -1098,13 +1110,19 @@ var mymoonddd = function() {
 
     function reduce(collection, iteratee = identity, accumulator) {
         iteratee = Iteratee(iteratee)
-        if (arguments.length < 3) {
-            accumulator = collection[0]
-        } else {
-            accumulator = iteratee(accumulator, collection[0], 0, collection)
-        }
-        for (let i = 1; i < collection.length; i++) {
-            accumulator = iteratee(accumulator, collection[i], i, collection)
+        let firstAccumulated = false
+        for (let key in collection) {
+            let val = collection[key]
+            if (!firstAccumulated) {
+                if (arguments.length < 3) {
+                    accumulator = val
+                } else {
+                    accumulator = iteratee(accumulator, val, key, collection)
+                }
+                firstAccumulated = true
+            } else {
+                accumulator = iteratee(accumulator, val, key, collection)
+            }
         }
         return accumulator
     }
@@ -1991,24 +2009,15 @@ var mymoonddd = function() {
         return object[method](...args)
     }
 
-    function invokeMap() {
-        let collection = arguments[0]
-        let path
-        let args
-        if (arguments.length > 1) {
-            path = arguments[1]
-        }
-        if (arguments.length > 2) {
-            args = slice(arguments, 2)
-        }
+    function invokeMap(collection, path, ...args) {
         if (typeof path !== 'function') {
-            path = Array.prototype[path]
+            return collection.map(it => invoke(it, path, ...args))
         }
         return collection.map(it => {
             if (args !== undefined) {
-                return path.apply(it, args)
+                return path.call(it, it, ...args)
             } else {
-                return path.apply(it)
+                return path.call(it, it)
             }
         })
     }
@@ -2798,8 +2807,7 @@ var mymoonddd = function() {
 
     function ary(func, n=func.length) {
         return function() {
-            arguments.length = n
-            return func.apply(this, arguments)
+            return func.apply(this, arguments.slice(0, n))
         }
     }
 
@@ -3078,6 +3086,7 @@ var mymoonddd = function() {
         }
         return res+omi
     }
+
 
 
     return {
