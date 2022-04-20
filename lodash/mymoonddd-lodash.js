@@ -1955,23 +1955,6 @@ var mymoonddd = function() {
         return prototype
     }
 
-
-    // function bind(func, thisArg, partials) {
-    //   return function f(arg) {
-    //     func.call(thisArg)
-    //     return func(partials,arg)
-    //   }
-    // }
-
-    // function parseInt(string, radix=10) {
-    //   let res = 0
-    //   for (let i = string.length - 1, j = 0; i >= 0; i--, j++) {
-    //     let digit = string[i]
-    //     res+= digit * radix ** j
-    //   }
-    //   return res
-    // }
-
     function invert(object) {
         let res = {}
         for (let key in object) {
@@ -2487,7 +2470,7 @@ var mymoonddd = function() {
     }
 
     function startCase(string='') {
-        let str = lowerCase(string)
+        let str = words(string)
         let res = toUpper(str[0])
         for (let i = 1; i < str.length; i++) {
             if (str[i-1] == ' ') {
@@ -2670,6 +2653,7 @@ var mymoonddd = function() {
 
     function parseInt(string, radix=10) {
         let len = arguments.length
+        let numStr = ''
         for (let char of string) {
             if (char >= '0' && char < radix) {
                 numStr += char
@@ -2802,25 +2786,6 @@ var mymoonddd = function() {
             return res
         }
     }
-
-    // function memoize(func, resolver) {
-    //     let val 
-    //     let key
-    //     let data = {}
-    //     return function(key) {
-    //         val = func.apply(this, arguments)
-    //         key = resolver === undefined ? arguments[0] : resolver(arguments[0])
-    //         Object.defineProperty(this, 'cache', Fn)
-    //         function Fn(val, key) {
-    //             this.data = data
-    //             this.data[key] = val
-    //             this.set = function(key, val) {
-    //                 this.data[obj] = val
-    //             }
-    //         }
-    //         return data[key]
-    //     }
-    // }
 
     function flip(func) {
         return function() {
@@ -3002,6 +2967,8 @@ var mymoonddd = function() {
         function stringifyCharacter(value) {
             if (isString(value)) {
                 res += '"' + value + '"'
+            } else if (isNil(value) || isNaN(value)) {
+                res += 'null'
             } else {
                 res += value.toString()
             }
@@ -3020,10 +2987,12 @@ var mymoonddd = function() {
             res += '{'
             for (let key in value) {
                 let val = value[key]
-                stringifyCharacter(key)
-                res += ':'
-                stringifyPart(val)
-                res += ','
+                if (val !== undefined) {
+                    stringifyCharacter(key)
+                    res += ':'
+                    stringifyPart(val)
+                    res += ','
+                }
             }
             res = slice(res, 0, -1) + '}'
         }
