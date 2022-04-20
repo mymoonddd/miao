@@ -2554,7 +2554,7 @@ var mymoonddd = function() {
 
     function upperCase(string='') {
         return toUpper(words(string).join(' '))
-    }x
+    }
 
     function words(string='', pattern) {
         if (!pattern) {
