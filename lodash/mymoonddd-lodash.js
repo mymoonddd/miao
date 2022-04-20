@@ -2471,9 +2471,9 @@ var mymoonddd = function() {
 
     function startCase(string='') {
         let str = words(string).join(' ')
-        let res = toUpper(str[0])
-        for (let i = 1; i < str.length; i++) {
-            if (str[i-1] == ' ') {
+        let res = ''
+        for (let i = 0; i < str.length; i++) {
+            if (str[i-1] === undefined || str[i-1] == ' ') {
                 res += toUpper(str[i])
             } else {
                 res += str[i]
@@ -2814,7 +2814,7 @@ var mymoonddd = function() {
         return flow(reverse(funcs))
     }
 
-    function method(path, args) {
+    function method(path, ...args) {
         let paths = toPath(path)
         return function(object) {
             let res = object
@@ -2825,7 +2825,7 @@ var mymoonddd = function() {
         }
     }
 
-    function methodOf(object, args) {
+    function methodOf(object, ...args) {
         return function(path) {
             let paths = toPath(path)
             let res = object
