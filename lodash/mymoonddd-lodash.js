@@ -2635,7 +2635,6 @@ var mymoonddd = function() {
         }
     }
 
-
     function isLowerCase(string='') {
         return string >= 'a' && string <= 'z'
     }
@@ -2654,39 +2653,24 @@ var mymoonddd = function() {
         return trimEnd(trimStart(string, chars), chars)
     }
 
-    function trimStart() {
-        let string = arguments[0]
-        let chars = arguments.length == 2 ? arguments[1] : ' '
-        chars = string.match(new RegExp(chars, 'g'))
-        let res = ''
-        let len = string.length
-        let hasChar = true
-        for (let i = 0; i < len; i++) {
-            let char = string[i]
-            if (!hasChar || !includes(chars, char)) {
-                res += char
-                hasChar = false
+    function trimStart(string='', chars=' ') {
+        for (let i = 0; i < string.length; i++) {
+            if (!includes(chars, string[i])) {
+                return slice(string, i)
             }
         }
-        return res
+        return string
     }
 
-    function trimEnd() {
-        let string = arguments[0]
-        let chars = arguments.length == 2 ? arguments[1] : ' '
-        chars = string.match(new RegExp(chars, 'g'))
-        let res = ''
-        let len = string.length
-        let hasChar = true
-        for (let i = len-1; i >= 0; i--) {
-            let char = string[i]
-            if (!hasChar || !includes(chars, char)) {
-                res = char + res
-                hasChar = false
+    function trimEnd(string='', chars=' ') {
+        for (let i = string.length-1; i >= 0; i--) {
+            if (!includes(chars, string[i])) {
+                return slice(string, 0, i+1)
             }
         }
-        return res
+        return string
     }
+
 
     function parseInt() {
         let len = arguments.length
