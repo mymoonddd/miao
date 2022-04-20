@@ -2746,6 +2746,12 @@ var mymoonddd = function() {
     function cloneDeep(value) {
         if (!isCloneable(value)) {
             return {}
+        } else if (isArrayLike(value)) {
+            let res = []
+            for (let val of value) {
+                res.push(cloneDeep(val))
+            }
+            return res
         }  else if (isObject(value)) {
             if (value === null) {
                 return value
@@ -2754,12 +2760,6 @@ var mymoonddd = function() {
             for (let key in value) {
                 let val = value[key]
                 res[key] = cloneDeep(val)
-            }
-            return res
-        } else if (isArrayLike(value)) {
-            let res = []
-            for (let val of value) {
-                res.push(cloneDeep(val))
             }
             return res
         } else {
@@ -2777,7 +2777,7 @@ var mymoonddd = function() {
 
     function ary(func, n=func.length) {
         return function() {
-            return func.apply(this, arguments.slice(0, n))
+            return func.apply(this, Array.prototype.slice.apply(arguments, [0, n]))
         }
     }
 
