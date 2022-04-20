@@ -2470,7 +2470,7 @@ var mymoonddd = function() {
     }
 
     function startCase(string='') {
-        let str = words(string)
+        let str = words(string).join(' ')
         let res = toUpper(str[0])
         for (let i = 1; i < str.length; i++) {
             if (str[i-1] == ' ') {
