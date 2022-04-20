@@ -1078,7 +1078,7 @@ var mymoonddd = function() {
         let res = {}
         for (let key in object) {
             let resKey = iteratee(object[key], key, object)
-            res[resKey] = key
+            res[resKey] = object[key]
         }
         return res
     }
@@ -1230,11 +1230,10 @@ var mymoonddd = function() {
 
     function findLastKey(object, predicate = identity) {
         predicate = Iteratee(predicate)
-        let res = {}
+        let res = ''
         for (let key in object) { //对象
             if (predicate(object[key], key, object)) {
-                res = {}
-                res[key] = object[key]
+                res = key
             }
         }
         return res
@@ -2413,7 +2412,7 @@ var mymoonddd = function() {
                 if (customizer) {
                     obj[path] = new customizer
                 } else {
-                    if (path >= 0 && path <= 9) {
+                    if (paths?.[i+1][0] >= 0 && paths?.[i+1][0] <= 9) {
                         obj[path] = []
                     } else {
                         obj[path] = {}
@@ -2456,7 +2455,7 @@ var mymoonddd = function() {
                 if (customizer) {
                     obj[path] = new customizer
                 } else {
-                    if (path >= 0 && path <= 9) {
+                    if (paths?.[i+1][0] >= 0 && paths?.[i+1][0] <= 9) {
                         obj[path] = []
                     } else {
                         obj[path] = {}
