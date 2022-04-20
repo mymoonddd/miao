@@ -1575,15 +1575,7 @@ var mymoonddd = function() {
     }
 
     function isObject(value) {
-        if (isNil(value) ||
-            isBoolean(value) ||
-            isString(value) ||
-            isNumber(value) ||
-            isSymbol(value)) {
-            return false
-        } else {
-            return true
-        }
+        return  isObjectLike(value) || typeof value == 'function'
     }
 
     function isObjectLike(value) {
@@ -2015,9 +2007,9 @@ var mymoonddd = function() {
         }
         return collection.map(it => {
             if (args !== undefined) {
-                return path.call(it, it, ...args)
+                return path.apply(it, args)
             } else {
-                return path.call(it, it)
+                return path.apply(it)
             }
         })
     }
