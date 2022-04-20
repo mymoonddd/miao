@@ -2939,7 +2939,7 @@ var mymoonddd = function() {
 
         function parseJsonNumber() {
             let res = ''
-            while(string[i] && string[i] !== ',' || string[i] !== ']' || string[i] !== '}') {
+            while(string[i] && string[i] !== ',' && string[i] !== ']' && string[i] !== '}') {
                 res += string[i]
                 i++
             }
