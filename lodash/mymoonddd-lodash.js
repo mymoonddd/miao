@@ -2396,11 +2396,6 @@ var mymoonddd = function() {
         return res
     }
 
-    // function transform(object, iteratee=identity, accumulator) {
-    //     let collection = toPairs(object)
-    //     return reduce(collection, iteratee, accumulator)
-    // }
-
     function setWith(object, path, value, customizer=undefined) {
         let paths = toPath(path)
         let len = paths.length 
@@ -2492,14 +2487,16 @@ var mymoonddd = function() {
     }
 
     function startCase(string='') {
-        string = parseName(string)
-        return map(split(string, ' '), word => {
-            if (/[a-z]/.test(word)) {
-                return capitalize(word)
+        let str = lowerCase(string)
+        let res = toUpper(str[0])
+        for (let i = 1; i < str.length; i++) {
+            if (str[i-1] == ' ') {
+                res += toUpper(str[i])
             } else {
-                return word
+                res += str[i]
             }
-        }).join(' ')
+        }
+        return res
     }
 
     function capitalize(string='') {
