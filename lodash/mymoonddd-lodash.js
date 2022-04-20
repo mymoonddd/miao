@@ -1090,8 +1090,9 @@ var mymoonddd = function() {
         let res = []
         for (let key in collection) {
             if (key[0] >= '0' && key[0] <= '9') {
-                res.push(iteratee(collection[key], +key, collection))
-            }
+                key = Number(key)
+            } 
+            res.push(iteratee(collection[key], key, collection))
         }
         return res
     }
