@@ -1,4 +1,5 @@
 var mymoonddd = function() {
+    var _ = {}
 
     // 辅助型函数
 
@@ -234,15 +235,10 @@ var mymoonddd = function() {
     function get(object, path, defaultValue = 'default') {
         let value = object
         path = toPath(path)
-        try {
-            for (let prop of path) {
-                value = value[prop]
-            }
-        } catch (e) {
-            if (e instanceof TypeError) {
+        for (let prop of path) {
+            value = value[prop]
+            if (value === undefined) {
                 return defaultValue
-            } else {
-                throw e
             }
         }
         return value
@@ -2951,53 +2947,22 @@ var mymoonddd = function() {
     }
 
 
-    function stringifyJson(value) {
-        let res = ''
-        stringifyPart(value)
-        return res
-
-        function stringifyPart(value) {
-            if (isArray(value)) {
-                stringifyArray(value)
-            } else if (isObject(value)) {
-                stringifyObject(value)
-            } else {
-                stringifyCharacter(value)
+    function stringifyJson(js, str = '') {
+        if (Array.isArray(js)) {
+            str += '[' + js.map(it => myStringfy(it, str)).join(',') + ']'
+        } else if (typeof js == 'object') {
+            for (let key in js) {
+                str += '"' + key + '":' + myStringfy(js[key]) + ','
             }
+            str = '{' + str.slice(0, -1) + '}'
+        } else if (typeof js == 'function') {
+            str += null
+        } else if (typeof js == 'string') {
+            str += '"' + js + '"'  
+        } else {
+            str += js 
         }
-
-        function stringifyCharacter(value) {
-            if (isString(value)) {
-                res += '"' + value + '"'
-            } else if (isNil(value) || isNaN(value)) {
-                res += 'null'
-            } else {
-                res += value.toString()
-            }
-        }
-
-        function stringifyArray(value) {
-            res += '['
-            for (let val of value) {
-                stringifyPart(val)
-                res += ','
-            }
-             res = slice(res, 0, -1) + ']'
-        }
-
-        function stringifyObject(value) {
-            res += '{'
-            for (let key in value) {
-                let val = value[key]
-                if (val !== undefined) {
-                    stringifyCharacter(key)
-                    res += ':'
-                    stringifyPart(val)
-                    res += ','
-                }
-            }
-            res = slice(res, 0, -1) + '}'
-        }
+        return str
     }
 
     function truncate(string='', options={}) {
@@ -3028,6 +2993,37 @@ var mymoonddd = function() {
         return res+omi
     }
 
+    function bind(func, thisArg, ...partials) {
+        return function(...args) {
+            let bindedArgs = partials.slice()
+            let j = 0
+            for (let i = 0; i < bindedArgs.length; i++) {
+                if (bindedArgs[i] == _) {
+                    bindedArgs[i] = args[j++]            
+                }
+            }
+            bindedArgs.push(args.slice(j))
+            return func.call(thisArg, ...bindedArgs)
+        }
+    }
+
+    // function spread(func, start=0) {
+    //     return function(...arg) {
+    //         let spreadArg = []
+    //         spreadArg.push(arg.slice(0, start), arg[start])
+    //         return func.apply(this, spreadArg)
+    //     }
+    // }
+
+    // function curry(func, arity=func.length) {
+    //     return function(...args) {
+    //         if (args.length == arity) {
+    //             return func(...args)
+    //         } else {
+    //             return curry(bind(func, this, args), arity - args.length)
+    //         }
+    //     }
+    // }
 
 
     return {
@@ -3279,5 +3275,9 @@ var mymoonddd = function() {
         unset,
         update,
         updateWith,
+        bind,
+        // bindAll,
+        // spread,
+        // curry,
     }
 }()
